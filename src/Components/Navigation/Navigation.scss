@@ -1,0 +1,15 @@
+.navLinks {
+  display: flex;
+  column-gap: 30px;
+  justify-content: flex-end;
+  margin: 0 50px 400px;
+  padding: 0;
+}
+
+.navLinks__navLink {
+  color: aliceblue;
+}
+
+.navLinks__navLink:hover {
+  opacity: 0.7;
+}
