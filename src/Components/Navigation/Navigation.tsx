@@ -1,9 +1,15 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 
+
+interface navLink {
+  title: string
+  link: string
+}
+
 export default function Navigation() {
 
-const navLinks = [
+const navLinks: navLink[] = [
   {
     title: 'Главная страница',
     link: '/'
