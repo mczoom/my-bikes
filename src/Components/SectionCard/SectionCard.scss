@@ -1,0 +1,19 @@
+$text-color: rgb(134, 76, 134);
+
+.section-card {
+  color: black;
+}
+
+.section-card__wrapper {
+  display: flex;
+}
+
+.section-card__header {
+  color: $text-color;
+}
+
+.section-card__text {
+  margin: 0;
+  margin-left: 25px;
+  align-self: center;
+}

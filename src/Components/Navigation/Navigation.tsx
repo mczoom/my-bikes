@@ -19,12 +19,16 @@ const navLinks: navLink[] = [
     link: '/about'
   },
   {
-    title: 'Мои велосипеды',
+    title: 'Мои тренировки',
+    link: '/stats'
+  },
+  {
+    title: 'Моя велосипеды',
     link: '/garage'
   },
   {
-    title: 'Моя статистика',
-    link: '/stats'
+    title: 'Техобслуживание',
+    link: '/maintenance'
   }
 ]
 
