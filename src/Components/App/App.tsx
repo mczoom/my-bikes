@@ -1,9 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {Routes, Route} from 'react-router-dom'
+import {Routes, Route} from 'react-router-dom';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Stats from '../Stats/Stats';
 import AccessPage from '../AccessPage/AccessPage';
+import { useNavigate } from 'react-router-dom';
+import { translateToken, renewToken } from '../../utils/stravaAuthApi';
+import { Token } from '../../models/Token';
 
 
 
@@ -14,23 +17,28 @@ function App() {
   const [token, setToken] = useState('');
   const [bikes, setBikes] = useState('');
 
+  const navigate = useNavigate();
+
+  const dateNow: number = Date.now() / 1000;
+  const tokenData: Token = JSON.parse(localStorage.getItem('token') || "");
+  const expDate: number = tokenData.expires_at;
+  const isTokenExpired: number = (expDate - dateNow);
+  const refreshToken: string = tokenData.refresh_token;
 
 
 
 
 
-    //   const getAthlete = () => {
-    //     return fetch(`https://www.strava.com/api/v3/athlete`, {
-    //       method: 'GET',
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         "Authorization": `Bearer ${token.access_token}`,
-    //       }
-    //     })
-    //     .then((res) => res.json())
-    //     .then((res) => setBikes(res.bikes))
-    //     .catch((err) => console.log(err))
-    //   };
+
+
+  useEffect(() => {
+    if(!localStorage.getItem('token')) {
+      translateToken();
+      navigate("/");
+    } else if (isTokenExpired <= 0) {
+      renewToken(refreshToken);
+    }
+  }, [])
 
 
 

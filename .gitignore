@@ -10,6 +10,7 @@
 
 # production
 /build
+secretConstants.ts
 
 # misc
 .DS_Store
