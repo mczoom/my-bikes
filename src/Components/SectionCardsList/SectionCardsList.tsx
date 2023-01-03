@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import garage from '../../images/garage.png';
 import stats from '../../images/stats.png';
 import maintenance from '../../images/maintenance.png';
@@ -29,6 +29,8 @@ export default function SectionCardsList() {
       path: '/maintenance'
     }
   ]
+
+  const [activities, setActivities] = useState(null);
 
   return (
     <section className='section-cards-list'>

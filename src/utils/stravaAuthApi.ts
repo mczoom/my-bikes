@@ -1,12 +1,13 @@
-import {clientId, clientSecret} from './secretConstants'
+import {clientId, clientSecret} from './secretConstants';
+import {stravaAuthUrl} from './constants';
 
-export function translateToken() {
+export function exchangeToken() {
   const params: any = new Proxy(new URLSearchParams(window.location.search), {
     get: (searchParams, prop:string) => searchParams.get(prop),
   }); // Get the value of "some_key" in eg "https://example.com/?some_key=some_value"
   const accessToken: string = params.code;
 
-  return fetch(`https://www.strava.com/oauth/token?client_id=${clientId}&client_secret=${clientSecret}&code=${accessToken}&grant_type=authorization_code`, {
+  return fetch(`${stravaAuthUrl}?client_id=${clientId}&client_secret=${clientSecret}&code=${accessToken}&grant_type=authorization_code`, {
     method: 'POST',
     headers: {
       "Content-Type": "application/json"
@@ -25,7 +26,7 @@ export function translateToken() {
 
 
 export function renewToken(refreshToken: string) {
-  return fetch(`https://www.strava.com/oauth/token?client_id=${clientId}&client_secret=${clientSecret}&refresh_token=${refreshToken}&grant_type=refresh_token`, {
+  return fetch(`${stravaAuthUrl}?client_id=${clientId}&client_secret=${clientSecret}&refresh_token=${refreshToken}&grant_type=refresh_token`, {
     method: 'POST',
     headers: {
       "Content-Type": "application/json"
