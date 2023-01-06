@@ -25,7 +25,7 @@ export function exchangeToken() {
 
 
 
-export function renewToken(refreshToken: string) {
+export function renewToken(refreshToken: string | undefined) {
   return fetch(`${stravaAuthUrl}?client_id=${clientId}&client_secret=${clientSecret}&refresh_token=${refreshToken}&grant_type=refresh_token`, {
     method: 'POST',
     headers: {

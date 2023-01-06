@@ -10,9 +10,9 @@ export default function AccessPage() {
 
 
   return (
-    <>
-    <AccessButton />
-    <div>You successfully paired your My-bikes account with Strava</div>
-    </>
+    <section className='access-page'>
+      <AccessButton />
+      <p>Для использования приложения необходимо разрешить доступ к аккаунту Strava</p>
+    </section>
   )
 }

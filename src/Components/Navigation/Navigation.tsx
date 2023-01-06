@@ -23,7 +23,7 @@ const navLinks: navLink[] = [
     link: '/stats'
   },
   {
-    title: 'Моя велосипеды',
+    title: 'Мои велосипеды',
     link: '/garage'
   },
   {
