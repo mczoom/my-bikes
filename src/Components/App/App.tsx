@@ -5,7 +5,7 @@ import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Stats from '../Stats/Stats';
 import { exchangeToken, renewToken } from '../../utils/stravaAuthApi';
-import {getAthlete} from '../../utils/stravaApi'
+import {getCurrentAthlete} from '../../utils/stravaApi'
 import {Profile} from '../../models/Profile'
 import { Token } from '../../models/Token';
 import AccessPage from '../AccessPage/AccessPage';
@@ -40,11 +40,15 @@ function App() {
   const isTokenExpired: number = (expDate - dateNow);
   const refreshToken: string | undefined = tokenData().refresh_token;
 
-
-  useEffect(() => {
-    getAthlete()
+  function getCurrentUserInfo() {
+    getCurrentAthlete()
       .then((user) => setCurrentUser(user))
       .catch((err) => console.log(err));
+  }
+
+
+  useEffect(() => {
+    getCurrentUserInfo();
   }, [])
   console.log(currentUser);
 

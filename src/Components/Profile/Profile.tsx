@@ -9,7 +9,7 @@ export default function Profile() {
   const [name, setName] = useState<string>('')
 
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (currentUser) {
       setAvatar(currentUser.profile);
       setName(currentUser.firstname);
