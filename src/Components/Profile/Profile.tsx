@@ -18,8 +18,12 @@ export default function Profile() {
 
   return (
     <section className='profile'>
-      <img src={avatar} alt='Аватара пользователя' className='profile__image'></img>
-      <p className='profile__name'>{name}</p>
+      {currentUser.profile &&
+        <>
+          <img src={avatar} alt='Аватара пользователя' className='profile__image'></img>
+          <p className='profile__name'>{name}</p>
+        </>
+      }
     </section>
   )
 }

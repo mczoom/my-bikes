@@ -4,6 +4,7 @@ import { getActivities, getCurrentAthlete, getAthlete } from '../../utils/strava
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import { Profile } from '../../models/Profile';
 import { AthleteStats } from '../../models/AthleteStats';
+import { Preloader } from '../Preloader/Preloader';
 
 export default function Stats() {
 
@@ -11,6 +12,7 @@ export default function Stats() {
 
   const [allRidesTotals, setAllRidesTotals] = useState<AthleteStats>({} as AthleteStats);
   const [allYTDRidesTotals, setAllYTDRidesTotals] = useState<AthleteStats>({} as AthleteStats)
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   console.log(allRidesTotals);
   console.log(currentUser)
 
@@ -30,13 +32,15 @@ export default function Stats() {
   // }
 
   function getUserStats(user: Profile) {
+    setIsLoading(true);
     getAthlete(user.id)
       .then((res) => {
         setAllRidesTotals((res.all_ride_totals));
         setAllYTDRidesTotals(res.ytd_ride_totals);
       })
-      .catch((err) => console.log(err));
-  }
+      .catch((err) => console.log(err))
+      .finally(() => setIsLoading(false));
+  };
 
   useEffect(() => {
     if(currentUser.id) {
@@ -49,12 +53,16 @@ export default function Stats() {
 
   return (
     <section className='stats'>
-      {/* <button type='button' onClick={getTrainings}>Get trainings</button>
-      <button type='button' onClick={getUser}>Get user</button> */}
-      <p>Количество тренировок за всё время: <span className='stats__text_bold'>{allRidesTotals.count}</span></p>
-      <p>Пройдено км за всё время: <span className='stats__text_bold'>{allRidesDistance ? Math.floor(allRidesDistance) : ''}</span> км</p>
-      <p>Количество тренировок за год: <span className='stats__text_bold'>{allYTDRidesTotals.count}</span></p>
-      <p>Пройдено км за год: <span className='stats__text_bold'>{yTDRidesDistance ? Math.floor(yTDRidesDistance) : ''}</span> км</p>
+      <Preloader isLoading={isLoading} />
+      {allRidesTotals.distance && allYTDRidesTotals.distance &&
+      <ul>
+        <li><p>Количество тренировок за всё время: <span className='stats__text_bold'>{allRidesTotals.count}</span></p></li>
+        <li><p>Пройдено км за всё время: <span className='stats__text_bold'>{allRidesDistance ? Math.round(allRidesDistance) : ''}</span> км</p></li>
+        <li><p>Количество тренировок в этом году: <span className='stats__text_bold'>{allYTDRidesTotals.count}</span></p></li>
+        <li><p>Пройдено км в этом году: <span className='stats__text_bold'>{yTDRidesDistance ? Math.round(yTDRidesDistance) : ''}</span> км</p></li>
+      </ul>
+}
     </section>
+
   )
 }

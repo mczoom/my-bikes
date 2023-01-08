@@ -24,8 +24,9 @@ function App() {
 
   const navigate = useNavigate();
 
-  const tokenData = (): Token => {
+  const isLoggedIn = true;  //временный костыль для проверки на залогиненость
 
+  const tokenData = (): Token => {
     let token = {};
     if(localStorage.getItem('token')) {
       token = JSON.parse(localStorage.getItem('token') || "");
@@ -49,7 +50,7 @@ function App() {
 
   useEffect(() => {
     getCurrentUserInfo();
-  }, [])
+  }, [isLoggedIn])
   console.log(currentUser);
 
   useEffect(() => {
