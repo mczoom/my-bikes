@@ -26,6 +26,8 @@ function App() {
 
   const isLoggedIn = true;  //временный костыль для проверки на залогиненость
 
+  const yearOfRegistrationAtStrava: number = new Date(currentUser.created_at).getFullYear();
+
   const tokenData = (): Token => {
     let token = {};
     if(localStorage.getItem('token')) {
@@ -73,7 +75,7 @@ function App() {
         <Route path='/access' element={<AccessPage />} />
         <Route path='/' element={<ProtectedRoute component={Main} isAuthorized={accessToStrava}/>}  />
         <Route path='/about' element={<About />} />
-        <Route path='/stats' element={<Stats />} />
+        <Route path='/stats' element={<Stats registrationYear={yearOfRegistrationAtStrava}/>} />
       </Routes>
     </div>
     </CurrentUserContext.Provider>

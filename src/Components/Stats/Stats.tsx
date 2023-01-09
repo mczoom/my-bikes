@@ -6,7 +6,12 @@ import { Profile } from '../../models/Profile';
 import { AthleteStats } from '../../models/AthleteStats';
 import { Preloader } from '../Preloader/Preloader';
 
-export default function Stats() {
+
+interface StatsProps {
+  registrationYear: number
+}
+
+export default function Stats({registrationYear}: StatsProps) {
 
   const currentUser = React.useContext<Profile>(CurrentUserContext);
 
@@ -61,7 +66,12 @@ export default function Stats() {
         <li><p>Количество тренировок в этом году: <span className='stats__text_bold'>{allYTDRidesTotals.count}</span></p></li>
         <li><p>Пройдено км в этом году: <span className='stats__text_bold'>{yTDRidesDistance ? Math.round(yTDRidesDistance) : ''}</span> км</p></li>
       </ul>
-}
+      }
+      <select>
+        <option>A</option>
+        <option>S</option>
+        <option>D</option>
+      </select>
     </section>
 
   )

@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import spinner from '../../images/spinner-wheel.png'
 
 interface PreloaderProps {
   isLoading: boolean
@@ -11,9 +12,7 @@ export const Preloader = ({isLoading}: PreloaderProps) => {
 
     return (
         <div className={preloaderClassName}>
-            <div className="preloader__container">
-                <span className="preloader__round"></span>
-            </div>
+            <img src={spinner} className="preloader__spinner" />
         </div>
     )
 };
