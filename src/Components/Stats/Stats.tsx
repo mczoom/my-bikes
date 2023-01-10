@@ -5,13 +5,18 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import { Profile } from '../../models/Profile';
 import { AthleteStats } from '../../models/AthleteStats';
 import { Preloader } from '../Preloader/Preloader';
+import { currentYear } from '../../utils/constants';
+import StatsYearsList from '../StatsYearsList/StatsYearsList';
+import CommonStats from '../CommonStats/CommonStats';
+
 
 
 interface StatsProps {
   registrationYear: number
+  yearsAtStrava: (p: number) => number[]
 }
 
-export default function Stats({registrationYear}: StatsProps) {
+export default function Stats({registrationYear, yearsAtStrava}: StatsProps) {
 
   const currentUser = React.useContext<Profile>(CurrentUserContext);
 
@@ -20,6 +25,12 @@ export default function Stats({registrationYear}: StatsProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   console.log(allRidesTotals);
   console.log(currentUser)
+
+  const y = yearsAtStrava(currentYear);
+  console.log(y)
+
+
+
 
 
   const allRidesDistance: number = allRidesTotals.distance / 1000;
@@ -47,6 +58,7 @@ export default function Stats({registrationYear}: StatsProps) {
       .finally(() => setIsLoading(false));
   };
 
+
   useEffect(() => {
     if(currentUser.id) {
       getUserStats(currentUser)
@@ -54,24 +66,14 @@ export default function Stats({registrationYear}: StatsProps) {
   }, [currentUser]);
 
 
-
-
   return (
     <section className='stats'>
       <Preloader isLoading={isLoading} />
       {allRidesTotals.distance && allYTDRidesTotals.distance &&
-      <ul>
-        <li><p>Количество тренировок за всё время: <span className='stats__text_bold'>{allRidesTotals.count}</span></p></li>
-        <li><p>Пройдено км за всё время: <span className='stats__text_bold'>{allRidesDistance ? Math.round(allRidesDistance) : ''}</span> км</p></li>
-        <li><p>Количество тренировок в этом году: <span className='stats__text_bold'>{allYTDRidesTotals.count}</span></p></li>
-        <li><p>Пройдено км в этом году: <span className='stats__text_bold'>{yTDRidesDistance ? Math.round(yTDRidesDistance) : ''}</span> км</p></li>
-      </ul>
+        <CommonStats allRidesTotals={allRidesTotals} allYTDRidesTotals={allYTDRidesTotals} />
       }
-      <select>
-        <option>A</option>
-        <option>S</option>
-        <option>D</option>
-      </select>
+      <StatsYearsList registrationYear={registrationYear} yearsAtStrava={yearsAtStrava}/>
+
     </section>
 
   )

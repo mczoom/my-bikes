@@ -1,0 +1,13 @@
+@import '../../styles/_index';
+
+.year-card {
+  margin: 20px auto;
+  box-shadow: 5px 5px 10px #886f84,
+  inset -5px -5px 8px -4px #ee38d0;
+
+  padding: 5px 10px;
+  min-height: 100px;
+  width: 100%;
+  border: 1px none $border-color;
+  border-radius: 6px;
+}

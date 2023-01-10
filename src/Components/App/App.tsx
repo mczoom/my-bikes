@@ -26,7 +26,7 @@ function App() {
 
   const isLoggedIn = true;  //временный костыль для проверки на залогиненость
 
-  const yearOfRegistrationAtStrava: number = new Date(currentUser.created_at).getFullYear();
+
 
   const tokenData = (): Token => {
     let token = {};
@@ -48,6 +48,18 @@ function App() {
       .then((user) => setCurrentUser(user))
       .catch((err) => console.log(err));
   }
+
+  const yearOfRegistrationAtStrava: number = new Date(currentUser.created_at).getFullYear();
+
+
+  function yearsAtStrava(currentYear: number): number[] {
+    let years: number[] = [];
+    for(let i = yearOfRegistrationAtStrava; i <= (currentYear); i++) {
+      years.push(i);
+    };
+    return years;
+  }
+
 
 
   useEffect(() => {
@@ -75,7 +87,7 @@ function App() {
         <Route path='/access' element={<AccessPage />} />
         <Route path='/' element={<ProtectedRoute component={Main} isAuthorized={accessToStrava}/>}  />
         <Route path='/about' element={<About />} />
-        <Route path='/stats' element={<Stats registrationYear={yearOfRegistrationAtStrava}/>} />
+        <Route path='/stats' element={<Stats registrationYear={yearOfRegistrationAtStrava} yearsAtStrava={yearsAtStrava}/>} />
       </Routes>
     </div>
     </CurrentUserContext.Provider>
