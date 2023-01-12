@@ -2,12 +2,29 @@
 
 .year-card {
   margin: 20px auto;
-  box-shadow: 5px 5px 10px #886f84,
-  inset -5px -5px 8px -4px #ee38d0;
-
+  text-align: center;
+  box-shadow: 5px 5px 10px peachpuff,
+  inset -5px -5px 8px -4px palegoldenrod;
   padding: 5px 10px;
   min-height: 100px;
   width: 100%;
   border: 1px none $border-color;
   border-radius: 6px;
+
+}
+
+.year-card__opener {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.year-card__opener::before {
+  margin-bottom: 6px;
+  content: "";
+  display: block;
+  border-top: 2px solid black;
 }
