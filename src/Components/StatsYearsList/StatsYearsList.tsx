@@ -1,6 +1,9 @@
 import React from 'react';
+import { Activities } from '../../models/Activities';
+import { Ride } from '../../models/Ride';
 import { currentYear } from '../../utils/constants';
 import StatsYearCard from '../StatsYearCard/StatsYearCard';
+
 
 interface StatsYearsListProps {
   registrationYear: number

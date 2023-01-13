@@ -1,6 +1,7 @@
 @import '../../styles/_index';
 
 .year-card {
+  position: relative;
   margin: 20px auto;
   text-align: center;
   box-shadow: 5px 5px 10px peachpuff,
@@ -10,7 +11,6 @@
   width: 100%;
   border: 1px none $border-color;
   border-radius: 6px;
-
 }
 
 .year-card__opener {

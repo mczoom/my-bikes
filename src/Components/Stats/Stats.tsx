@@ -8,6 +8,8 @@ import { Preloader } from '../Preloader/Preloader';
 import { currentYear } from '../../utils/constants';
 import StatsYearsList from '../StatsYearsList/StatsYearsList';
 import CommonStats from '../CommonStats/CommonStats';
+import { Ride } from '../../models/Ride';
+import { Activities } from '../../models/Activities';
 
 
 
@@ -16,30 +18,27 @@ interface StatsProps {
   yearsAtStrava: (p: number) => number[]
 }
 
+
 export default function Stats({registrationYear, yearsAtStrava}: StatsProps) {
 
   const currentUser = React.useContext<Profile>(CurrentUserContext);
 
   const [allRidesTotals, setAllRidesTotals] = useState<AthleteStats>({} as AthleteStats);
   const [allYTDRidesTotals, setAllYTDRidesTotals] = useState<AthleteStats>({} as AthleteStats)
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  console.log(allRidesTotals);
+
   console.log(currentUser)
 
   const y = yearsAtStrava(currentYear);
-  console.log(y)
 
 
 
 
+  const allRidesDistance: number = allRidesTotals?.distance / 1000;
+  const yTDRidesDistance: number = allYTDRidesTotals?.distance / 1000;
 
-  const allRidesDistance: number = allRidesTotals.distance / 1000;
-  const yTDRidesDistance: number = allYTDRidesTotals.distance / 1000;
-  // function getTrainings() {
-  //   getActivities()
-  //     .then((res) => console.log(res))
-  //     .catch((err) => console.log(err));
-  // }
+
 
   // function getCurrentUser() {
   //   getAthlete()
@@ -72,7 +71,7 @@ export default function Stats({registrationYear, yearsAtStrava}: StatsProps) {
       {allRidesTotals.distance && allYTDRidesTotals.distance &&
         <CommonStats allRidesTotals={allRidesTotals} allYTDRidesTotals={allYTDRidesTotals} />
       }
-      <StatsYearsList registrationYear={registrationYear} yearsAtStrava={yearsAtStrava}/>
+      <StatsYearsList registrationYear={registrationYear} yearsAtStrava={yearsAtStrava} />
 
     </section>
 
