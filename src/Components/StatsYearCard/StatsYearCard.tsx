@@ -14,18 +14,29 @@ export default function StatsYearCard({year}: StatsYearCardProps) {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [activities, setActivities] = useState<Ride[]>([]);
+  const [isStatsShown, setIsStatsShown] = useState<boolean>(false);
 
   const fromDate: number = Date.parse(year.toString()) / 1000;
   const tillDate: number = Date.parse((year + 1).toString()) / 1000 - 1;
 
-const distance = () => {
-  let odo = 0;
-  activities.forEach((training) => {
-    odo += Math.round(training.distance / 1000);
-  })
-  return odo;
-}
-console.log(distance);
+  const statsClassName = `year-card_stats ${isStatsShown ? 'year-card_stats_on' : ''}`
+
+  function showTotalDistance(): number {
+    let odo = 0;
+    activities.forEach((training) => {
+      odo += Math.round(training.distance / 1000);
+    })
+    return odo;
+  }
+
+  function showTotalTime(): number {
+    let odo = 0;
+    activities.forEach((training) => {
+      odo += Math.round(training.elapsed_time / 3600);
+    })
+    return odo;
+  }
+
 
 
   function showYearStats() {
@@ -33,7 +44,8 @@ console.log(distance);
     getActivities(fromDate, tillDate)
     .then((res) => setActivities(res))
     .catch((err) => console.log(err))
-    .finally(() => setIsLoading(false))
+    .finally(() => setIsLoading(false));
+    setIsStatsShown(true);
   }
 
   console.log(activities);
@@ -44,9 +56,11 @@ console.log(distance);
       <Preloader isLoading={isLoading} />
       <h2 className='year-card__year'>{year} год</h2>
       <button type='button' className='year-card__opener' onClick={showYearStats}>показать статистику</button>
-      <p>Количество тренировок: {activities.length}</p>
-      <p>Пройдено километров: {distance()} км</p>
-      <p>Общее время поездок:</p>
+      <div className={statsClassName}>
+        <p>Количество тренировок: {activities.length}</p>
+        <p>Пройдено километров: {showTotalDistance()} км</p>
+        <p>Общее время поездок: {showTotalTime()} ч</p>
+      </div>
     </div>
   )
 }
