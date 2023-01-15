@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Activities } from '../../models/Activities';
 import { Ride } from '../../models/Ride';
 import { getActivities } from '../../utils/stravaApi';
 import { Preloader } from '../Preloader/Preloader';
@@ -19,7 +18,9 @@ export default function StatsYearCard({year}: StatsYearCardProps) {
   const fromDate: number = Date.parse(year.toString()) / 1000;
   const tillDate: number = Date.parse((year + 1).toString()) / 1000 - 1;
 
-  const statsClassName = `year-card_stats ${isStatsShown ? 'year-card_stats_on' : ''}`
+  const dashboardClassName = `stats_dashboard ${isStatsShown ? 'stats_dashboard_on' : ''}`
+  const yearStatsButtonText = isStatsShown ? 'скрыть' : 'показать статистику';
+  const openerIconClassName = isStatsShown ? 'stats__opener-icon_hide' : 'stats__opener-icon_show';
 
   function showTotalDistance(): number {
     let odo = 0;
@@ -39,13 +40,19 @@ export default function StatsYearCard({year}: StatsYearCardProps) {
 
 
 
-  function showYearStats() {
-    setIsLoading(true);
-    getActivities(fromDate, tillDate)
-    .then((res) => setActivities(res))
-    .catch((err) => console.log(err))
-    .finally(() => setIsLoading(false));
-    setIsStatsShown(true);
+  function toggleYearStatsDisplay() {
+    if(!isStatsShown && activities.length === 0) {
+      setIsLoading(true);
+      getActivities({fromDate, tillDate})
+      .then((res) => setActivities(res))
+      .catch((err) => console.log(err))
+      .finally(() => setIsLoading(false));
+      setIsStatsShown(true);
+    }else if(!isStatsShown && activities.length > 0) {
+      setIsStatsShown(true);
+    }else {
+      setIsStatsShown(false);
+    }
   }
 
   console.log(activities);
@@ -54,12 +61,24 @@ export default function StatsYearCard({year}: StatsYearCardProps) {
   return (
     <div className='year-card'>
       <Preloader isLoading={isLoading} />
-      <h2 className='year-card__year'>{year} год</h2>
-      <button type='button' className='year-card__opener' onClick={showYearStats}>показать статистику</button>
-      <div className={statsClassName}>
-        <p>Количество тренировок: {activities.length}</p>
-        <p>Пройдено километров: {showTotalDistance()} км</p>
-        <p>Общее время поездок: {showTotalTime()} ч</p>
+      <h2 className='year-card__header'>{year} год</h2>
+      <div className='year_card__stats'>
+        <div className='stats__wrapper' onClick={toggleYearStatsDisplay}>
+          <button type='button' className='stats__opener'>{yearStatsButtonText}</button>
+          <div className={openerIconClassName}></div>
+        </div>
+        {activities.length > 0 ? (
+        <div className={dashboardClassName}>
+          <p className='stats__text'>Количество тренировок: {activities.length}</p>
+          <p className='stats__text'>Пройденая дистанция: {showTotalDistance()} км</p>
+          <p className='stats__text'>Общее время поездок: {showTotalTime()} ч</p>
+        </div>
+        ) : (
+        <div className={dashboardClassName}>
+          <p>Тренировки не найдены</p>
+        </div>
+        )
+        }
       </div>
     </div>
   )

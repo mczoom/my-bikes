@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getActivities, getCurrentAthlete, getAthlete } from '../../utils/stravaApi';
+import { getCurrentAthlete, getAthlete } from '../../utils/stravaApi';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import { Profile } from '../../models/Profile';
 import { AthleteStats } from '../../models/AthleteStats';
@@ -8,8 +8,7 @@ import { Preloader } from '../Preloader/Preloader';
 import { currentYear } from '../../utils/constants';
 import StatsYearsList from '../StatsYearsList/StatsYearsList';
 import CommonStats from '../CommonStats/CommonStats';
-import { Ride } from '../../models/Ride';
-import { Activities } from '../../models/Activities';
+
 
 
 

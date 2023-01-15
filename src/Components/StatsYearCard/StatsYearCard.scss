@@ -6,35 +6,71 @@
   text-align: center;
   box-shadow: 5px 5px 10px peachpuff,
   inset -5px -5px 8px -4px palegoldenrod;
-  padding: 5px 10px;
-  min-height: 100px;
+  padding: 5px 2px;
   width: 100%;
   border: 1px none $border-color;
   border-radius: 6px;
 }
 
-.year-card__opener {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
+.year_card__stats {
+  background-color: rgb(173, 168, 168);
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
 }
 
-.year-card__opener::before {
+.stats__opener {
+  margin: 0;
+  padding-bottom: 0px;
+  width: 100%;
+  background-color: rgb(173, 168, 168);
+  border: none;
+  cursor: pointer;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.stats__opener::before {
   margin-bottom: 6px;
   content: "";
   display: block;
   border-top: 2px solid black;
 }
 
-.year-card_stats {
-  margin: 0;
-  padding: 0;
-  opacity: 0;
+.stats__opener-icon_show {
+  display: block;
+  margin: 10px auto;
+  height: 16px;
+  width: 16px;
+  text-align: center;
+  background-image: url('../../images/chevron-down-24.png');
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.year-card_stats_on {
-  opacity: 1;
+.stats__opener-icon_hide {
+  display: block;
+  margin: 10px auto 25px;
+  height: 16px;
+  width: 16px;
+  text-align: center;
+  background-image: url('../../images/chevron-up-24.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.stats_dashboard {
+  height: 0;
+  margin: 0;
+  padding: 0;
+  visibility: hidden;
+
+}
+
+.stats_dashboard_on {
+  visibility: visible;
+  padding-bottom: 110px;
+}
+
+.stats__text {
+  margin-top: 0;
 }

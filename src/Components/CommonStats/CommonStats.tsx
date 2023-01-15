@@ -15,10 +15,10 @@ export default function CommonStats({allRidesTotals, allYTDRidesTotals}: CommonS
 
   return (
     <ul className='common-stats'>
-        <li><p>Количество тренировок за всё время: <span className='stats__text_bold'>{allRidesTotals.count}</span></p></li>
-        <li><p>Пройдено км за всё время: <span className='stats__text_bold'>{allRidesDistance ? Math.round(allRidesDistance) : ''}</span> км</p></li>
-        <li><p>Количество тренировок в этом году: <span className='stats__text_bold'>{allYTDRidesTotals.count}</span></p></li>
-        <li><p>Пройдено км в этом году: <span className='stats__text_bold'>{yTDRidesDistance ? Math.round(yTDRidesDistance) : ''}</span> км</p></li>
+        <li><p>Тренировок за всё время: <span className='stats__text_bold'>{allRidesTotals.count}</span></p></li>
+        <li><p>Пройдено за всё время: <span className='stats__text_bold'>{allRidesDistance ? Math.round(allRidesDistance) : ''}</span> км</p></li>
+        <li><p>Тренировок в этом году: <span className='stats__text_bold'>{allYTDRidesTotals.count}</span></p></li>
+        <li><p>Пройдено в этом году: <span className='stats__text_bold'>{yTDRidesDistance ? Math.round(yTDRidesDistance) : ''}</span> км</p></li>
       </ul>
   )
 }

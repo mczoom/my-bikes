@@ -1,6 +1,6 @@
 export interface Activities {
-    from: number
-    till: number
+    fromDate: number
+    tillDate: number
     page?: number
     perPage?: number
 }
