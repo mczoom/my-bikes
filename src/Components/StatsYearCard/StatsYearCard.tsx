@@ -18,9 +18,9 @@ export default function StatsYearCard({year}: StatsYearCardProps) {
   const fromDate: number = Date.parse(year.toString()) / 1000;
   const tillDate: number = Date.parse((year + 1).toString()) / 1000 - 1;
 
-  const dashboardClassName = `stats_dashboard ${isStatsShown ? 'stats_dashboard_on' : ''}`
-  const yearStatsButtonText = isStatsShown ? 'скрыть' : 'показать статистику';
+  const dashboardClassName = `stats_dashboard ${isStatsShown ? 'stats_dashboard_on' : ''}`;
   const openerIconClassName = isStatsShown ? 'stats__opener-icon_hide' : 'stats__opener-icon_show';
+  const yearStatsButtonText = isStatsShown ? 'скрыть' : 'показать статистику';
 
   function showTotalDistance(): number {
     let odo = 0;
@@ -64,7 +64,7 @@ export default function StatsYearCard({year}: StatsYearCardProps) {
       <h2 className='year-card__header'>{year} год</h2>
       <div className='year_card__stats'>
         <div className='stats__wrapper' onClick={toggleYearStatsDisplay}>
-          <button type='button' className='stats__opener'>{yearStatsButtonText}</button>
+          <p className='stats__opener-text'>{yearStatsButtonText}</p>
           <div className={openerIconClassName}></div>
         </div>
         {activities.length > 0 ? (
@@ -75,7 +75,7 @@ export default function StatsYearCard({year}: StatsYearCardProps) {
         </div>
         ) : (
         <div className={dashboardClassName}>
-          <p>Тренировки не найдены</p>
+          <p className='stats__text'>Тренировки не найдены</p>
         </div>
         )
         }

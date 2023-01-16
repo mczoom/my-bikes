@@ -1,5 +1,14 @@
 @import '../../styles/_index';
 
+@keyframes yo-yo {
+  50% {
+    transform: translateY(6px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
 .year-card {
   position: relative;
   margin: 20px auto;
@@ -18,44 +27,49 @@
   border-bottom-right-radius: 6px;
 }
 
-.stats__opener {
+.stats__wrapper {
+  cursor: pointer;
+}
+
+.stats__opener-text {
   margin: 0;
   padding-bottom: 0px;
   width: 100%;
   background-color: rgb(173, 168, 168);
   border: none;
-  cursor: pointer;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
 }
 
-.stats__opener::before {
+.stats__wrapper::before {
   margin-bottom: 6px;
   content: "";
   display: block;
   border-top: 2px solid black;
 }
 
-.stats__opener-icon_show {
-  display: block;
-  margin: 10px auto;
-  height: 16px;
-  width: 16px;
-  text-align: center;
+%opener-icon {
+  margin: 10px auto 14px;
+  height: 14px;
+  width: 100%;
   background-image: url('../../images/chevron-down-24.png');
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: contain;
+  background-position: center;
+}
+
+.stats__opener-icon_show {
+  @extend %opener-icon;
+}
+
+.stats__opener-icon_show:hover {
+  animation: yo-yo 1.4s ease infinite;
 }
 
 .stats__opener-icon_hide {
-  display: block;
-  margin: 10px auto 25px;
-  height: 16px;
-  width: 16px;
-  text-align: center;
+  @extend %opener-icon;
+  margin-bottom: 25px;
   background-image: url('../../images/chevron-up-24.png');
-  background-repeat: no-repeat;
-  background-size: cover;
 }
 
 .stats_dashboard {
@@ -63,7 +77,6 @@
   margin: 0;
   padding: 0;
   visibility: hidden;
-
 }
 
 .stats_dashboard_on {

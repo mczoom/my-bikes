@@ -11,6 +11,7 @@ import { Token } from '../../models/Token';
 import AccessPage from '../AccessPage/AccessPage';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import About from '../About/About';
+import Garage from '../Garage/Garage';
 
 
 
@@ -88,6 +89,7 @@ function App() {
         <Route path='/' element={<ProtectedRoute component={Main} isAuthorized={accessToStrava}/>}  />
         <Route path='/about' element={<About />} />
         <Route path='/stats' element={<Stats registrationYear={yearOfRegistrationAtStrava} yearsAtStrava={yearsAtStrava}/>} />
+        <Route path='/garage' element={<Garage />} />
       </Routes>
     </div>
     </CurrentUserContext.Provider>
