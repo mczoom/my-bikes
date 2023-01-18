@@ -1,4 +1,22 @@
-.bike-card__image {
-  height: 200px;
+.bike-card {
+  margin: 0;
 
+
+}
+
+
+
+.bike-card__image {
+  margin: 0;
+  height: 200px;
+  width: 300px;
+  object-fit: cover;
+}
+
+.bike-card__bike-name {
+  margin: 0;
+}
+
+.bike-card__stats {
+  margin: 0;
 }

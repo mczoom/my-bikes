@@ -1,0 +1,31 @@
+.bike-popup {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  background-color: rgb(0 0 0 / 0.4);
+  align-items: center;
+}
+
+.bike-popup_off {
+  opacity: 0;
+}
+
+.image {
+  position: relative;
+  max-height: 80%;
+  width: 80%;
+}
+
+.bike-popup__close-btn {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+}
+
+.bike-popup__image {
+  max-height: 500px;
+  width: 80%;
+  object-fit: cover;
+}

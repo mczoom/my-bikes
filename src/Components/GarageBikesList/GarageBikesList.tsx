@@ -7,9 +7,15 @@ import deli from '../../images/bikes/deli.jpg';
 import deliIndoor from '../../images/bikes/deli_indoor.jpg';
 import trek from '../../images/bikes/trek.jpg';
 import trekIndoor from '../../images/bikes/trek_indoor.jpg';
+import { MyBike } from '../../models/MyBike';
 
 
-export default function GarageBikesList() {
+interface GarageBikesListProps {
+  openBikePopup: (bikeData:MyBike | undefined) => void
+}
+
+
+export default function GarageBikesList({openBikePopup}: GarageBikesListProps) {
 
   const currentUser = React.useContext<Profile>(CurrentUserContext);
 
@@ -45,10 +51,10 @@ const myBikes = [
 
 
   return (
-    <ul>
+    <ul className='bike-cards-list'>
       {currentUser?.bikes?.map((bike) => (
-        <li key={bike.id}>
-          <GarageBikeCard bike={bike}/>
+        <li key={bike.id} className='bike-cards-list__item'>
+          <GarageBikeCard bike={bike} openBikePopup={openBikePopup}/>
         </li>
       ))}
     </ul>

@@ -11,15 +11,16 @@ import trekIndoor from '../../images/bikes/trek_indoor.jpg';
 
 interface BikeCardProps {
   bike: Bike
+  openBikePopup: (bikeData: MyBike | undefined) => void
 }
 
 
-export default function GarageBikeCard({bike}: BikeCardProps) {
+export default function GarageBikeCard({bike, openBikePopup}: BikeCardProps) {
 
   const myBikes: MyBike[] = [
     {
       id: 'b7840399',
-      name: 'Trek',
+      name: 'Trek Alpha 1.5',
       src: trek
     },
     {
@@ -44,15 +45,22 @@ export default function GarageBikeCard({bike}: BikeCardProps) {
     }
   ]
 
-const bikePhoto: MyBike | undefined = myBikes.find((b: MyBike) => {return b.id.includes(bike.id)})
+const bikePhoto: MyBike | undefined = myBikes.find((b: MyBike) => {
+  return b.id.includes(bike.id)
+});
+
+function openPopup() {
+  openBikePopup(bikePhoto);
+
+}
 
 
 
   return (
-    <div className='bike-card'>
+    <div className='bike-card' onClick={openPopup}>
       <img src={bikePhoto?.src} className='bike-card__image'></img>
-      <h2>{bike.name}</h2>
-      <p>Пробег: {bike.converted_distance}</p>
+      <h2 className='bike-card__bike-name'>{bike.name}</h2>
+      <p className='bike-card__stats'>Пробег: {bike.converted_distance}</p>
     </div>
   )
 }
