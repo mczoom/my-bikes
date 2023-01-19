@@ -21,6 +21,10 @@ body {
   background-color: $page-background;
 }
 
+.page {
+  position: relative;
+}
+
 ul {
   list-style: none;
 }

@@ -9,14 +9,19 @@ export default function Garage() {
   const [bikePopupData, setBikePopupData] = useState<MyBike | undefined>({} as MyBike);
 
 function openBikePopup(bikeData: MyBike | undefined) {
-  setIsPopupOpen((state) => !state);
+  setIsPopupOpen(true);
   setBikePopupData(bikeData);
 }
+
+function closeBikePopup() {
+  setIsPopupOpen(false);
+}
+
 
   return (
     <section className='garage'>
       <GarageBikesList openBikePopup={openBikePopup}/>
-      <BikeCardPopup isPopupOpen={isPopupOpen} bikePopupData={bikePopupData}/>
+      <BikeCardPopup isPopupOpen={isPopupOpen} bikePopupData={bikePopupData} closeBikePopup={closeBikePopup} />
     </section>
   )
 }
