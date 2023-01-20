@@ -38,8 +38,6 @@ export default function StatsYearCard({year}: StatsYearCardProps) {
     return odo;
   }
 
-
-
   function toggleYearStatsDisplay() {
     if(!isStatsShown && activities.length === 0) {
       setIsLoading(true);

@@ -7,16 +7,18 @@ import deliIndoor from '../../images/bikes/deli_indoor.jpg';
 import trek from '../../images/bikes/trek.jpg';
 import trekIndoor from '../../images/bikes/trek_indoor.jpg';
 import BikeSpecs from '../BikeSpecs/BikeSpecs';
+import DistancePerYearList from '../DistancePerYearList/DistancePerYearList';
 
 
 
 interface BikeCardProps {
   bike: Bike
   openBikePopup: (bikeData: MyBike | undefined) => void
+  yearsAtStrava: (currentYear: number) => number[]
 }
 
 
-export default function GarageBikeCard({bike, openBikePopup}: BikeCardProps) {
+export default function GarageBikeCard({bike, openBikePopup, yearsAtStrava}: BikeCardProps) {
 
   const myBikes: MyBike[] = [
     {
@@ -77,10 +79,9 @@ function openPopup() {
     <div className='bike-card' >
       <div className='bike-card__wrap'>
         <img src={myBike?.src} className='bike-card__image' onClick={openPopup}></img>
-        <BikeSpecs myBike={myBike} />
+        <BikeSpecs myBike={myBike} bike={bike}/>
+        <DistancePerYearList yearsAtStrava={yearsAtStrava} bike={bike} />
       </div>
-
-      <p className='bike-card__stats'>Пробег: {Math.round(bike.converted_distance)} км</p>
     </div>
   )
 }

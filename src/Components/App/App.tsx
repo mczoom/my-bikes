@@ -12,6 +12,7 @@ import AccessPage from '../AccessPage/AccessPage';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import About from '../About/About';
 import Garage from '../Garage/Garage';
+import { currentYear } from '../../utils/constants';
 
 
 
@@ -27,6 +28,14 @@ function App() {
 
   const isLoggedIn = true;  //временный костыль для проверки на залогиненость
 
+
+  // const fromYear = (y: number) => {
+  //   return Date.parse(y.toString()) / 1000;
+  // }
+
+  // const tillYear = (y:number) => {
+  //   return Date.parse((y + 1).toString()) / 1000 - 1;
+  // }
 
 
   const tokenData = (): Token => {
@@ -53,7 +62,16 @@ function App() {
   const yearOfRegistrationAtStrava: number = new Date(currentUser.created_at).getFullYear();
 
 
-  function yearsAtStrava(currentYear: number): number[] {
+  // function yearsAtStrava(currentYear: number): number[] {
+  //   let years: number[] = [];
+  //   for(let i = yearOfRegistrationAtStrava; i <= (currentYear); i++) {
+  //     years.push(i);
+  //   };
+  //   return years;
+  // }
+
+
+  const yearsAtStrava = (currentYear: number): number[] => {
     let years: number[] = [];
     for(let i = yearOfRegistrationAtStrava; i <= (currentYear); i++) {
       years.push(i);
@@ -89,7 +107,7 @@ function App() {
         <Route path='/' element={<ProtectedRoute component={Main} isAuthorized={accessToStrava}/>}  />
         <Route path='/about' element={<About />} />
         <Route path='/stats' element={<Stats registrationYear={yearOfRegistrationAtStrava} yearsAtStrava={yearsAtStrava}/>} />
-        <Route path='/garage' element={<Garage />} />
+        <Route path='/garage' element={<Garage yearsAtStrava={yearsAtStrava}/>} />
       </Routes>
     </div>
     </CurrentUserContext.Provider>

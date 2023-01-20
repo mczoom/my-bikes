@@ -1,9 +1,14 @@
 import React, {useState} from 'react'
 import { MyBike } from '../../models/MyBike';
-import BikeCardPopup from '../BikeCardPopup/BikeCardPopup'
-import GarageBikesList from '../GarageBikesList/GarageBikesList'
+import BikeCardPopup from '../BikeCardPopup/BikeCardPopup';
+import GarageBikesList from '../GarageBikesList/GarageBikesList';
 
-export default function Garage() {
+
+interface GarageProps {
+  yearsAtStrava: (currentYear: number) => number[]
+}
+
+export default function Garage({yearsAtStrava}: GarageProps) {
 
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
   const [bikePopupData, setBikePopupData] = useState<MyBike | undefined>({} as MyBike);
@@ -20,7 +25,7 @@ function closeBikePopup() {
 
   return (
     <section className='garage'>
-      <GarageBikesList openBikePopup={openBikePopup}/>
+      <GarageBikesList openBikePopup={openBikePopup} yearsAtStrava={yearsAtStrava} />
       <BikeCardPopup isPopupOpen={isPopupOpen} bikePopupData={bikePopupData} closeBikePopup={closeBikePopup} />
     </section>
   )

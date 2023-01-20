@@ -4,8 +4,21 @@
   padding: 0;
 }
 
+.bike-specs__bike-name {
+  margin: 0;
+  padding: 0;
+}
+
 .bike-specs__spec {
   margin: 0;
   margin-bottom: 15px;
   padding: 0;
+}
+
+.bike-specs__spec:last-of-type {
+  margin-bottom: 0;
+}
+
+.bold {
+  font-weight: 700;
 }
