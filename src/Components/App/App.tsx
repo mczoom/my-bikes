@@ -1,13 +1,14 @@
 import React, {useState, useEffect} from 'react';
-import {CurrentUserContext} from '../../contexts/CurrentUserContext'
+import {CurrentUserContext} from '../../contexts/CurrentUserContext';
 import {Routes, Route, useNavigate} from 'react-router-dom';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Stats from '../Stats/Stats';
 import { exchangeToken, renewToken } from '../../utils/stravaAuthApi';
-import {getCurrentAthlete} from '../../utils/stravaApi'
-import {Profile} from '../../models/Profile'
+import {getCurrentAthlete, getActivities} from '../../utils/stravaApi';
+import {Profile} from '../../models/Profile';
 import { Token } from '../../models/Token';
+import {Ride} from '../../models/Ride';
 import AccessPage from '../AccessPage/AccessPage';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import About from '../About/About';
@@ -21,17 +22,31 @@ function App() {
   const accessToStrava = localStorage.getItem('token');
   // const accessToStrava = false;
   const [currentUser, setCurrentUser] = useState<Profile>({} as Profile);
+  const [allActivities, setAllActivities] = useState<Ride[]>([]);
   const [token, setToken] = useState('');
   const [bikes, setBikes] = useState('');
+
+  const dateOfRegistrationAtStrava: string = currentUser.created_at;
+  const yearOfRegistrationAtStrava: number = new Date(currentUser.created_at).getFullYear();
 
   const navigate = useNavigate();
 
   const isLoggedIn = true;  //временный костыль для проверки на залогиненость
 
 
+  function getAllActivities() {
+    const fromDate = Date.parse(dateOfRegistrationAtStrava) / 1000;
+    const tillDate = Date.now() / 1000;
+    getActivities({fromDate, tillDate})
+      .then((res) => setAllActivities(res))
+      .catch((err) => console.log(err));
+  }
+  console.log(allActivities)
+
+
   // const fromYear = (y: number) => {
   //   return Date.parse(y.toString()) / 1000;
-  // }
+  // }currentUser
 
   // const tillYear = (y:number) => {
   //   return Date.parse((y + 1).toString()) / 1000 - 1;
@@ -59,7 +74,6 @@ function App() {
       .catch((err) => console.log(err));
   }
 
-  const yearOfRegistrationAtStrava: number = new Date(currentUser.created_at).getFullYear();
 
 
   // function yearsAtStrava(currentYear: number): number[] {
@@ -83,6 +97,7 @@ function App() {
 
   useEffect(() => {
     getCurrentUserInfo();
+    getAllActivities();
   }, [isLoggedIn])
   console.log(currentUser);
 

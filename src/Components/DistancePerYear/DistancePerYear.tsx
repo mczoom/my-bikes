@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Bike } from '../../models/Bike';
 import { fromYear, tillYear } from '../../utils/constants';
 import { getActivities } from '../../utils/stravaApi';
@@ -19,20 +19,25 @@ function getDistancePerYear() {
   const tillDate = tillYear(year);
   getActivities({fromDate, tillDate})
     .then((res) => {
-
       let distance: number = 0;
       res.forEach((activity: any) => {
         if(bike.id === activity.gear_id) {
-        distance += (activity.distance / 1000)}});
+        distance += (Math.round(activity.distance / 1000))
+      }});
       return distance;
 
     })
     .then((dist) => setYearDistance(dist))
-}
+    .catch((err) => console.log(err))
+};
 
-console.log(yearDistance);
+// useEffect(() => {
+//   getDistancePerYear();
+// }, []);
+
+
 
   return (
-    <p onClick={getDistancePerYear}>{year}</p>
+    <p onClick={getDistancePerYear}>{year}: {yearDistance} км</p>
   )
 }

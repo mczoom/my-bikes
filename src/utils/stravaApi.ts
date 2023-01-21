@@ -42,7 +42,7 @@ export const getAthlete = (id: number) => {
 };
 
 
-export const getActivities = ({fromDate, tillDate, page = 1, perPage = 200}: Activities) => {
+export const getActivities = ({fromDate, tillDate, page = 1+1, perPage = 200}: Activities) => {
   return fetch(`${stravaApiUrl}/athlete/activities?before=${tillDate}&after=${fromDate}&page=${page}&per_page=${perPage}`, {
     method: 'GET',
     headers: {
