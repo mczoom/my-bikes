@@ -14,34 +14,68 @@ import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import About from '../About/About';
 import Garage from '../Garage/Garage';
 import { currentYear } from '../../utils/constants';
+import { Activity } from '../../models/Activity';
 
 
 
 function App() {
 
   const accessToStrava = localStorage.getItem('token');
-  // const accessToStrava = false;
+
   const [currentUser, setCurrentUser] = useState<Profile>({} as Profile);
-  const [allActivities, setAllActivities] = useState<Ride[]>([]);
+  const [allActivities, setAllActivities] = useState<Activity[]>([]);
   const [token, setToken] = useState('');
   const [bikes, setBikes] = useState('');
 
   const dateOfRegistrationAtStrava: string = currentUser.created_at;
   const yearOfRegistrationAtStrava: number = new Date(currentUser.created_at).getFullYear();
 
-  const navigate = useNavigate();
+
 
   const isLoggedIn = true;  //временный костыль для проверки на залогиненость
 
 
-  function getAllActivities() {
+  const getAllActivities = () => {
     const fromDate = Date.parse(dateOfRegistrationAtStrava) / 1000;
-    const tillDate = Date.now() / 1000;
-    getActivities({fromDate, tillDate})
-      .then((res) => setAllActivities(res))
-      .catch((err) => console.log(err));
+    const tillDate = Math.round(Date.now() / 1000);
+    let aaa: any = [];
+    let page = 1;
+
+
+    do {
+
+
+          // setAllActivities((v) => (v.concat(res)));
+          page += 1;
+aaa.push(page);
+          console.log(page);
+          console.log(aaa);
+          setAllActivities(aaa);
+
+    } while(page <=5);
+return aaa;
+
+
+
+  // for(let page = 1; page <= 10; page++) {
+  //   getActivities({fromDate, tillDate, page})
+  //     .then((res: any) => {
+  //       if(!res.message) {
+  //         setAllActivities((v) => (v.concat(res)));
+  //         aaa += 1;
+  //         console.log(aaa);
+  //       } else {
+  //         return;
+  //       }
+  //     })
+  //     .catch((err) => console.log(err));
+  //   }
+
   }
-  console.log(allActivities)
+  console.log(allActivities);
+console.log(getAllActivities);
+
+
 
 
   // const fromYear = (y: number) => {
@@ -95,21 +129,23 @@ function App() {
 
 
 
+
+
+  useEffect(() => {
+    if(!accessToStrava) {
+      exchangeToken();
+    } else if (!isTokenExpired) {
+      renewToken(refreshToken);
+    };
+  }, [accessToStrava, isTokenExpired]);
+
+
   useEffect(() => {
     getCurrentUserInfo();
     getAllActivities();
-  }, [isLoggedIn])
+  }, []);
   console.log(currentUser);
 
-  useEffect(() => {
-    if(accessToStrava) {
-    if(!localStorage.getItem('token')) {
-      exchangeToken();
-    } else if (isTokenExpired <= 0) {
-      renewToken(refreshToken);
-    }
-  }
-  }, [])
 
 
 

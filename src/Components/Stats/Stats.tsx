@@ -27,11 +27,6 @@ export default function Stats({registrationYear, yearsAtStrava}: StatsProps) {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  console.log(currentUser)
-
-  const y = yearsAtStrava(currentYear);
-
-
 
 
   const allRidesDistance: number = allRidesTotals?.distance / 1000;
