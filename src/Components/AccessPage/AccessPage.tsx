@@ -11,8 +11,8 @@ export default function AccessPage() {
 
   return (
     <section className='access-page'>
+      <p className='access-page__text'>Для использования приложения необходимо разрешить доступ к аккаунту Strava</p>
       <AccessButton />
-      <p>Для использования приложения необходимо разрешить доступ к аккаунту Strava</p>
     </section>
   )
 }

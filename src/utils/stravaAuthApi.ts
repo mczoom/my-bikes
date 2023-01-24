@@ -1,5 +1,7 @@
 import {clientId, clientSecret} from './secretConstants';
 import {stravaAuthUrl} from './constants';
+import { ExchangeToken } from '../models/ExchangeToken';
+import { RefreshToken } from '../models/RefreshToken';
 
 export function exchangeToken() {
   const params: any = new Proxy(new URLSearchParams(window.location.search), {
@@ -14,10 +16,11 @@ export function exchangeToken() {
     }
   })
   .then((res) => res.json())
-  .then((res) => {
+  .then((res: ExchangeToken) => {
     console.log(res);
     if (res.access_token) {
       localStorage.setItem('token', JSON.stringify(res));
+      localStorage.setItem('accessToStrava', 'true');
     }
   })
   .catch(() => console.log('Ошибка авторизации'))
@@ -33,7 +36,7 @@ export function renewToken(refreshToken: string | undefined) {
     }
   })
   .then((res) => res.json())
-  .then((res) => {
+  .then((res: RefreshToken) => {
     console.log(res);
     if (res.access_token) {
       localStorage.setItem('token', JSON.stringify(res));

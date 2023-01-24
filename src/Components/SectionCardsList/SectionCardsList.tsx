@@ -30,7 +30,6 @@ export default function SectionCardsList() {
     }
   ]
 
-  const [activities, setActivities] = useState(null);
 
   return (
     <section className='section-cards-list'>

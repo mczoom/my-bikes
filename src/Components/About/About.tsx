@@ -1,12 +1,12 @@
 import React, {useEffect} from 'react'
 import { exchangeToken, renewToken } from '../../utils/stravaAuthApi';
-import { Token } from '../../models/Token';
+import { ExchangeToken } from '../../models/ExchangeToken';
 
 export default function About() {
 
-  const tokenData = (): Token => {
+  const tokenData = (): ExchangeToken => {
 
-    let token = {};
+    let token: ExchangeToken = {} as ExchangeToken;
     if(localStorage.getItem('token')) {
       token = JSON.parse(localStorage.getItem('token') || "");
     }
@@ -20,16 +20,6 @@ export default function About() {
   const isTokenExpired: number = (expDate - dateNow);
   const refreshToken: string | undefined = tokenData().refresh_token;
 
-
-  useEffect(() => {
-
-    if(!localStorage.getItem('token')) {
-      exchangeToken();
-    } else if (isTokenExpired <= 0) {
-      renewToken(refreshToken);
-    }
-
-  }, [])
 
   return (
     <div>About</div>

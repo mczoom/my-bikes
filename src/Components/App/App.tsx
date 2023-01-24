@@ -7,20 +7,21 @@ import Stats from '../Stats/Stats';
 import { exchangeToken, renewToken } from '../../utils/stravaAuthApi';
 import {getCurrentAthlete, getActivities} from '../../utils/stravaApi';
 import {Profile} from '../../models/Profile';
-import { Token } from '../../models/Token';
+import { ExchangeToken } from '../../models/ExchangeToken';
 import {Ride} from '../../models/Ride';
 import AccessPage from '../AccessPage/AccessPage';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import About from '../About/About';
 import Garage from '../Garage/Garage';
-import { currentYear } from '../../utils/constants';
+import { tokenData } from '../../utils/constants';
 import { Activity } from '../../models/Activity';
+import { RefreshToken } from '../../models/RefreshToken';
 
 
 
 function App() {
 
-  const accessToStrava = localStorage.getItem('token');
+  const accessToStrava: string | null = localStorage.getItem('accessToStrava');
 
   const [currentUser, setCurrentUser] = useState<Profile>({} as Profile);
   const [allActivities, setAllActivities] = useState<Activity[]>([]);
@@ -41,20 +42,23 @@ function App() {
     let aaa: any = [];
     let page = 1;
 
+    if(currentUser.id) {
+      do {
+        let ress;
+        getActivities({fromDate, tillDate, page})
+          .then((res: any) => {
+            ress = res;
+            // setAllActivities((v) => (v.concat(res)));
+            page++;
+            aaa = aaa.concat(res);
+            console.log(aaa);
+            console.log(ress);
+            console.log(ress.length);
 
-    do {
-
-
-          // setAllActivities((v) => (v.concat(res)));
-          page += 1;
-aaa.push(page);
-          console.log(page);
-          console.log(aaa);
-          setAllActivities(aaa);
-
-    } while(page <=5);
-return aaa;
-
+            // setAllActivities(aaa);
+          })
+      } while(page <=5 );
+    }
 
 
   // for(let page = 1; page <= 10; page++) {
@@ -72,8 +76,8 @@ return aaa;
   //   }
 
   }
+
   console.log(allActivities);
-console.log(getAllActivities);
 
 
 
@@ -87,13 +91,7 @@ console.log(getAllActivities);
   // }
 
 
-  const tokenData = (): Token => {
-    let token = {};
-    if(localStorage.getItem('token')) {
-      token = JSON.parse(localStorage.getItem('token') || "");
-    }
-    return token;
-  }
+
 
   const dateNow: number = Date.now() / 1000;
   // const tokenData: Token = JSON.parse(localStorage.getItem('token') || "");
@@ -104,7 +102,10 @@ console.log(getAllActivities);
 
   function getCurrentUserInfo() {
     getCurrentAthlete()
-      .then((user) => setCurrentUser(user))
+      .then((user) => {
+        if(user.id) {
+          setCurrentUser(user)}
+      })
       .catch((err) => console.log(err));
   }
 
@@ -134,10 +135,12 @@ console.log(getAllActivities);
   useEffect(() => {
     if(!accessToStrava) {
       exchangeToken();
-    } else if (!isTokenExpired) {
-      renewToken(refreshToken);
-    };
-  }, [accessToStrava, isTokenExpired]);
+    }
+  }, [accessToStrava]);
+
+  useEffect(() => {
+    renewToken(refreshToken);
+  }, [isTokenExpired]);
 
 
   useEffect(() => {
@@ -155,7 +158,7 @@ console.log(getAllActivities);
       <Header />
       <Routes>
         <Route path='/access' element={<AccessPage />} />
-        <Route path='/' element={<ProtectedRoute component={Main} isAuthorized={accessToStrava}/>}  />
+        <Route path='/' element={<ProtectedRoute element={Main} isAuthorized={accessToStrava}/>}  />
         <Route path='/about' element={<About />} />
         <Route path='/stats' element={<Stats registrationYear={yearOfRegistrationAtStrava} yearsAtStrava={yearsAtStrava}/>} />
         <Route path='/garage' element={<Garage yearsAtStrava={yearsAtStrava}/>} />

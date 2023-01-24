@@ -2,12 +2,11 @@ import React from 'react';
 import { Route, Navigate } from 'react-router-dom';
 
 interface ProtectedRouteProps {
-
-  component: any
-  isAuthorized: any
+  element: any
+  isAuthorized: string | null
 }
 
-export default function ProtectedRoute({ component: Component, ...props  }: ProtectedRouteProps) {
+export default function ProtectedRoute({ element: Component, ...props  }: ProtectedRouteProps) {
   return (
     <div>
       {props.isAuthorized ? <Component {...props} /> : <Navigate to="/access" />}

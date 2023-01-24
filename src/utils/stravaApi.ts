@@ -1,19 +1,8 @@
 import { Activities } from '../models/Activities';
-import { Token } from '../models/Token';
-import { stravaApiUrl } from './constants';
+import { ExchangeToken } from '../models/ExchangeToken';
+import { stravaApiUrl, tokenData } from './constants';
 
 
-
-const tokenData = ():Token => {
-  const token = localStorage.getItem('token');
-  let tokenData;
-  if(token) {
-  tokenData = JSON.parse(localStorage.getItem('token') || "");
-  }
-  return tokenData;
-}
-
-// const tokenData: Token = JSON.parse(localStorage.getItem('token') || "");
 
 
 export const getCurrentAthlete = () => {
