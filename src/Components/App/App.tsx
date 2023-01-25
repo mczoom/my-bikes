@@ -16,6 +16,8 @@ import Garage from '../Garage/Garage';
 import { tokenData } from '../../utils/constants';
 import { Activity } from '../../models/Activity';
 import { RefreshToken } from '../../models/RefreshToken';
+import Page404 from '../Page404/Page404';
+import Maintenance from '../Maintenance/Maintenance';
 
 
 
@@ -42,38 +44,19 @@ function App() {
     let aaa: any = [];
     let page = 1;
 
-    if(currentUser.id) {
+
       do {
-        let ress;
-        getActivities({fromDate, tillDate, page})
-          .then((res: any) => {
-            ress = res;
-            // setAllActivities((v) => (v.concat(res)));
-            page++;
-            aaa = aaa.concat(res);
+
+      //   getActivities({fromDate, tillDate, page})
+      //     .then((res: any) => {
+
+            aaa = aaa.concat(page);
             console.log(aaa);
-            console.log(ress);
-            console.log(ress.length);
+            console.log(aaa.length);
 
-            // setAllActivities(aaa);
-          })
+            page++;
+         // })
       } while(page <=5 );
-    }
-
-
-  // for(let page = 1; page <= 10; page++) {
-  //   getActivities({fromDate, tillDate, page})
-  //     .then((res: any) => {
-  //       if(!res.message) {
-  //         setAllActivities((v) => (v.concat(res)));
-  //         aaa += 1;
-  //         console.log(aaa);
-  //       } else {
-  //         return;
-  //       }
-  //     })
-  //     .catch((err) => console.log(err));
-  //   }
 
   }
 
@@ -146,7 +129,7 @@ function App() {
   useEffect(() => {
     getCurrentUserInfo();
     getAllActivities();
-  }, []);
+  }, [currentUser]);
   console.log(currentUser);
 
 
@@ -156,13 +139,17 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
     <div className="page">
       <Header />
-      <Routes>
-        <Route path='/access' element={<AccessPage />} />
-        <Route path='/' element={<ProtectedRoute element={Main} isAuthorized={accessToStrava}/>}  />
-        <Route path='/about' element={<About />} />
-        <Route path='/stats' element={<Stats registrationYear={yearOfRegistrationAtStrava} yearsAtStrava={yearsAtStrava}/>} />
-        <Route path='/garage' element={<Garage yearsAtStrava={yearsAtStrava}/>} />
-      </Routes>
+      <main>
+        <Routes>
+          <Route path='/access' element={<AccessPage />} />
+          <Route path='/' element={<ProtectedRoute element={Main} isAuthorized={accessToStrava}/>}  />
+          <Route path='/about' element={<About />} />
+          <Route path='/stats' element={<Stats registrationYear={yearOfRegistrationAtStrava} yearsAtStrava={yearsAtStrava}/>} />
+          <Route path='/garage' element={<Garage yearsAtStrava={yearsAtStrava}/>} />
+          <Route path='/maintenance' element={<Maintenance />} />
+          <Route path='/*' element={<Page404 />} />
+        </Routes>
+      </main>
     </div>
     </CurrentUserContext.Provider>
   );
