@@ -27,10 +27,10 @@ function App() {
 
   const [currentUser, setCurrentUser] = useState<Profile>({} as Profile);
   const [allActivities, setAllActivities] = useState<Activity[]>([]);
-  const [token, setToken] = useState('');
+  const [isStravaTokenExpired, setIsStravaTokenExpired] = useState<boolean>(false);
   const [bikes, setBikes] = useState('');
 
-  const dateOfRegistrationAtStrava: string = currentUser.created_at;
+  const dateOfRegAtStrava: string = currentUser.created_at;
   const yearOfRegistrationAtStrava: number = new Date(currentUser.created_at).getFullYear();
 
 
@@ -38,26 +38,29 @@ function App() {
   const isLoggedIn = true;  //временный костыль для проверки на залогиненость
 
 
-  const getAllActivities = () => {
-    const fromDate = Date.parse(dateOfRegistrationAtStrava) / 1000;
-    const tillDate = Math.round(Date.now() / 1000);
+
+  async function getAllActivities() {
+    const fromDate: number = Date.parse(dateOfRegAtStrava) / 1000 || 674686422;
+    const tillDate: number = Math.round(Date.now() / 1000);
     let aaa: any = [];
     let page = 1;
 
-
       do {
+        await getActivities({fromDate, tillDate, page})
+          .then((res: any) => {
 
-      //   getActivities({fromDate, tillDate, page})
-      //     .then((res: any) => {
-
-            aaa = aaa.concat(page);
+            aaa.push(page);
             console.log(aaa);
+            console.log(res);
             console.log(aaa.length);
 
-            page++;
-         // })
-      } while(page <=5 );
+          })
+          .catch((err) => {
+            console.log(err);
 
+          });
+            page++;
+      } while(page < 4 );
   }
 
   console.log(allActivities);
@@ -74,13 +77,18 @@ function App() {
   // }
 
 
+  function checkIsStravaTokenExpired() {
+    const dateNow: number = Date.now() / 1000;
+    const expDate: any = tokenData().expires_at;
+    const isTokenExpired: number = (expDate - dateNow);
+    if(isTokenExpired) {
+      setIsStravaTokenExpired(true);
+    }
+  }
+
+  console.log(isStravaTokenExpired);
 
 
-  const dateNow: number = Date.now() / 1000;
-  // const tokenData: Token = JSON.parse(localStorage.getItem('token') || "");
-
-  const expDate: any = tokenData().expires_at;
-  const isTokenExpired: number = (expDate - dateNow);
   const refreshToken: string | undefined = tokenData().refresh_token;
 
   function getCurrentUserInfo() {
@@ -111,7 +119,12 @@ function App() {
     return years;
   }
 
-
+  useEffect(() => {
+    checkIsStravaTokenExpired();
+    if(isStravaTokenExpired) {
+      renewToken(refreshToken);
+    }
+  }, []);
 
 
 
@@ -121,15 +134,15 @@ function App() {
     }
   }, [accessToStrava]);
 
-  useEffect(() => {
-    renewToken(refreshToken);
-  }, [isTokenExpired]);
+  // useEffect(() => {
+  //   renewToken(refreshToken);
+  // }, [isStravaTokenExpired]);
 
 
   useEffect(() => {
     getCurrentUserInfo();
     getAllActivities();
-  }, [currentUser]);
+  }, []);
   console.log(currentUser);
 
 
