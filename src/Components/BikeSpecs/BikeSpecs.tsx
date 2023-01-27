@@ -9,6 +9,9 @@ interface BikeSpecsProps {
 }
 
 export default function BikeSpecs({myBike, bike}: BikeSpecsProps) {
+
+
+
   return (
     <ul className='bike-specs'>
       <li className='bike-specs__spec'>

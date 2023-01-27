@@ -6,4 +6,5 @@ export interface MyBike {
   model: string
   year?: number
   weight?: number
+  trainer: boolean
 }

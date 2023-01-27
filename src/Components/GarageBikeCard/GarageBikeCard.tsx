@@ -8,6 +8,7 @@ import trek from '../../images/bikes/trek.jpg';
 import trekIndoor from '../../images/bikes/trek_indoor.jpg';
 import BikeSpecs from '../BikeSpecs/BikeSpecs';
 import DistancePerYearList from '../DistancePerYearList/DistancePerYearList';
+import { Activity } from '../../models/Activity';
 
 
 
@@ -15,10 +16,11 @@ interface BikeCardProps {
   bike: Bike
   openBikePopup: (bikeData: MyBike | undefined) => void
   yearsAtStrava: (currentYear: number) => number[]
+  activities: Activity[]
 }
 
 
-export default function GarageBikeCard({bike, openBikePopup, yearsAtStrava}: BikeCardProps) {
+export default function GarageBikeCard({bike, openBikePopup, yearsAtStrava, activities}: BikeCardProps) {
 
   const myBikes: MyBike[] = [
     {
@@ -28,7 +30,8 @@ export default function GarageBikeCard({bike, openBikePopup, yearsAtStrava}: Bik
       brand: 'Trek',
       model: 'Alpha 1.5',
       year: 2015,
-      weight: 9
+      weight: 9,
+      trainer: false
     },
     {
       id: 'b11562279',
@@ -37,7 +40,8 @@ export default function GarageBikeCard({bike, openBikePopup, yearsAtStrava}: Bik
       brand: 'Delihea',
       model: 'Rest',
       year: 2022,
-      weight: 8
+      weight: 8,
+      trainer: false
     },
     {
       id: 'b8653526',
@@ -45,7 +49,8 @@ export default function GarageBikeCard({bike, openBikePopup, yearsAtStrava}: Bik
       src: trekIndoor,
       brand: 'b-twin',
       model: 'InRide 500',
-      year: 2021
+      year: 2021,
+      trainer: true
     },
     {
       id: 'b11690555',
@@ -53,7 +58,8 @@ export default function GarageBikeCard({bike, openBikePopup, yearsAtStrava}: Bik
       src: deliIndoor,
       brand: 'b-twin',
       model: 'InRide 500',
-      year: 2021
+      year: 2021,
+      trainer: true
     },
     {
       id: 'b6048640',
@@ -62,7 +68,8 @@ export default function GarageBikeCard({bike, openBikePopup, yearsAtStrava}: Bik
       brand: 'NS',
       model: 'Clash',
       year: 2015,
-      weight: 13
+      weight: 13,
+      trainer: false
     }
   ]
 
@@ -80,7 +87,7 @@ function openPopup() {
       <div className='bike-card__wrap'>
         <img src={myBike?.src} className='bike-card__image' onClick={openPopup}></img>
         <BikeSpecs myBike={myBike} bike={bike}/>
-        <DistancePerYearList yearsAtStrava={yearsAtStrava} bike={bike} />
+        <DistancePerYearList yearsAtStrava={yearsAtStrava} bike={bike} myBike={myBike} />
       </div>
     </div>
   )

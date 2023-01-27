@@ -34,33 +34,32 @@ function App() {
   const yearOfRegistrationAtStrava: number = new Date(currentUser.created_at).getFullYear();
 
 
-
   const isLoggedIn = true;  //временный костыль для проверки на залогиненость
 
 
 
   async function getAllActivities() {
-    const fromDate: number = Date.parse(dateOfRegAtStrava) / 1000 || 674686422;
+    const fromDate: number = Date.parse(dateOfRegAtStrava) / 1000;
     const tillDate: number = Math.round(Date.now() / 1000);
-    let aaa: any = [];
+    let activities: Activity[] = [];
     let page = 1;
+    let response = 0;
 
       do {
         await getActivities({fromDate, tillDate, page})
-          .then((res: any) => {
-
-            aaa.push(page);
-            console.log(aaa);
-            console.log(res);
-            console.log(aaa.length);
-
+          .then((res: Activity[]) => {
+            response = res.length;
+            activities.push(...res);
           })
           .catch((err) => {
             console.log(err);
-
           });
-            page++;
-      } while(page < 4 );
+
+        page++;
+
+      } while(response !== 0 );
+
+      setAllActivities(activities);
   }
 
   console.log(allActivities);
@@ -121,10 +120,13 @@ function App() {
 
   useEffect(() => {
     checkIsStravaTokenExpired();
+  }, []);
+
+  useEffect(() => {
     if(isStravaTokenExpired) {
       renewToken(refreshToken);
     }
-  }, []);
+  }, [isStravaTokenExpired]);
 
 
 
@@ -158,7 +160,7 @@ function App() {
           <Route path='/' element={<ProtectedRoute element={Main} isAuthorized={accessToStrava}/>}  />
           <Route path='/about' element={<About />} />
           <Route path='/stats' element={<Stats registrationYear={yearOfRegistrationAtStrava} yearsAtStrava={yearsAtStrava}/>} />
-          <Route path='/garage' element={<Garage yearsAtStrava={yearsAtStrava}/>} />
+          <Route path='/garage' element={<Garage yearsAtStrava={yearsAtStrava} activities={allActivities} />} />
           <Route path='/maintenance' element={<Maintenance />} />
           <Route path='/*' element={<Page404 />} />
         </Routes>

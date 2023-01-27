@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Bike } from '../../models/Bike';
+import { MyBike } from '../../models/MyBike';
 import { fromYear, tillYear } from '../../utils/constants';
 import { getActivities } from '../../utils/stravaApi';
 
@@ -7,10 +8,11 @@ import { getActivities } from '../../utils/stravaApi';
 interface DistancePerYear {
   year: number
   bike: Bike
+  myBike: MyBike | undefined
 }
 
 
-export default function DistancePerYear({year, bike}: DistancePerYear) {
+export default function DistancePerYear({year, bike, myBike}: DistancePerYear) {
 
   const [yearDistance, setYearDistance] = useState<any>([])
 
