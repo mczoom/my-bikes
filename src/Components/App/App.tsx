@@ -65,17 +65,6 @@ function App() {
   console.log(allActivities);
 
 
-
-
-  // const fromYear = (y: number) => {
-  //   return Date.parse(y.toString()) / 1000;
-  // }currentUser
-
-  // const tillYear = (y:number) => {
-  //   return Date.parse((y + 1).toString()) / 1000 - 1;
-  // }
-
-
   function checkIsStravaTokenExpired() {
     const dateNow: number = Date.now() / 1000;
     const expDate: any = tokenData().expires_at;
@@ -84,8 +73,6 @@ function App() {
       setIsStravaTokenExpired(true);
     }
   }
-
-  console.log(isStravaTokenExpired);
 
 
   const refreshToken: string | undefined = tokenData().refresh_token;
@@ -100,14 +87,15 @@ function App() {
   }
 
 
-
-  // function yearsAtStrava(currentYear: number): number[] {
-  //   let years: number[] = [];
-  //   for(let i = yearOfRegistrationAtStrava; i <= (currentYear); i++) {
-  //     years.push(i);
-  //   };
-  //   return years;
-  // }
+  function getBikeTotalDistance(bikeId: string) {
+    let dist = 0;
+    allActivities.forEach((act) => {
+      if(act.gear_id === bikeId) {
+        dist += act.distance;
+      }
+    });
+    return dist;
+  }
 
 
   const yearsAtStrava = (currentYear: number): number[] => {
@@ -136,10 +124,6 @@ function App() {
     }
   }, [accessToStrava]);
 
-  // useEffect(() => {
-  //   renewToken(refreshToken);
-  // }, [isStravaTokenExpired]);
-
 
   useEffect(() => {
     getCurrentUserInfo();
@@ -160,7 +144,7 @@ function App() {
           <Route path='/' element={<ProtectedRoute element={Main} isAuthorized={accessToStrava}/>}  />
           <Route path='/about' element={<About />} />
           <Route path='/stats' element={<Stats registrationYear={yearOfRegistrationAtStrava} yearsAtStrava={yearsAtStrava}/>} />
-          <Route path='/garage' element={<Garage yearsAtStrava={yearsAtStrava} activities={allActivities} />} />
+          <Route path='/garage' element={<Garage yearsAtStrava={yearsAtStrava} activities={allActivities} bikeTotalDistance={getBikeTotalDistance} />} />
           <Route path='/maintenance' element={<Maintenance />} />
           <Route path='/*' element={<Page404 />} />
         </Routes>

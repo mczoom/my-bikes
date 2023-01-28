@@ -33,13 +33,6 @@ export default function Stats({registrationYear, yearsAtStrava}: StatsProps) {
   const yTDRidesDistance: number = allYTDRidesTotals?.distance / 1000;
 
 
-
-  // function getCurrentUser() {
-  //   getAthlete()
-  //     .then((res) => console.log(res))
-  //     .catch((err) => console.log(err));
-  // }
-
   function getUserStats(user: Profile) {
     setIsLoading(true);
     getAthlete(user.id)
