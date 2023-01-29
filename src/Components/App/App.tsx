@@ -5,7 +5,7 @@ import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Stats from '../Stats/Stats';
 import { exchangeToken, renewToken } from '../../utils/stravaAuthApi';
-import {getCurrentAthlete, getActivities} from '../../utils/stravaApi';
+import {getCurrentAthlete, getActivities, getAthlete} from '../../utils/stravaApi';
 import {Profile} from '../../models/Profile';
 import { ExchangeToken } from '../../models/ExchangeToken';
 import {Ride} from '../../models/Ride';
@@ -18,6 +18,7 @@ import { Activity } from '../../models/Activity';
 import { RefreshToken } from '../../models/RefreshToken';
 import Page404 from '../Page404/Page404';
 import Maintenance from '../Maintenance/Maintenance';
+import { AthleteStats } from '../../models/AthleteStats';
 
 
 
@@ -28,7 +29,10 @@ function App() {
   const [currentUser, setCurrentUser] = useState<Profile>({} as Profile);
   const [allActivities, setAllActivities] = useState<Activity[]>([]);
   const [isStravaTokenExpired, setIsStravaTokenExpired] = useState<boolean>(false);
-  const [bikes, setBikes] = useState('');
+  const [allRidesTotals, setAllRidesTotals] = useState<AthleteStats>({} as AthleteStats);
+  const [allYTDRidesTotals, setAllYTDRidesTotals] = useState<AthleteStats>({} as AthleteStats);
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const dateOfRegAtStrava: string = currentUser.created_at;
   const yearOfRegistrationAtStrava: number = new Date(currentUser.created_at).getFullYear();
@@ -36,6 +40,17 @@ function App() {
 
   const isLoggedIn = true;  //временный костыль для проверки на залогиненость
 
+
+  function getUserStats(user: Profile) {
+    setIsLoading(true);
+    getAthlete(user.id)
+      .then((res) => {
+        setAllRidesTotals((res.all_ride_totals));
+        setAllYTDRidesTotals(res.ytd_ride_totals);
+      })
+      .catch((err) => console.log(err))
+      .finally(() => setIsLoading(false));
+  };
 
 
   async function getAllActivities() {
@@ -100,8 +115,8 @@ function App() {
 
   const yearsAtStrava = (currentYear: number): number[] => {
     let years: number[] = [];
-    for(let i = yearOfRegistrationAtStrava; i <= (currentYear); i++) {
-      years.push(i);
+    for(let y = yearOfRegistrationAtStrava; y <= (currentYear); y++) {
+      years.push(y);
     };
     return years;
   }
@@ -115,6 +130,13 @@ function App() {
       renewToken(refreshToken);
     }
   }, [isStravaTokenExpired]);
+
+
+  useEffect(() => {
+    if(currentUser.id) {
+      getUserStats(currentUser)
+    };
+  }, [currentUser]);
 
 
 
@@ -143,7 +165,7 @@ function App() {
           <Route path='/access' element={<AccessPage />} />
           <Route path='/' element={<ProtectedRoute element={Main} isAuthorized={accessToStrava}/>}  />
           <Route path='/about' element={<About />} />
-          <Route path='/stats' element={<Stats registrationYear={yearOfRegistrationAtStrava} yearsAtStrava={yearsAtStrava}/>} />
+          <Route path='/stats' element={<Stats registrationYear={yearOfRegistrationAtStrava} yearsAtStrava={yearsAtStrava} allRidesTotals={allRidesTotals} allYTDRidesTotals={allYTDRidesTotals} isLoading={isLoading} allActivities={allActivities} />} />
           <Route path='/garage' element={<Garage yearsAtStrava={yearsAtStrava} activities={allActivities} bikeTotalDistance={getBikeTotalDistance} />} />
           <Route path='/maintenance' element={<Maintenance />} />
           <Route path='/*' element={<Page404 />} />

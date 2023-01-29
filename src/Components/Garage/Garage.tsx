@@ -107,7 +107,7 @@ useEffect(() => {
   filterBikeCardsToRender();
 }, [isBikesFilterChecked])
 
-console.log(bikeTotalDistance)
+
   return (
     <section className='garage'>
       <BikesTypeFilter toggleBikesFilter={toggleBikesFilter} />

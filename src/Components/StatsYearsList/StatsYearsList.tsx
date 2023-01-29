@@ -1,4 +1,5 @@
 import React from 'react';
+import { Activity } from '../../models/Activity';
 import { Ride } from '../../models/Ride';
 import { currentYear } from '../../utils/constants';
 import StatsYearCard from '../StatsYearCard/StatsYearCard';
@@ -7,13 +8,17 @@ import StatsYearCard from '../StatsYearCard/StatsYearCard';
 interface StatsYearsListProps {
   registrationYear: number
   yearsAtStrava: (p: number) => number[]
+  allActivities: Activity[]
+  totalDistance: (y: number) => number
+  totalTime: (y: number) => number
+  totalTrainings: (y: number) => number
 }
 
-export default function StatsYearsList({registrationYear, yearsAtStrava}: StatsYearsListProps) {
+export default function StatsYearsList({registrationYear, yearsAtStrava, allActivities, totalDistance, totalTime, totalTrainings}: StatsYearsListProps) {
   return (
     <ul className='years-list'>
       {yearsAtStrava(currentYear).reverse().map((year: number, i: number) => (
-          <li key={i}><StatsYearCard year={year} /></li>
+          <li key={i}><StatsYearCard year={year} allActivities={allActivities} totalDistance={totalDistance} totalTime={totalTime} totalTrainings={totalTrainings} /></li>
         ))}
     </ul>
   )
