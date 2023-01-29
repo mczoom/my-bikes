@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Bike } from '../../models/Bike';
 import { MyBike } from '../../models/MyBike';
 
 

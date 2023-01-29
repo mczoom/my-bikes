@@ -1,5 +1,4 @@
 import React from 'react';
-import { Bike } from '../../models/Bike';
 import {MyBike} from '../../models/MyBike';
 import BikeSpecs from '../BikeSpecs/BikeSpecs';
 import DistancePerYearList from '../DistancePerYearList/DistancePerYearList';
@@ -18,9 +17,6 @@ interface BikeCardProps {
 
 export default function GarageBikeCard({bike, openBikePopup, yearsAtStrava, activities, bikeTotalDistance}: BikeCardProps) {
 
-  // const myBike: MyBike | undefined = myBikes.find((b: MyBike) => {
-  //   return b.id.includes(bike.id)
-  // });
 
   function openPopup() {
     openBikePopup(bike);

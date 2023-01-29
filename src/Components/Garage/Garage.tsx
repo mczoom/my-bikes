@@ -92,8 +92,6 @@ function filterBikeCardsToRender() {
   }
 }
 
-
-
 function openBikePopup(bikeData: MyBike | undefined) {
   setIsPopupOpen(true);
   setBikePopupData(bikeData);
@@ -111,7 +109,13 @@ useEffect(() => {
   return (
     <section className='garage'>
       <BikesTypeFilter toggleBikesFilter={toggleBikesFilter} />
-      <GarageBikesList bikesToRender={bikesToRender} openBikePopup={openBikePopup} yearsAtStrava={yearsAtStrava} activities={activities} bikeTotalDistance={bikeTotalDistance} />
+      <GarageBikesList
+        bikesToRender={bikesToRender}
+        openBikePopup={openBikePopup}
+        yearsAtStrava={yearsAtStrava}
+        activities={activities}
+        bikeTotalDistance={bikeTotalDistance}
+      />
       <BikeCardPopup isPopupOpen={isPopupOpen} bikePopupData={bikePopupData} closeBikePopup={closeBikePopup} />
     </section>
   )

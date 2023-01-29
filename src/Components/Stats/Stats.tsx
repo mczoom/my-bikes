@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { Preloader } from '../Preloader/Preloader';
 import StatsYearsList from '../StatsYearsList/StatsYearsList';
 import CommonStats from '../CommonStats/CommonStats';
@@ -18,7 +18,6 @@ interface StatsProps {
 
 
 export default function Stats({registrationYear, yearsAtStrava, allRidesTotals, allYTDRidesTotals, isLoading, allActivities}: StatsProps) {
-
 
 
   function sumTotalDistance(y: number): number {

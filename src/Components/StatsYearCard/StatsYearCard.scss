@@ -28,6 +28,7 @@
 }
 
 .stats__wrapper {
+  padding-bottom: 2px;
   cursor: pointer;
 }
 
@@ -49,7 +50,7 @@
 }
 
 %opener-icon {
-  margin: 10px auto 14px;
+  margin: 10px auto 6px;
   height: 14px;
   width: 100%;
   background-image: url('../../images/chevron-down-24.png');
@@ -73,15 +74,16 @@
 }
 
 .stats_dashboard {
-  height: 0;
+  display: none;
   margin: 0;
   padding: 0;
-  visibility: hidden;
+
 }
 
 .stats_dashboard_on {
-  visibility: visible;
-  padding-bottom: 110px;
+  display: block;
+
+  padding-bottom: 20px;
 }
 
 .stats__text {
