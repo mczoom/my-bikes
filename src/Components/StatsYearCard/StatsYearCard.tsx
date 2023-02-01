@@ -8,10 +8,11 @@ interface StatsYearCardProps {
   totalDistance: (y: number) => number
   totalTime: (y: number) => number
   totalTrainings: (y: number) => number
+  yearLongesDistance: (y: number) => number
 }
 
 
-export default function StatsYearCard({year, allActivities, totalDistance, totalTime, totalTrainings}: StatsYearCardProps) {
+export default function StatsYearCard({year, allActivities, totalDistance, totalTime, totalTrainings, yearLongesDistance}: StatsYearCardProps) {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isStatsShown, setIsStatsShown] = useState<boolean>(false);
@@ -40,6 +41,7 @@ export default function StatsYearCard({year, allActivities, totalDistance, total
             <p className='stats__text'>Количество тренировок: {totalTrainings(year)}</p>
             <p className='stats__text'>Пройденая дистанция: {totalDistance(year)} км</p>
             <p className='stats__text'>Общее время поездок: {totalTime(year)} ч</p>
+            <p className='stats__text'>Самая длинная поездка: {yearLongesDistance(year)} км</p>
           </div>
         ) : (
           <div className={dashboardClassName}>

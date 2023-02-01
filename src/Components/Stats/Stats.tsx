@@ -19,21 +19,39 @@ interface StatsProps {
 
 export default function Stats({registrationYear, yearsAtStrava, allRidesTotals, allYTDRidesTotals, isLoading, allActivities}: StatsProps) {
 
+  const isYearMatch = (y: number, activity: Activity) => {
+    return new Date(activity.start_date).getFullYear() === y;
+  }
+
 
   function sumTotalDistance(y: number): number {
     let odo = 0;
     allActivities.forEach((training) => {
-      if(new Date(training.start_date).getFullYear() === y) {
+      if(isYearMatch(y, training)) {
         odo += Math.round(training.distance / 1000);
       }
     })
     return odo;
   }
 
+  function getYearLongesDistance(y: number): number {
+    let dist: number[] = [];
+    allActivities.forEach((training) => {
+      if(isYearMatch(y, training)) {
+        dist.push(training.distance);
+      }
+    });
+    dist.sort(function(a,b) {
+      return b - a;
+    });
+
+    return Math.round(dist[0] / 1000);
+  }
+
   function sumTotalTime(y: number): number {
     let odo = 0;
     allActivities.forEach((training) => {
-      if(new Date(training.start_date).getFullYear() === y) {
+      if(isYearMatch(y, training)) {
         odo += Math.round(training.elapsed_time / 3600);
       }
     })
@@ -43,7 +61,7 @@ export default function Stats({registrationYear, yearsAtStrava, allRidesTotals, 
   function sumTrainings(y: number): number {
     let trainings = 0;
     allActivities.forEach((training) => {
-      if(new Date(training.start_date).getFullYear() === y) {
+      if(isYearMatch(y, training)) {
         trainings ++;
       }
     })
@@ -63,6 +81,7 @@ export default function Stats({registrationYear, yearsAtStrava, allRidesTotals, 
         totalDistance={sumTotalDistance}
         totalTime={sumTotalTime}
         totalTrainings={sumTrainings}
+        yearLongesDistance={getYearLongesDistance}
       />
     </section>
   )
