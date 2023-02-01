@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 import { Activity } from '../../models/Activity';
-import { Ride } from '../../models/Ride';
-import { getActivities } from '../../utils/stravaApi';
-import { Preloader } from '../Preloader/Preloader';
 
 
 interface StatsYearCardProps {
@@ -17,25 +14,16 @@ interface StatsYearCardProps {
 export default function StatsYearCard({year, allActivities, totalDistance, totalTime, totalTrainings}: StatsYearCardProps) {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  // const [activities, setActivities] = useState<Ride[]>([]);
-
   const [isStatsShown, setIsStatsShown] = useState<boolean>(false);
-
-
-  // const fromDate: number = Date.parse(year.toString()) / 1000;
-  // const tillDate: number = Date.parse((year + 1).toString()) / 1000 - 1;
 
   const dashboardClassName = `stats_dashboard ${isStatsShown ? 'stats_dashboard_on' : ''}`;
   const openerIconClassName = isStatsShown ? 'stats__opener-icon_hide' : 'stats__opener-icon_show';
   const yearStatsButtonText = isStatsShown ? 'скрыть' : 'показать статистику';
 
 
-
   function toggleYearStatsDisplay() {
       setIsStatsShown(v => !v);
   }
-
-
 
 
   return (

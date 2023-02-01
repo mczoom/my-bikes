@@ -26,6 +26,7 @@ function App() {
 
   const accessToStrava: string | null = localStorage.getItem('accessToStrava');
 
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<Profile>({} as Profile);
   const [allActivities, setAllActivities] = useState<Activity[]>([]);
   const [isStravaTokenExpired, setIsStravaTokenExpired] = useState<boolean>(false);
@@ -38,7 +39,8 @@ function App() {
   const yearOfRegistrationAtStrava: number = new Date(currentUser.created_at).getFullYear();
 
 
-  const isLoggedIn = true;  //временный костыль для проверки на залогиненость
+  const access = () => localStorage.getItem('accessToStrava');
+console.log(access());
 
 
   function getUserStats(user: Profile) {
@@ -68,13 +70,13 @@ function App() {
           })
           .catch((err) => {
             console.log(err);
+            return;
           });
-
         page++;
 
       } while(response !== 0 );
 
-      setAllActivities(activities);
+    setAllActivities(activities);
   }
 
   console.log(allActivities);
@@ -82,7 +84,7 @@ function App() {
 
   function checkIsStravaTokenExpired() {
     const dateNow: number = Date.now() / 1000;
-    const expDate: any = tokenData().expires_at;
+    const expDate: number = tokenData()?.expires_at;
     const isTokenExpired: number = (expDate - dateNow);
     if(isTokenExpired) {
       setIsStravaTokenExpired(true);
@@ -90,7 +92,7 @@ function App() {
   }
 
 
-  const refreshToken: string | undefined = tokenData().refresh_token;
+  const refreshToken: string | undefined = tokenData()?.refresh_token;
 
   function getCurrentUserInfo() {
     getCurrentAthlete()
@@ -125,6 +127,7 @@ function App() {
     checkIsStravaTokenExpired();
   }, []);
 
+
   useEffect(() => {
     if(isStravaTokenExpired) {
       renewToken(refreshToken);
@@ -141,15 +144,17 @@ function App() {
 
 
   useEffect(() => {
-    if(!accessToStrava) {
+    if(!tokenData()) {
       exchangeToken();
     }
-  }, [accessToStrava]);
+  }, []);
 
 
   useEffect(() => {
-    getCurrentUserInfo();
-    getAllActivities();
+    if(tokenData()) {
+      getCurrentUserInfo();
+      getAllActivities();
+    }
   }, []);
   console.log(currentUser);
 
@@ -163,11 +168,11 @@ function App() {
       <main>
         <Routes>
           <Route path='/access' element={<AccessPage />} />
-          <Route path='/' element={<ProtectedRoute element={Main} isAuthorized={accessToStrava}/>}  />
+          <Route path='/' element={<ProtectedRoute element={Main} isAuthorized={access}/>}  />
           <Route path='/about' element={<About />} />
-          <Route path='/stats' element={<Stats registrationYear={yearOfRegistrationAtStrava} yearsAtStrava={yearsAtStrava} allRidesTotals={allRidesTotals} allYTDRidesTotals={allYTDRidesTotals} isLoading={isLoading} allActivities={allActivities} />} />
-          <Route path='/garage' element={<Garage yearsAtStrava={yearsAtStrava} activities={allActivities} bikeTotalDistance={getBikeTotalDistance} />} />
-          <Route path='/maintenance' element={<Maintenance />} />
+          <Route path='/stats' element={<ProtectedRoute element={Stats} isAuthorized={access} registrationYear={yearOfRegistrationAtStrava} yearsAtStrava={yearsAtStrava} allRidesTotals={allRidesTotals} allYTDRidesTotals={allYTDRidesTotals} isLoading={isLoading} allActivities={allActivities} />} />
+          <Route path='/garage' element={<ProtectedRoute element={Garage} isAuthorized={access} yearsAtStrava={yearsAtStrava} activities={allActivities} bikeTotalDistance={getBikeTotalDistance} />} />
+          <Route path='/maintenance' element={<ProtectedRoute element={Maintenance} isAuthorized={access} />} />
           <Route path='/*' element={<Page404 />} />
         </Routes>
       </main>

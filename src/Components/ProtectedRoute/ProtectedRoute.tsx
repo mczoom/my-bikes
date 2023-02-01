@@ -6,10 +6,11 @@ interface ProtectedRouteProps {
   isAuthorized: string | null
 }
 
-export default function ProtectedRoute({ element: Component, ...props  }: ProtectedRouteProps) {
+export default function ProtectedRoute({ element: Component, ...props  }: any) {
+
   return (
     <div>
-      {props.isAuthorized ? <Component {...props} /> : <Navigate to="/access" />}
+      {props.isAuthorized() ? <Component {...props} /> : <Navigate to="/access" />}
     </div>
   )
 }

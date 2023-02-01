@@ -1,10 +1,11 @@
 .section-cards-list__card {
-  margin: 20px auto;
+  margin: 30px auto;
   padding: 10px 20px;
   border: solid 1px;
+  background-color: #f172a1;
 }
 
 .section-cards-list__card:hover {
-  background-color: rgb(194, 183, 170);
+  // background-color: #f76c6c;
   transform: scale(1.02);
 }
