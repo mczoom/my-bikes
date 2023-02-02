@@ -13,13 +13,14 @@ interface StatsYearsListProps {
   totalTime: (y: number) => number
   totalTrainings: (y: number) => number
   yearLongesDistance: (y: number) => number
+  totalOverHundredRides: (y: number) => number
 }
 
-export default function StatsYearsList({yearsAtStrava, allActivities, totalDistance, totalTime, totalTrainings, yearLongesDistance}: StatsYearsListProps) {
+export default function StatsYearsList({yearsAtStrava, allActivities, totalDistance, totalTime, totalTrainings, yearLongesDistance, totalOverHundredRides}: StatsYearsListProps) {
   return (
     <ul className='years-list'>
       {yearsAtStrava(currentYear).reverse().map((year: number, i: number) => (
-          <li key={i}><StatsYearCard year={year} allActivities={allActivities} totalDistance={totalDistance} totalTime={totalTime} totalTrainings={totalTrainings} yearLongesDistance={yearLongesDistance} /></li>
+          <li key={i}><StatsYearCard year={year} allActivities={allActivities} totalDistance={totalDistance} totalTime={totalTime} totalTrainings={totalTrainings} yearLongesDistance={yearLongesDistance} totalOverHundredRides={totalOverHundredRides} /></li>
         ))}
     </ul>
   )

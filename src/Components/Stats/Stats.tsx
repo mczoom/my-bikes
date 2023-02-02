@@ -34,19 +34,28 @@ export default function Stats({registrationYear, yearsAtStrava, allRidesTotals, 
     return odo;
   }
 
+
   function getYearLongesDistance(y: number): number {
-    let dist: number[] = [];
+    let dist = 0;
     allActivities.forEach((training) => {
-      if(isYearMatch(y, training)) {
-        dist.push(training.distance);
+      if(isYearMatch(y, training) && training.distance > dist) {
+        dist = training.distance;
+      };
+    });
+    return Math.round(dist / 1000);
+  }
+
+
+  function totalOverHundredRides(y: number): number {
+    let longRide = 0;
+    allActivities.forEach((training) => {
+      if(isYearMatch(y, training) && training.distance >= 100000) {
+        longRide += 1;
       }
     });
-    dist.sort(function(a,b) {
-      return b - a;
-    });
-
-    return Math.round(dist[0] / 1000);
+    return longRide;
   }
+
 
   function sumTotalTime(y: number): number {
     let odo = 0;
@@ -58,6 +67,7 @@ export default function Stats({registrationYear, yearsAtStrava, allRidesTotals, 
     return odo;
   }
 
+
   function sumTrainings(y: number): number {
     let trainings = 0;
     allActivities.forEach((training) => {
@@ -67,6 +77,7 @@ export default function Stats({registrationYear, yearsAtStrava, allRidesTotals, 
     })
     return trainings;
   }
+
 
   return (
     <section className='stats'>
@@ -82,6 +93,7 @@ export default function Stats({registrationYear, yearsAtStrava, allRidesTotals, 
         totalTime={sumTotalTime}
         totalTrainings={sumTrainings}
         yearLongesDistance={getYearLongesDistance}
+        totalOverHundredRides={totalOverHundredRides}
       />
     </section>
   )

@@ -11,24 +11,31 @@
 
 .year-card {
   position: relative;
-  margin: 20px auto;
+  margin: 60px auto;
   text-align: center;
-  box-shadow: 5px 5px 10px peachpuff,
-  inset -5px -5px 8px -4px palegoldenrod;
-  padding: 5px 2px;
+  // box-shadow: 5px 8px 10px aliceblue;
+  // inset: -5px -5px 8px -4px #f172a1;
+  padding: 0;
+  padding-top: 5px;
   width: 100%;
-  border: 1px none $border-color;
+  // border: 1px none $border-color;
   border-radius: 6px;
+  background-color: #3cc47c;
+
+}
+
+.year-card__header {
+  color: black;
 }
 
 .year_card__stats {
-  background-color: rgb(173, 168, 168);
+  background-color: #f8eee7;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
 }
 
 .stats__wrapper {
-  padding-bottom: 2px;
+  padding-bottom: 10px;
   cursor: pointer;
 }
 
@@ -36,7 +43,7 @@
   margin: 0;
   padding-bottom: 0px;
   width: 100%;
-  background-color: rgb(173, 168, 168);
+  // background-color: rgb(173, 168, 168);
   border: none;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
@@ -50,7 +57,7 @@
 }
 
 %opener-icon {
-  margin: 10px auto 6px;
+  margin: 10px auto px;
   height: 14px;
   width: 100%;
   background-image: url('../../images/chevron-down-24.png');
@@ -77,12 +84,10 @@
   display: none;
   margin: 0;
   padding: 0;
-
 }
 
 .stats_dashboard_on {
   display: block;
-
   padding-bottom: 20px;
 }
 
