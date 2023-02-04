@@ -4,7 +4,9 @@ import StatsYearsList from '../StatsYearsList/StatsYearsList';
 import CommonStats from '../CommonStats/CommonStats';
 import { AthleteStats } from '../../models/AthleteStats';
 import { Activity } from '../../models/Activity';
-
+import FullCalendar from '@fullcalendar/react' // must go before plugins
+import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
+import { getDateMeta } from '@fullcalendar/core/internal';
 
 
 interface StatsProps {
@@ -79,12 +81,61 @@ export default function Stats({registrationYear, yearsAtStrava, allRidesTotals, 
   }
 
 
+  function getAllActivitiesForCalendar() {
+    let activities: any = [];
+    allActivities.forEach((act: Activity) => {
+      activities.push({start: act.start_date, title: Math.round(act.distance / 1000) + ' км', allDay : true})
+    })
+    return activities;
+  }
+
+
+  function getDist() {
+    let a = 0;
+    getAllActivitiesForCalendar().forEach((day: any) => {
+      a = day.dist;
+    });
+    return a;
+  }
+
+
+const aa = [
+  {
+    dist: 42,
+    start  : '2023-02-01'
+
+  },
+  {
+    title  : 'event2',
+    start  : '2023-02-02',
+    end    : '2023-02-02'
+  },
+  {
+    title  : 'event3',
+    start  : '2023-02-09',
+    allDay : false // will make the time show
+  }
+];
+
   return (
     <section className='stats'>
       <Preloader isLoading={isLoading} />
       {allRidesTotals.distance && allYTDRidesTotals.distance &&
         <CommonStats allRidesTotals={allRidesTotals} allYTDRidesTotals={allYTDRidesTotals} />
       }
+      <div className='calendar'>
+      <FullCalendar
+        plugins={[ dayGridPlugin ]}
+        initialView="dayGridMonth"
+        // eventContent={'Ride'}
+        height={'auto'}
+        locale={'ru'}
+        firstDay={1}
+        // showNonCurrentDates={false}
+        fixedWeekCount={false}
+        events={getAllActivitiesForCalendar()}
+      />
+      </div>
       <StatsYearsList
         registrationYear={registrationYear}
         yearsAtStrava={yearsAtStrava}
