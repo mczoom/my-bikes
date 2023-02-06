@@ -1,0 +1,35 @@
+:root {
+  --fc-button-bg-color: #3cc47c;
+  --fc-event-border-color: none;
+  --fc-event-bg-color: #4d6d9a;
+}
+
+.fc .fc-daygrid-event-harness {
+  display: flex;
+  justify-content: center;
+}
+
+.date-content__dot {
+  margin: 0 auto;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+
+}
+
+.date-content__dot_indoor-ride {
+  background-color: rgb(187, 196, 66);
+}
+
+.date-content__dot_outdoor-ride {
+  background-color: #3cc47c;
+}
+
+.date-content__dot_other-activity {
+  background-color: aliceblue;
+}
+
+.date-content__title {
+  color: aliceblue;
+  margin: 10px 0 0;
+}

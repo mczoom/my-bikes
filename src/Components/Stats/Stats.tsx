@@ -6,7 +6,7 @@ import { AthleteStats } from '../../models/AthleteStats';
 import { Activity } from '../../models/Activity';
 import FullCalendar from '@fullcalendar/react' // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
-import { getDateMeta } from '@fullcalendar/core/internal';
+
 
 
 interface StatsProps {
@@ -84,38 +84,35 @@ export default function Stats({registrationYear, yearsAtStrava, allRidesTotals, 
   function getAllActivitiesForCalendar() {
     let activities: any = [];
     allActivities.forEach((act: Activity) => {
-      activities.push({start: act.start_date, title: Math.round(act.distance / 1000) + ' км', allDay : true})
+      const dotClassName = () => {
+        if(act.type.includes('Ride')) {
+        if(act.trainer === true) {
+          return 'date-content__dot date-content__dot_indoor-ride';
+        }else{
+          return 'date-content__dot date-content__dot_outdoor-ride';
+        }
+      }else{
+        return 'date-content__dot date-content__dot_other-activity';
+      }
+    };
+      activities.push({
+        start: act.start_date,
+        title: `${Math.round(act.distance / 1000)} км`,
+        allDay: 'false',
+        content: <div className='date-content'>
+                   <div className={dotClassName()}></div>
+                   <p className='date-content__title'>{Math.round(act.distance / 1000)} км</p>
+                 </div>
+      })
     })
     return activities;
   }
 
-
-  function getDist() {
-    let a = 0;
-    getAllActivitiesForCalendar().forEach((day: any) => {
-      a = day.dist;
-    });
-    return a;
+  const vv = {
+    right: 'prev,next'
   }
 
-
-const aa = [
-  {
-    dist: 42,
-    start  : '2023-02-01'
-
-  },
-  {
-    title  : 'event2',
-    start  : '2023-02-02',
-    end    : '2023-02-02'
-  },
-  {
-    title  : 'event3',
-    start  : '2023-02-09',
-    allDay : false // will make the time show
-  }
-];
+  const bb = {html: '<i>some html</i>'};
 
   return (
     <section className='stats'>
@@ -127,13 +124,17 @@ const aa = [
       <FullCalendar
         plugins={[ dayGridPlugin ]}
         initialView="dayGridMonth"
-        // eventContent={'Ride'}
+        eventContent={function(events) { return events.event.extendedProps.content}}
         height={'auto'}
         locale={'ru'}
         firstDay={1}
         // showNonCurrentDates={false}
         fixedWeekCount={false}
         events={getAllActivitiesForCalendar()}
+        displayEventTime={false}
+        headerToolbar={vv}
+
+
       />
       </div>
       <StatsYearsList
