@@ -1,0 +1,23 @@
+.tile-content__dot {
+  margin: 0 auto;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+}
+
+.tile-content__dot_indoor-ride {
+  background-color: rgb(187, 196, 66);
+}
+
+.tile-content__dot_outdoor-ride {
+  background-color: #3cc47c;
+}
+
+.tile-content__dot_other-activity {
+  background-color: aliceblue;
+}
+
+.tile-content__title {
+  color: aliceblue;
+  margin: 10px 0 0;
+}

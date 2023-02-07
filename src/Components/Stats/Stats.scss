@@ -10,6 +10,15 @@
   font-weight: 600;
 }
 
+.stats__common-stats-wrapper {
+  display: flex;
+  justify-content: space-between;
+  height: 700px;
+}
+
 .calendar {
-  width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 600px;
 }
