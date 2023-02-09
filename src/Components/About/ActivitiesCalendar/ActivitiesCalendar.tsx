@@ -1,6 +1,7 @@
 import React from 'react';
 import FullCalendar from '@fullcalendar/react' // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
+import multiMonthPlugin from '@fullcalendar/multimonth';
 import { Activity } from '../../../models/Activity';
 import CalendarLegend from '../../CalendarLegend/CalendarLegend';
 import CalendarTileContent from '../../CalendarTileContent/CalendarTileContent';
@@ -37,11 +38,13 @@ export default function ActivitiesCalendar({allActivities}: ActivitiesCalendarPr
   }
 
 
+  // const calendarNavButtons = {end: 'multiMonthYear,today,prev,next'}
+
 
   return (
     <div className='calendar'>
       <FullCalendar
-        plugins={[ dayGridPlugin ]}
+        plugins={[ dayGridPlugin, multiMonthPlugin ]}
         initialView="dayGridMonth"
         eventContent={function(events) { return events.event.extendedProps.content}}
         height={'auto'}
@@ -52,7 +55,7 @@ export default function ActivitiesCalendar({allActivities}: ActivitiesCalendarPr
         events={getAllActivitiesForCalendar()}
         displayEventTime={false}
         // headerToolbar={calendarNavButtons}
-
+        buttonText={{today: 'сегодня'}}
 
       />
       <CalendarLegend />

@@ -14,11 +14,25 @@ export default function CommonStats({allRidesTotals, allYTDRidesTotals}: CommonS
   const yTDRidesDistance: number = Math.round(allYTDRidesTotals.distance / 1000);
 
   return (
-    <ul className='common-stats'>
-        <li><p>Тренировок за всё время: <span className='stats__text_bold'>{allRidesTotals.count || '--'}</span></p></li>
-        <li><p>Пройдено за всё время: <span className='stats__text_bold'>{allRidesDistance ? allRidesDistance + ' км' : '--'}</span></p></li>
-        <li><p>Тренировок в этом году: <span className='stats__text_bold'>{allYTDRidesTotals.count || '--'}</span></p></li>
-        <li><p>Пройдено в этом году: <span className='stats__text_bold'>{yTDRidesDistance ? yTDRidesDistance + ' км' : '--'}</span></p></li>
+    <div className='common-stats'>
+      <ul className='common-stats__list'>
+        <li className='common-stats__item'>
+          <p className='item__description'>Всего пройдено: </p>
+          <span className='item__value'>{allRidesDistance ? allRidesDistance + ' км' : '--'}</span>
+        </li>
+        <li className='common-stats__item'>
+          <p className='item__description'>Тренировок за всё время: </p>
+          <span className='item__value'>{allRidesTotals.count || '--'}</span>
+        </li>
+        <li className='common-stats__item'>
+          <p className='item__description'>Пройдено в этом году: </p>
+          <span className='item__value'>{yTDRidesDistance ? yTDRidesDistance + ' км' : '--'}</span>
+        </li>
+        <li className='common-stats__item'>
+          <p className='item__description'>Тренировок в этом году: </p>
+          <span className='item__value'>{allYTDRidesTotals.count || '--'}</span>
+        </li>
       </ul>
+    </div>
   )
 }
