@@ -57,7 +57,7 @@
 }
 
 %opener-icon {
-  margin: 10px auto px;
+  margin: 10px auto 2px;
   height: 14px;
   width: 100%;
   background-image: url('../../images/chevron-down-24.png');
@@ -76,7 +76,7 @@
 
 .stats__opener-icon_hide {
   @extend %opener-icon;
-  margin-bottom: 25px;
+  margin-bottom: 10px;
   background-image: url('../../images/chevron-up-24.png');
 }
 
@@ -87,10 +87,28 @@
 }
 
 .stats_dashboard_on {
-  display: block;
-  padding-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px 20px;
+}
+
+.stats_dashboard_empty {
+  justify-content: center;
 }
 
 .stats__text {
-  margin-top: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.stats__text__wrapper {
+  margin: 8px 0;
+}
+
+.stats__text_bold {
+  font-size: 36px;
+  line-height: 121%;
+  font-weight: 700;
+  margin: 0;
 }

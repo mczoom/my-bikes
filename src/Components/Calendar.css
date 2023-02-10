@@ -3,6 +3,7 @@
   --fc-event-border-color: none;
   --fc-event-bg-color: #4d6d9a;
   /* --fc-today-bg-color: #3cc47c; */
+  /* --fc-daygrid-event-dot-width: 15px; */
 }
 
 .fc .fc-daygrid-event-harness {

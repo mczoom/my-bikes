@@ -37,7 +37,7 @@ export default function Stats({registrationYear, yearsAtStrava, allRidesTotals, 
   }
 
 
-  function getYearLongesDistance(y: number): number {
+  function getYearLongestDistance(y: number): number {
     let dist = 0;
     allActivities.forEach((training) => {
       if(isYearMatch(y, training) && training.distance > dist) {
@@ -97,7 +97,7 @@ export default function Stats({registrationYear, yearsAtStrava, allRidesTotals, 
         totalDistance={sumTotalDistance}
         totalTime={sumTotalTime}
         totalTrainings={sumTrainings}
-        yearLongesDistance={getYearLongesDistance}
+        yearLongestDistance={getYearLongestDistance}
         totalOverHundredRides={totalOverHundredRides}
       />
     </section>

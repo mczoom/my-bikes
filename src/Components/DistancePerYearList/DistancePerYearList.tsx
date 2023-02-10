@@ -12,9 +12,9 @@ interface DistancePerYearListProps {
 
 export default function DistancePerYearList({yearsAtStrava, distancePerYear}: DistancePerYearListProps) {
   return (
-    <ul>
+    <ul className='year-dist-cardslist'>
       {yearsAtStrava(currentYear).reverse().map((year: number, i: number) => (
-        <li key={i}><DistancePerYear year={year} distancePerYear={distancePerYear} /></li>
+        <li className='year-dist-card' key={i}><DistancePerYear year={year} distancePerYear={distancePerYear} /></li>
       ))}
     </ul>
   )

@@ -1,0 +1,16 @@
+@import '../../styles/index';
+
+.distance-card__text {
+  margin: 0;
+  margin-bottom: 10px;
+  padding: 5px;
+  border: 3px solid black;
+  border-radius: 6px;
+}
+
+.distance-card__year {
+  font-size: 18px;
+  line-height: 121%;
+  font-weight: 700;
+  margin-left: 8px;
+}
