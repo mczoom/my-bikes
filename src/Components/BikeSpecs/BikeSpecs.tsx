@@ -16,19 +16,19 @@ export default function BikeSpecs({bike, bikeTotalDistance}: BikeSpecsProps) {
         <h2 className='bike-specs__bike-name'>{bike.name}</h2>
       </li>
       <li className='bike-specs__spec'>
-        <p >Бренд: <span className='bold'>{bike.brand}</span></p>
+        <p className='spec'>Бренд: <span className='bold'>{bike.brand}</span></p>
       </li>
       <li className='bike-specs__spec'>
-        <p>Модель: <span className='bold'>{bike.model}</span></p>
+        <p className='spec'>Модель: <span className='bold'>{bike.model}</span></p>
       </li>
       <li className='bike-specs__spec'>
-        <p>Год: <span className='bold'>{bike.year || 'н/д'}</span></p>
+        <p className='spec'>Год: <span className='bold'>{bike.year || 'н/д'}</span></p>
       </li>
       <li className='bike-specs__spec'>
-        <p>Вес: <span className='bold'>{bike.weight || 'н/д'}</span></p>
+        <p className='spec'>Вес: <span className='bold'>{bike.weight || 'н/д'}</span></p>
       </li>
       <li className='bike-specs__spec'>
-        <p>Общий пробег: <span className='bold'>{Math.round(bikeTotalDistance(bike.id) / 1000)} км</span></p>
+        <p className='spec'>Пробег: <span className='bold'>{Math.round(bikeTotalDistance(bike.id) / 1000) || '--'} км</span></p>
       </li>
     </ul>
   )

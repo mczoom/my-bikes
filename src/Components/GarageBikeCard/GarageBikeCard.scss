@@ -1,17 +1,15 @@
-.bike-card {
-  margin: 0;
-}
-
 .bike-card__wrap {
   display: flex;
 }
 
 .bike-card__image {
   margin: 0;
-  height: 200px;
+  height: 250px;
   width: 300px;
   object-fit: cover;
   cursor: pointer;
+  border: 3px solid black;
+  border-radius: 6px;
 }
 
 .bike-card__bike-name {

@@ -21,7 +21,7 @@ function closePopupByOverlayClick(e:React.SyntheticEvent) {
   return (
     <div className={popupClassName} onClick={closePopupByOverlayClick}>
       <div className='bike-popup__container'>
-        <button type='button' className='bike-popup__close-btn' onClick={closeBikePopup}>X</button>
+        <button type='button' className='bike-popup__close-btn' onClick={closeBikePopup}></button>
         <img src={bikePopupData?.src} className='bike-popup__image'/>
         <p className='bike-popup__bike-name'>{bikePopupData?.name}</p>
       </div>

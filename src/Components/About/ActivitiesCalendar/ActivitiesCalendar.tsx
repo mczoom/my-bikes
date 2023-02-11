@@ -31,7 +31,7 @@ export default function ActivitiesCalendar({allActivities}: ActivitiesCalendarPr
         start: act.start_date,
         title: `${Math.round(act.distance / 1000)} км`,
         allDay: 'false',
-        content: <CalendarTileContent dotClassName={dotClassName} act={act} />
+        content: <CalendarTileContent dotClassName={dotClassName} activity={act} />
       })
     })
     return activities;

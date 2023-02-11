@@ -1,3 +1,5 @@
+@import '../../styles/index';
+
 .bike-popup {
   position: fixed;
   top: 0;
@@ -7,7 +9,7 @@
   align-items: center;
   width: 100%;
   height: 100%;
-  background-color: rgba(34, 56, 28, 0.7);
+  background-color: rgba(5, 4, 10, 0.8);
 }
 
 .bike-popup_on {
@@ -29,9 +31,13 @@
 
 .bike-popup__close-btn {
   position: absolute;
-  top: -25px;
-  right: -15px;
+  width: 40px;
+  height: 40px;
+  top: -40px;
+  right: -40px;
   cursor: pointer;
+  background: url('../../images/close-btn.png') center no-repeat $details-bg;
+
 }
 
 .bike-popup__image {
@@ -42,7 +48,10 @@
 }
 
 .bike-popup__bike-name {
-  color: beige;
+  font-size: 18px;
+  line-height: 121%;
+  font-weight: 300;
+  color: aliceblue;
   margin: 0;
 
 }

@@ -40,7 +40,7 @@ function App() {
 
 
   const access = () => localStorage.getItem('accessToStrava');
-console.log(access());
+
 
 
   function getUserStats(user: Profile) {
@@ -104,9 +104,9 @@ console.log(access());
   }
 
 
-  function getBikeTotalDistance(bikeId: string) {
+  function getBikeTotalDistance(bikeId: string): number {
     let dist = 0;
-    allActivities.forEach((act) => {
+    allActivities.forEach((act: Activity) => {
       if(act.gear_id === bikeId) {
         dist += act.distance;
       }
@@ -151,8 +151,8 @@ console.log(access());
 
 
   useEffect(() => {
-    if(tokenData()) {
-      getCurrentUserInfo();
+    getCurrentUserInfo();
+    if(currentUser) {
       getAllActivities();
     }
   }, []);

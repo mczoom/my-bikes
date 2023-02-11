@@ -1,12 +1,23 @@
+@import '../../styles/index';
+
 .bike-specs {
+  min-width: 200px;
   margin: 0;
   margin-left: 30px;
-  padding: 0;
+  padding: 8px;
+  border: 3px solid black;
+  border-radius: 6px;
+
+  background-color: black;
 }
 
 .bike-specs__bike-name {
+  display: inline-block;
   margin: 0;
   padding: 0;
+  padding-bottom: 3px;
+  border-bottom: 3px dotted aliceblue;
+  color: aliceblue;
 }
 
 .bike-specs__spec {
@@ -19,6 +30,10 @@
   margin-bottom: 0;
 }
 
+.spec{
+  color: aliceblue;
+}
+
 .bold {
-  font-weight: 700;
+  font-weight: 500;
 }
