@@ -26,21 +26,21 @@ export default function Stats({registrationYear, yearsAtStrava, allRidesTotals, 
   }
 
 
-  function sumTotalDistance(y: number): number {
+  function sumTotalRideDistance(y: number): number {
     let odo = 0;
     allActivities.forEach((training) => {
-      if(isYearMatch(y, training)) {
-        odo += Math.round(training.distance / 1000);
+      if(isYearMatch(y, training) && training.type.includes('Ride')) {
+        odo += training.distance;
       }
     })
-    return odo;
+    return Math.round(odo / 1000);
   }
 
 
-  function getYearLongestDistance(y: number): number {
+  function getYearLongestRide(y: number): number {
     let dist = 0;
     allActivities.forEach((training) => {
-      if(isYearMatch(y, training) && training.distance > dist) {
+      if(isYearMatch(y, training) && training.distance > dist && training.type.includes('Ride')) {
         dist = training.distance;
       };
     });
@@ -51,7 +51,7 @@ export default function Stats({registrationYear, yearsAtStrava, allRidesTotals, 
   function totalOverHundredRides(y: number): number {
     let longRide = 0;
     allActivities.forEach((training) => {
-      if(isYearMatch(y, training) && training.distance >= 100000) {
+      if(isYearMatch(y, training) && training.distance >= 100000 && training.type.includes('Ride')) {
         longRide += 1;
       }
     });
@@ -59,21 +59,21 @@ export default function Stats({registrationYear, yearsAtStrava, allRidesTotals, 
   }
 
 
-  function sumTotalTime(y: number): number {
+  function sumTotalRideTime(y: number): number {
     let odo = 0;
     allActivities.forEach((training) => {
-      if(isYearMatch(y, training)) {
-        odo += Math.round(training.elapsed_time / 3600);
+      if(isYearMatch(y, training) && training.type.includes('Ride')) {
+        odo += training.moving_time;
       }
     })
-    return odo;
+    return Math.round(odo / 3600);
   }
 
 
-  function sumTrainings(y: number): number {
+  function countRides(y: number): number {
     let trainings = 0;
     allActivities.forEach((training) => {
-      if(isYearMatch(y, training)) {
+      if(isYearMatch(y, training) && training.type.includes('Ride')) {
         trainings ++;
       }
     })
@@ -94,10 +94,10 @@ export default function Stats({registrationYear, yearsAtStrava, allRidesTotals, 
         registrationYear={registrationYear}
         yearsAtStrava={yearsAtStrava}
         allActivities={allActivities}
-        totalDistance={sumTotalDistance}
-        totalTime={sumTotalTime}
-        totalTrainings={sumTrainings}
-        yearLongestDistance={getYearLongestDistance}
+        totalDistance={sumTotalRideDistance}
+        totalTime={sumTotalRideTime}
+        totalTrainings={countRides}
+        yearLongestDistance={getYearLongestRide}
         totalOverHundredRides={totalOverHundredRides}
       />
     </section>

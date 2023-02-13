@@ -3,7 +3,6 @@ import CalendarTileContent from '../CalendarTileContent/CalendarTileContent'
 
 export default function CalendarLegend() {
 
-
   return (
     <ul className='calendar-legend'>
       <li className='calendar-legend__item'>

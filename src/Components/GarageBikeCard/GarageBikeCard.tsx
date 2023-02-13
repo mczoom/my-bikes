@@ -5,7 +5,6 @@ import DistancePerYearList from '../DistancePerYearList/DistancePerYearList';
 import { Activity } from '../../models/Activity';
 
 
-
 interface BikeCardProps {
   bike: MyBike
   openBikePopup: (bikeData: MyBike | undefined) => void
@@ -16,7 +15,6 @@ interface BikeCardProps {
 
 
 export default function GarageBikeCard({bike, openBikePopup, yearsAtStrava, activities, bikeTotalDistance}: BikeCardProps) {
-
 
   function openPopup() {
     openBikePopup(bike);

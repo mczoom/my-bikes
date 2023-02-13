@@ -50,7 +50,6 @@ export default function ActivitiesCalendar({allActivities}: ActivitiesCalendarPr
         height={'auto'}
         locale={'ru'}
         firstDay={1}
-        // showNonCurrentDates={false}
         fixedWeekCount={true}
         events={getAllActivitiesForCalendar()}
         displayEventTime={false}

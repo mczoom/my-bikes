@@ -86,7 +86,7 @@ function App() {
     const dateNow: number = Date.now() / 1000;
     const expDate: number = tokenData()?.expires_at;
     const isTokenExpired: number = (expDate - dateNow);
-    if(isTokenExpired) {
+    if(isTokenExpired < 0) {
       setIsStravaTokenExpired(true);
     }
   }
@@ -123,16 +123,17 @@ function App() {
     return years;
   }
 
+  // useEffect(() => {
+  //   checkIsStravaTokenExpired();
+  // }, []);
+
+
   useEffect(() => {
     checkIsStravaTokenExpired();
-  }, []);
-
-
-  useEffect(() => {
     if(isStravaTokenExpired) {
       renewToken(refreshToken);
-    }
-  }, [isStravaTokenExpired]);
+    };
+  });
 
 
   useEffect(() => {
