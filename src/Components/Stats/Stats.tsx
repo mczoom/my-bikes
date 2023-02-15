@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Preloader } from '../Preloader/Preloader';
 import StatsYearsList from '../StatsYearsList/StatsYearsList';
 import CommonStats from '../CommonStats/CommonStats';
@@ -79,7 +79,6 @@ export default function Stats({registrationYear, yearsAtStrava, allRidesTotals, 
     })
     return trainings;
   }
-
 
 
 

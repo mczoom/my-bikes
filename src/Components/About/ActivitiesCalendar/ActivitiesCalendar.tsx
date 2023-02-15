@@ -55,7 +55,6 @@ export default function ActivitiesCalendar({allActivities}: ActivitiesCalendarPr
         displayEventTime={false}
         // headerToolbar={calendarNavButtons}
         buttonText={{today: 'сегодня'}}
-
       />
       <CalendarLegend />
       </div>
