@@ -20,6 +20,8 @@ import Page404 from '../Page404/Page404';
 import Maintenance from '../Maintenance/Maintenance';
 import { AthleteStats } from '../../models/AthleteStats';
 import PageWithForm from '../PageWithForm/PageWithForm';
+import RegPage from '../RegPage/RegPage';
+import LoginPage from '../LoginPage/LoginPage';
 
 
 
@@ -124,10 +126,6 @@ function App() {
     return years;
   }
 
-  useEffect(() => {
-    console.log('ooooop')
-  }, []);
-
 
   useEffect(() => {
     checkIsStravaTokenExpired();
@@ -135,14 +133,6 @@ function App() {
       renewToken(refreshToken);
     };
   });
-
-
-  useEffect(() => {
-    if(currentUser.id) {
-      getUserStats(currentUser)
-    };
-  }, [currentUser]);
-
 
 
   useEffect(() => {
@@ -154,13 +144,20 @@ function App() {
 
   useEffect(() => {
     getCurrentUserInfo();
-    if(currentUser) {
-      getAllActivities();
-    }
   }, []);
   console.log(currentUser);
 
 
+  useEffect(() => {
+    if(currentUser.id) {
+      getUserStats(currentUser);
+    }
+  }, [currentUser]);
+
+  useEffect(() => {
+    getAllActivities();
+
+}, []);
 
 
   return (
@@ -170,7 +167,8 @@ function App() {
       <main>
         <Routes>
           <Route path='/access' element={<AccessPage />} />
-          <Route path='/registration' element={<PageWithForm />} />
+          <Route path='/registration' element={<RegPage />} />
+          <Route path='/login' element={<LoginPage />} />
           <Route path='/' element={<ProtectedRoute element={Main} isAuthorized={access}/>}  />
           <Route path='/about' element={<About />} />
           <Route path='/stats' element={<ProtectedRoute element={Stats} isAuthorized={access} registrationYear={yearOfRegistrationAtStrava} yearsAtStrava={yearsAtStrava} allRidesTotals={allRidesTotals} allYTDRidesTotals={allYTDRidesTotals} isLoading={isLoading} allActivities={allActivities} />} />

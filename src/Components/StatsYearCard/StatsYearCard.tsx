@@ -26,7 +26,7 @@ export default function StatsYearCard({year, allActivities, totalDistance, total
 
 
   function toggleYearStatsDisplay() {
-      setIsStatsShown(v => !v);
+    setIsStatsShown(v => !v);
   }
 
 

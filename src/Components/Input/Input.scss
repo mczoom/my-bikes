@@ -1,0 +1,16 @@
+@import '../../styles/index';
+
+.input-field {
+  margin: 3px 0 25px;
+  border: none;
+  border-bottom: 1px solid #000;
+}
+
+.input-field:focus {
+  border-bottom: 2px solid $details-bg;
+  outline: none;
+}
+
+.input-label {
+  visibility: hidden;
+}
