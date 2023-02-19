@@ -5,8 +5,8 @@ import PageWithForm from '../PageWithForm/PageWithForm'
 export default function LoginPage() {
   return (
     <PageWithForm title='Вход в сервис My-Bikes' btnText='Залогиниться'>
-      <Input label={'Логин'} inputType={'text'} placeholder={'Логин'} />
-      <Input label={'Пароль'} inputType={'password'} placeholder={'Пароль'} />
+      <Input name='login' label={'Логин'} inputType={'text'} placeholder={'Логин'} />
+      <Input name='password' label={'Пароль'} inputType={'password'} placeholder={'Пароль'} />
     </PageWithForm>
   )
 }

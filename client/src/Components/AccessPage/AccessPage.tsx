@@ -11,12 +11,12 @@ export default function AccessPage({}) {
   const navigate = useNavigate();
 
 
-  useEffect(() => {
-    const access = localStorage.getItem('accessToStrava');
-    if(access){
-      navigate('/');
-    }
-  }, []);
+  // useEffect(() => {
+  //   const access = localStorage.getItem('accessToStrava');
+  //   if(access){
+  //     navigate('/');
+  //   }
+  // }, []);
 
 
   return (

@@ -19,7 +19,7 @@ export function exchangeToken() {
   .then((res: ExchangeToken) => {
     console.log(res);
     if (res.access_token) {
-      localStorage.setItem('token', JSON.stringify(res));
+      localStorage.setItem('stravaToken', JSON.stringify(res));
       localStorage.setItem('accessToStrava', 'true');
     }
   })
@@ -39,7 +39,7 @@ export function renewToken(refreshToken: string | undefined) {
   .then((res: RefreshToken) => {
     console.log(res);
     if (res.access_token) {
-      localStorage.setItem('token', JSON.stringify(res));
+      localStorage.setItem('stravaToken', JSON.stringify(res));
     }
   })
   .catch(() => console.log('Ошибка обновления токена'))

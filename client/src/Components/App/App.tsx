@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {CurrentUserContext} from '../../contexts/CurrentUserContext';
 import {Routes, Route, useNavigate} from 'react-router-dom';
+import * as appApi from '../../utils/appApi';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Stats from '../Stats/Stats';
@@ -38,8 +39,46 @@ function App() {
   const yearOfRegistrationAtStrava: number = new Date(currentUser.created_at).getFullYear();
 
 
-  const access = () => localStorage.getItem('accessToStrava');
+  // const access = () => localStorage.getItem('accessToStrava');
+  const access = () => true;
 
+  const navigate = useNavigate();
+
+
+  function handleRegistration(login: string, password: string) {
+    appApi.register(login, password)
+      .then((res) => {
+        if(res) {
+          handleLogin(login, password);
+        }
+      })
+      .catch((err) => {
+        console.log('Ошибка при регистрации');
+      })
+  }
+
+
+  function handleLogin(login: string, password: string) {
+    appApi.login(login, password)
+    .then((data) => {
+      if(data.token) {
+        localStorage.setItem('token', data.token);
+        setIsLoggedIn(true);
+        localStorage.setItem('isLoggedIn', 'true');
+        navigate('/');
+      };
+    })
+    .catch((err: string) => {
+      console.log(err);
+    });
+    if(isLoggedIn) {
+      getCurrentAthlete()
+      .then((user) => {
+        setCurrentUser(user)}
+      )
+      .catch((err) => console.log(err));
+    }
+  };
 
 
   function getUserStats(user: Profile) {
@@ -152,7 +191,7 @@ function App() {
 
   useEffect(() => {
     getAllActivities();
-}, []);
+  }, []);
 
 
   return (
@@ -162,7 +201,7 @@ function App() {
       <main>
         <Routes>
           <Route path='/access' element={<AccessPage />} />
-          <Route path='/registration' element={<RegPage />} />
+          <Route path='/registration' element={<RegPage handleRegistration={handleRegistration} />} />
           <Route path='/login' element={<LoginPage />} />
           <Route path='/' element={<ProtectedRoute element={Main} isAuthorized={access}/>}  />
           <Route path='/about' element={<About />} />
