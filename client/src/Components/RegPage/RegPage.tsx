@@ -26,9 +26,9 @@ export default function RegPage({handleRegistration}: RegPageProps) {
   }
 
   return (
-    <PageWithForm title='Регистрация в сервисе My-Bikes' btnText='Зарегаться' registrationHandler={registrationHandler} >
-      <Input name = {'login'} label={'Логин'} inputType={'text'} placeholder={'Логин'} getLoginInputValue={getLoginInputValue} />
-      <Input name = {'password'} label={'Пароль'} inputType={'password'} placeholder={'Пароль'} getPasswordInputValue={getPasswordInputValue} />
+    <PageWithForm name='reg' title='Регистрация в сервисе My-Bikes' btnText='Зарегаться' registrationHandler={registrationHandler} >
+      <Input name='login' label='Логин' inputType='text' placeholder='Логин' getLoginInputValue={getLoginInputValue} />
+      <Input name='password' label='Пароль' inputType='password' placeholder='Пароль' getPasswordInputValue={getPasswordInputValue} />
     </PageWithForm>
   )
 }

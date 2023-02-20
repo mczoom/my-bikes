@@ -202,7 +202,7 @@ function App() {
         <Routes>
           <Route path='/access' element={<AccessPage />} />
           <Route path='/registration' element={<RegPage handleRegistration={handleRegistration} />} />
-          <Route path='/login' element={<LoginPage />} />
+          <Route path='/login' element={<LoginPage handleLogin={handleLogin} />} />
           <Route path='/' element={<ProtectedRoute element={Main} isAuthorized={access}/>}  />
           <Route path='/about' element={<About />} />
           <Route path='/stats' element={<ProtectedRoute element={Stats} isAuthorized={access} registrationYear={yearOfRegistrationAtStrava} yearsAtStrava={yearsAtStrava} allRidesTotals={allRidesTotals} allYTDRidesTotals={allYTDRidesTotals} isLoading={isLoading} allActivities={allActivities} />} />
