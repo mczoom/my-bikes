@@ -19,6 +19,7 @@ import Maintenance from '../Maintenance/Maintenance';
 import { AthleteStats } from '../../models/AthleteStats';
 import RegPage from '../RegPage/RegPage';
 import LoginPage from '../LoginPage/LoginPage';
+import { Bike } from '../../models/Bike';
 
 
 
@@ -29,6 +30,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<Profile>({} as Profile);
   const [allActivities, setAllActivities] = useState<Activity[]>([]);
+  const [userBikes, setUserBikes] = useState<any>([]);
   const [isStravaTokenExpired, setIsStravaTokenExpired] = useState<boolean>(false);
   const [allRidesTotals, setAllRidesTotals] = useState<AthleteStats>({} as AthleteStats);
   const [allYTDRidesTotals, setAllYTDRidesTotals] = useState<AthleteStats>({} as AthleteStats);
@@ -43,6 +45,18 @@ function App() {
   const access = () => true;
 
   const navigate = useNavigate();
+
+  function addBikes() {
+    currentUser.bikes.forEach((bike: Bike) => {
+      const {
+        converted_distance,
+        id,
+        name,
+        retired
+       } = bike
+      appApi.addAllBikes(converted_distance, id, name, retired);
+    })
+  }
 
 
   function handleRegistration(login: string, password: string) {
@@ -62,9 +76,9 @@ function App() {
     appApi.login(login, password)
     .then((data) => {
       if(data.token) {
-        localStorage.setItem('token', data.token);
+        localStorage.setItem('jwt', data.token);
         setIsLoggedIn(true);
-        localStorage.setItem('isLoggedIn', 'true');
+        // localStorage.setItem('isLoggedIn', 'true');
         navigate('/');
       };
     })
@@ -162,10 +176,25 @@ function App() {
   }
 
 
+  function checkToken() {
+    const jwt = localStorage.getItem('jwt');
+    if(jwt) {
+      appApi.getAllBikes()
+        .then((bikes) => {
+          if(bikes) {
+            setIsLoggedIn(true);
+            setUserBikes(bikes);
+          }
+        })
+        .catch(err => console.log(err));
+  }
+
+
   useEffect(() => {
     checkIsStravaTokenExpired();
     if(isStravaTokenExpired) {
-      renewToken(refreshToken);
+      // renewToken(refreshToken);
+      renewToken();
     };
   });
 
@@ -178,9 +207,16 @@ function App() {
 
 
   useEffect(() => {
+    checkToken();
     getCurrentUserInfo();
   }, []);
   console.log(currentUser);
+
+  // useEffect(() => {
+  //   if(currentUser.id){
+  //   addBikes();
+  //   }
+  // }, [currentUser]);
 
 
   useEffect(() => {
@@ -193,6 +229,8 @@ function App() {
     getAllActivities();
   }, []);
 
+}
+
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -203,7 +241,7 @@ function App() {
           <Route path='/access' element={<AccessPage />} />
           <Route path='/registration' element={<RegPage handleRegistration={handleRegistration} />} />
           <Route path='/login' element={<LoginPage handleLogin={handleLogin} />} />
-          <Route path='/' element={<ProtectedRoute element={Main} isAuthorized={access}/>}  />
+          <Route path='/' element={<ProtectedRoute element={<Main/>} isAuthorized={access}/>}  />
           <Route path='/about' element={<About />} />
           <Route path='/stats' element={<ProtectedRoute element={Stats} isAuthorized={access} registrationYear={yearOfRegistrationAtStrava} yearsAtStrava={yearsAtStrava} allRidesTotals={allRidesTotals} allYTDRidesTotals={allYTDRidesTotals} isLoading={isLoading} allActivities={allActivities} />} />
           <Route path='/garage' element={<ProtectedRoute element={Garage} isAuthorized={access} yearsAtStrava={yearsAtStrava} activities={allActivities} bikeTotalDistance={getBikeTotalDistance} />} />

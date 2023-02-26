@@ -1,3 +1,4 @@
+import { Bike } from '../models/Bike';
 import {BASE_URL} from './constants';
 
 
@@ -29,6 +30,30 @@ export const register = (login: string, password: string) => {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({login, password})
+    })
+    .then((res) => handleResponse(res));
+  };
+
+
+  export const addAllBikes = (converted_distance: any, id: any, name: any, retired: any) => {
+    return fetch(`${BASE_URL}/bikes`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem('token')}`,
+      },
+      body: JSON.stringify({converted_distance, id, name, retired})
+    })
+    .then((res) => handleResponse(res));
+  };
+
+  export const getAllBikes = () => {
+    return fetch(`${BASE_URL}/bikes`, {
+      method: 'GET',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem('token')}`,
+      }
     })
     .then((res) => handleResponse(res));
   };
