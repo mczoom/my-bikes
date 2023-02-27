@@ -64,6 +64,7 @@ function App() {
       .then((res) => {
         if(res) {
           handleLogin(login, password);
+          navigate('/access');
         }
       })
       .catch((err) => {
@@ -79,7 +80,7 @@ function App() {
         localStorage.setItem('jwt', data.token);
         setIsLoggedIn(true);
         // localStorage.setItem('isLoggedIn', 'true');
-        navigate('/');
+        // navigate('/');
       };
     })
     .catch((err: string) => {

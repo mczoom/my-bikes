@@ -46,24 +46,36 @@ import { RefreshToken } from '../models/RefreshToken';
 //   .catch(() => console.log('Ошибка обновления токена'))
 // };
 
+export function getStravaAccess() {
+  return fetch('/strava-access', {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem('jwt')}`
+    },
+  })
+  .then((res) => res.json())
+  .catch(() => console.log('Ошибка получения доступа к Страве'))
+};
+
+
 
 export function exchangeToken() {
   const params: any = new Proxy(new URLSearchParams(window.location.search), {
     get: (searchParams, prop:string) => searchParams.get(prop),
-  }); // Get the value of "some_key" in eg "https://example.com/?some_key=some_value"
-  const accessToken: string = params.code;
+  });
+  const accessToken: string = params.code;  // Get the value of "some_key" in eg "https://example.com/?some_key=some_value"
 
   return fetch('/exchange-str-token', {
     method: 'POST',
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${localStorage.getItem('token')}`
+      "Authorization": `Bearer ${localStorage.getItem('jwt')}`
     },
     body: JSON.stringify(accessToken)
   })
   .then((res) => res.json())
   .then((res: ExchangeToken) => {
-    console.log(res);
     if (res.access_token) {
       localStorage.setItem('stravaToken', JSON.stringify(res));
       localStorage.setItem('accessToStrava', 'true');
@@ -78,7 +90,7 @@ export function renewToken() {
     method: 'GET',
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${localStorage.getItem('token')}`
+      "Authorization": `Bearer ${localStorage.getItem('jwt')}`
     }
   })
   .then((res) => res.json())
