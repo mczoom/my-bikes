@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { login, createUser } = require('../controllers/users');
-const { addAllBikes } = require('../controllers/bikes');
+const { addAllBikes, getAllBikes } = require('../controllers/bikes');
 const { auth } = require('../middlewares/auth');
 const { exchangeStrToken, refreshStrToken } = require('../controllers/strToken');
 
@@ -10,10 +10,11 @@ const router = Router();
 router.post('/signup', createUser);
 router.post('/signin', login);
 
-router.post('/exchange-str-token', auth, exchangeStrToken);
+router.post('/strava-access', exchangeStrToken);
+router.post('/strtokenexchange', exchangeStrToken);
 router.post('/renew-str-token', auth, refreshStrToken);
 router.post('/bikes', auth, addAllBikes);
-router.get('/bikes', auth, getAllBikes);
+// router.get('/bikes', auth, getAllBikes);
 
 router.use('*', () => {
   throw new Error('Страница не найдена');

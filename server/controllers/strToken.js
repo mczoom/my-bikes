@@ -1,3 +1,4 @@
+const fetch = require('node-fetch');
 const StravaToken = require('../models/stravaToken');
 
 const {STRAVA_AUTH_URL, CLIENT_ID, CLIENT_SECRET, STRAVA_API_URL} = process.env;
@@ -11,27 +12,40 @@ module.exports.getAccess = (req, res, next) => {
       }
     })
     .then((res) => res.json())
+    .catch(next);
 };
 
-
+// `${STRAVA_AUTH_URL}?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&code=${exchangeToken}&grant_type=authorization_code`
 module.exports.exchangeStrToken = (req, res, next) => {
 
-  const exchangeToken = req.body.accessToken;
+  const exchangeToken = req.body.token;
 
-  return fetch(`${STRAVA_AUTH_URL}?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&code=${exchangeToken}&grant_type=authorization_code`, {
+  return fetch(`${STRAVA_AUTH_URL}`, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json"
-      }
+      },
+      body: JSON.stringify({
+        client_id: CLIENT_ID,
+        client_secret: CLIENT_SECRET,
+        code: exchangeToken,
+        grant_type: 'authorization_code'
+      })
     })
-    .then((res) => res.json())
+    .then(res => res.json())
     .then((res) => {
+      console.log(res)
       if (res.access_token) {
         StravaToken.create({access_token: res.accessToken, expires_at: res.expires_at, refresh_token: res.refresh_token});
       }
     })
-    .then((res) => res.status(201).send(res))
-    .catch(() => console.log('Ошибка получения Strava токена'));
+    .then((res) => console.log(res))
+    .catch(next);
+
+
+
+
+
 };
 
 

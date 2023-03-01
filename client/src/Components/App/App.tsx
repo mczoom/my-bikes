@@ -64,7 +64,7 @@ function App() {
       .then((res) => {
         if(res) {
           handleLogin(login, password);
-          navigate('/access');
+          navigate('/access', {replace: true});
         }
       })
       .catch((err) => {
@@ -86,13 +86,13 @@ function App() {
     .catch((err: string) => {
       console.log(err);
     });
-    if(isLoggedIn) {
-      getCurrentAthlete()
-      .then((user) => {
-        setCurrentUser(user)}
-      )
-      .catch((err) => console.log(err));
-    }
+    // if(isLoggedIn) {
+    //   getCurrentAthlete()
+    //   .then((user) => {
+    //     setCurrentUser(user)}
+    //   )
+    //   .catch((err) => console.log(err));
+    // }
   };
 
 
@@ -188,7 +188,8 @@ function App() {
           }
         })
         .catch(err => console.log(err));
-  }
+    }
+  };
 
 
   useEffect(() => {
@@ -208,8 +209,8 @@ function App() {
 
 
   useEffect(() => {
-    checkToken();
-    getCurrentUserInfo();
+    //checkToken();
+    //getCurrentUserInfo();
   }, []);
   console.log(currentUser);
 
@@ -227,10 +228,10 @@ function App() {
   }, [currentUser]);
 
   useEffect(() => {
-    getAllActivities();
+    //getAllActivities();
   }, []);
 
-}
+
 
 
   return (
@@ -242,7 +243,7 @@ function App() {
           <Route path='/access' element={<AccessPage />} />
           <Route path='/registration' element={<RegPage handleRegistration={handleRegistration} />} />
           <Route path='/login' element={<LoginPage handleLogin={handleLogin} />} />
-          <Route path='/' element={<ProtectedRoute element={<Main/>} isAuthorized={access}/>}  />
+          <Route path='/' element={<ProtectedRoute element={Main} isAuthorized={access}/>}  />
           <Route path='/about' element={<About />} />
           <Route path='/stats' element={<ProtectedRoute element={Stats} isAuthorized={access} registrationYear={yearOfRegistrationAtStrava} yearsAtStrava={yearsAtStrava} allRidesTotals={allRidesTotals} allYTDRidesTotals={allYTDRidesTotals} isLoading={isLoading} allActivities={allActivities} />} />
           <Route path='/garage' element={<ProtectedRoute element={Garage} isAuthorized={access} yearsAtStrava={yearsAtStrava} activities={allActivities} bikeTotalDistance={getBikeTotalDistance} />} />

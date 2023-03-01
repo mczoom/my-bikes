@@ -47,6 +47,7 @@ export const register = (login: string, password: string) => {
     .then((res) => handleResponse(res));
   };
 
+
   export const getAllBikes = () => {
     return fetch(`${BASE_URL}/bikes`, {
       method: 'GET',

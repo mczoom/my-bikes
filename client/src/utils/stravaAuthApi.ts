@@ -14,7 +14,7 @@ import { RefreshToken } from '../models/RefreshToken';
 //     method: 'POST',
 //     headers: {
 //       "Content-Type": "application/json"
-//     }
+//     },
 //   })
 //   .then((res) => res.json())
 //   .then((res: ExchangeToken) => {
@@ -66,22 +66,30 @@ export function exchangeToken() {
   });
   const accessToken: string = params.code;  // Get the value of "some_key" in eg "https://example.com/?some_key=some_value"
 
-  return fetch('/exchange-str-token', {
+  return fetch(`${BASE_URL}/strtokenexchange`, {
     method: 'POST',
     headers: {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${localStorage.getItem('jwt')}`
     },
-    body: JSON.stringify(accessToken)
+    body: JSON.stringify({token: accessToken}),
   })
-  .then((res) => res.json())
-  .then((res: ExchangeToken) => {
-    if (res.access_token) {
-      localStorage.setItem('stravaToken', JSON.stringify(res));
-      localStorage.setItem('accessToStrava', 'true');
-    }
+  .then(res => res.json())
+  // .then((res: ExchangeToken) => {
+  //   if (res.access_token) {
+  //     localStorage.setItem('stravaToken', JSON.stringify(res.access_token));
+  //     localStorage.setItem('accessToStrava', 'true');
+  //   }
+  // })
+  .then((res: any) => {
+    console.log(res);
+
+
+      // localStorage.setItem('stravaToken', JSON.stringify(res.access_token));
+      // localStorage.setItem('accessToStrava', 'true');
+
   })
-  .catch(() => console.log('Ошибка авторизации'))
+  .catch((err) => console.log(`${err} 'Ошибкаaaa авторизации'`))
 };
 
 
