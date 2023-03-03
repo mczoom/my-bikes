@@ -1,8 +1,13 @@
 import {BASE_URL} from './constants';
-import {clientId, clientSecret} from './secretConstants';
-import {stravaAuthUrl} from './constants';
+// import {clientId, clientSecret} from './secretConstants';
+// import {stravaAuthUrl} from './constants';
 import { ExchangeToken } from '../models/ExchangeToken';
 import { RefreshToken } from '../models/RefreshToken';
+
+
+interface stravaToken {
+  strToken: string
+}
 
 // export function exchangeToken() {
 //   const params: any = new Proxy(new URLSearchParams(window.location.search), {
@@ -75,26 +80,16 @@ export function exchangeToken() {
     body: JSON.stringify({token: accessToken}),
   })
   .then(res => res.json())
-  // .then((res: ExchangeToken) => {
-  //   if (res.access_token) {
-  //     localStorage.setItem('stravaToken', JSON.stringify(res.access_token));
-  //     localStorage.setItem('accessToStrava', 'true');
-  //   }
-  // })
-  .then((res: any) => {
-    console.log(res);
-
-
-      // localStorage.setItem('stravaToken', JSON.stringify(res.access_token));
-      // localStorage.setItem('accessToStrava', 'true');
-
+  .then((token: stravaToken) => {        
+      localStorage.setItem('stravaToken', JSON.stringify(token.strToken));
+      localStorage.setItem('accessToStrava', 'true');    
   })
-  .catch((err) => console.log(`${err} 'Ошибкаaaa авторизации'`))
+  .catch((err) => console.log(`${err} 'Ошибка получения Strava токена'`))
 };
 
 
-export function renewToken() {
-  return fetch(`${BASE_URL}/renew-str-token`, {
+export function refreshToken() {
+  return fetch(`${BASE_URL}/strtokenrefresh`, {
     method: 'GET',
     headers: {
       "Content-Type": "application/json",
@@ -102,11 +97,11 @@ export function renewToken() {
     }
   })
   .then((res) => res.json())
-  .then((res: RefreshToken) => {
-    console.log(res);
-    if (res.access_token) {
-      localStorage.setItem('stravaToken', JSON.stringify(res));
-    }
+  .then((strToken: any) => {
+    console.log(strToken.tok);
+    // if (strToken) {
+    //   localStorage.setItem('stravaToken', strToken);
+    // }
   })
-  .catch(() => console.log('Ошибка обновления токена'))
+  .catch(() => console.log('Ошибка получения токена обновления'))
 };

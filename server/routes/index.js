@@ -10,9 +10,9 @@ const router = Router();
 router.post('/signup', createUser);
 router.post('/signin', login);
 
-router.post('/strava-access', exchangeStrToken);
-router.post('/strtokenexchange', exchangeStrToken);
-router.post('/renew-str-token', auth, refreshStrToken);
+router.post('/strava-access', auth, exchangeStrToken);
+router.post('/strtokenexchange', auth, exchangeStrToken);
+router.get('/strtokenrefresh', auth, refreshStrToken);
 router.post('/bikes', auth, addAllBikes);
 // router.get('/bikes', auth, getAllBikes);
 

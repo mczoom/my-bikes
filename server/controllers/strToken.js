@@ -4,21 +4,9 @@ const StravaToken = require('../models/stravaToken');
 const {STRAVA_AUTH_URL, CLIENT_ID, CLIENT_SECRET, STRAVA_API_URL} = process.env;
 
 
-module.exports.getAccess = (req, res, next) => {
-  return fetch(`http://www.strava.com/oauth/authorize?client_id=${CLIENT_ID}&response_type=code&redirect_uri=http://localhost:3000&scope=profile:read_all,activity:read_all`, {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-    .then((res) => res.json())
-    .catch(next);
-};
-
-// `${STRAVA_AUTH_URL}?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&code=${exchangeToken}&grant_type=authorization_code`
 module.exports.exchangeStrToken = (req, res, next) => {
-
   const exchangeToken = req.body.token;
+  const user = req.user._id;
 
   return fetch(`${STRAVA_AUTH_URL}`, {
       method: 'POST',
@@ -33,26 +21,50 @@ module.exports.exchangeStrToken = (req, res, next) => {
       })
     })
     .then(res => res.json())
-    .then((res) => {
-      console.log(res)
-      if (res.access_token) {
-        StravaToken.create({access_token: res.accessToken, expires_at: res.expires_at, refresh_token: res.refresh_token});
+    .then((tokenData) => {          
+      if (tokenData.access_token) {
+        res.status(201).send({strToken: tokenData.access_token});
+        StravaToken.create({access_token: tokenData.access_token, expires_at: tokenData.expires_at, refresh_token: tokenData.refresh_token, userID: user});
       }
     })
-    .then((res) => console.log(res))
     .catch(next);
-
-
-
-
-
 };
 
 
 module.exports.refreshStrToken = (req, res, next) => {
-  const user = req.user._id;
+  // const user = req.user._id;
+   
+     
+    StravaToken.find({})
+      .then((tokenData) => res.send({tok: tokenData[0].refresh_token}))      
+      .catch(next);    
+  
 
-  StravaToken.find({user})
-    .then((tokenData) => res.send(tokenData))
-    .catch(next);
+  
+
+  // return fetch(`${STRAVA_AUTH_URL}`, {
+  //   method: 'POST',
+  //   headers: {
+  //     "Content-Type": "application/json"
+  //   },
+  //   body: JSON.stringify({
+  //     client_id: CLIENT_ID,
+  //     client_secret: CLIENT_SECRET,
+  //     refresh_token: refreshToken,
+  //     grant_type: 'refresh_token'
+  //   })
+  // })
+  // .then(res => res.json())
+  // .then((res) => {    
+  //   if (res.access_token) {
+  //     StravaToken.findOneAndUpdate(
+  //       {user}, 
+  //       {access_token: res.access_token, expires_at: res.expires_at, refresh_token: res.refresh_token, userID: user},
+  //       {new: true, upsert: true}
+  //     );
+  //   }
+  //   return res;
+  // })
+  // .then((tokenData) => res.send(tokenData.access_token))
+  // .catch(next);
 };

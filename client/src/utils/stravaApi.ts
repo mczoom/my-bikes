@@ -2,6 +2,10 @@ import { ExchangeToken } from '../models/ExchangeToken';
 import { stravaApiUrl, tokenData } from './constants';
 
 
+const stravaToken = localStorage.getItem('stravaToken');
+console.log(stravaToken)
+
+
 export interface ActivitiesRequest {
   fromDate: number
   tillDate: number
@@ -15,7 +19,7 @@ export const getCurrentAthlete = () => {
     method: 'GET',
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${tokenData().access_token}`,
+      "Authorization": `Bearer ${stravaToken}`,
     }
   })
   .then((res) => res.json())
@@ -28,7 +32,7 @@ export const getAthlete = (id: number) => {
     method: 'GET',
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${tokenData().access_token}`,
+      "Authorization": `Bearer ${stravaToken}`,
     }
   })
   .then((res) => res.json())
@@ -41,7 +45,7 @@ export const getActivities = ({fromDate, tillDate, page = 1, perPage = 200}: Act
     method: 'GET',
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${tokenData().access_token}`,
+      "Authorization": `Bearer ${stravaToken}`,
     }
   })
   .then((res) => res.json())

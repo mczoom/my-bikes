@@ -1,3 +1,4 @@
+/* eslint-disable no-loop-func */
 import React, {useState, useEffect} from 'react';
 import {CurrentUserContext} from '../../contexts/CurrentUserContext';
 import {Routes, Route, useNavigate} from 'react-router-dom';
@@ -5,7 +6,7 @@ import * as appApi from '../../utils/appApi';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Stats from '../Stats/Stats';
-import { exchangeToken, renewToken } from '../../utils/stravaAuthApi';
+import { exchangeToken, refreshToken } from '../../utils/stravaAuthApi';
 import {getCurrentAthlete, getActivities, getAthlete} from '../../utils/stravaApi';
 import {Profile} from '../../models/Profile';
 import AccessPage from '../AccessPage/AccessPage';
@@ -45,6 +46,11 @@ function App() {
   const access = () => true;
 
   const navigate = useNavigate();
+
+  function getStravaRefreshToken() {
+
+  }
+
 
   function addBikes() {
     currentUser.bikes.forEach((bike: Bike) => {
@@ -135,17 +141,17 @@ function App() {
   console.log(allActivities);
 
 
-  function checkIsStravaTokenExpired() {
-    const dateNow: number = Date.now() / 1000;
-    const expDate: number = tokenData()?.expires_at;
-    const isTokenExpired: number = (expDate - dateNow);
-    if(isTokenExpired < 0) {
-      setIsStravaTokenExpired(true);
-    }
-  }
+  // function checkIsStravaTokenExpired() {
+  //   const dateNow: number = Date.now() / 1000;
+  //   const expDate: number = tokenData()?.expires_at;
+  //   const isTokenExpired: number = (expDate - dateNow);
+  //   if(isTokenExpired < 0) {
+  //     setIsStravaTokenExpired(true);
+  //   }
+  // }
 
 
-  const refreshToken: string | undefined = tokenData()?.refresh_token;
+  // const refreshToken: string | undefined = tokenData()?.refresh_token;
 
   function getCurrentUserInfo() {
     getCurrentAthlete()
@@ -192,25 +198,25 @@ function App() {
   };
 
 
-  useEffect(() => {
-    checkIsStravaTokenExpired();
-    if(isStravaTokenExpired) {
-      // renewToken(refreshToken);
-      renewToken();
-    };
-  });
+  // useEffect(() => {
+  //   checkIsStravaTokenExpired();
+  //   if(isStravaTokenExpired) {
+  //     renewToken(refreshToken);
+  //     renewToken();
+  //   };
+  // });
 
 
-  useEffect(() => {
-    if(!tokenData()) {
-      exchangeToken();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if(!tokenData()) {
+  //     exchangeToken();
+  //   }
+  // }, []);
 
 
   useEffect(() => {
     //checkToken();
-    //getCurrentUserInfo();
+    getCurrentUserInfo();
   }, []);
   console.log(currentUser);
 
@@ -228,7 +234,9 @@ function App() {
   }, [currentUser]);
 
   useEffect(() => {
-    //getAllActivities();
+    if(dateOfRegAtStrava) {
+      getAllActivities();
+    }
   }, []);
 
 

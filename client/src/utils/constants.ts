@@ -4,7 +4,7 @@ import { RefreshToken } from "../models/RefreshToken";
 
 export const BASE_URL = 'http://localhost:3001';
 
-
+export const clientId = 98790;
 export const stravaAuthUrl: string = 'https://www.strava.com/oauth/token';
 export const stravaApiUrl: string = 'https://www.strava.com/api/v3';
 
