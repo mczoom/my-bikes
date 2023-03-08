@@ -30,6 +30,7 @@ function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<Profile>({} as Profile);
+  const [stravaTokenExpTime, setStravaTokenExpTime] = useState<number | undefined>(undefined);
   const [allActivities, setAllActivities] = useState<Activity[]>([]);
   const [userBikes, setUserBikes] = useState<any>([]);
   const [isStravaTokenExpired, setIsStravaTokenExpired] = useState<boolean>(false);
@@ -41,15 +42,20 @@ function App() {
   const dateOfRegAtStrava: string = currentUser.created_at;
   const yearOfRegistrationAtStrava: number = new Date(currentUser.created_at).getFullYear();
 
-
+  console.log(stravaTokenExpTime);
   // const access = () => localStorage.getItem('accessToStrava');
   const access = () => true;
 
   const navigate = useNavigate();
 
-  function getStravaRefreshToken() {
-
-  }
+  function getStravaTokenExpTime(id: number) {
+    appApi.getStrTokenExpTime(id)
+      .then((time) => {
+        console.log(time);        
+        setStravaTokenExpTime(time.expTime);
+      })
+      .catch((err) => console.log(err))
+  };
 
 
   function addBikes() {
@@ -85,6 +91,8 @@ function App() {
       if(data.token) {
         localStorage.setItem('jwt', data.token);
         setIsLoggedIn(true);
+        console.log(data);
+        
         // localStorage.setItem('isLoggedIn', 'true');
         // navigate('/');
       };
@@ -157,8 +165,11 @@ function App() {
     getCurrentAthlete()
       .then((user) => {
         if(user.id) {
-          setCurrentUser(user)}
+          setCurrentUser(user);          
+        }
+        return user;
       })
+      .then((user) => {getStravaTokenExpTime(user.id)})
       .catch((err) => console.log(err));
   }
 
@@ -216,7 +227,7 @@ function App() {
 
   useEffect(() => {
     //checkToken();
-    getCurrentUserInfo();
+    getCurrentUserInfo();    
   }, []);
   console.log(currentUser);
 
@@ -230,6 +241,7 @@ function App() {
   useEffect(() => {
     if(currentUser.id) {
       getUserStats(currentUser);
+      
     }
   }, [currentUser]);
 

@@ -6,7 +6,7 @@ import { RefreshToken } from '../models/RefreshToken';
 
 
 interface stravaToken {
-  strToken: string
+  strToken: string  
 }
 
 // export function exchangeToken() {
@@ -51,17 +51,7 @@ interface stravaToken {
 //   .catch(() => console.log('Ошибка обновления токена'))
 // };
 
-export function getStravaAccess() {
-  return fetch('/strava-access', {
-    method: 'POST',
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${localStorage.getItem('jwt')}`
-    },
-  })
-  .then((res) => res.json())
-  .catch(() => console.log('Ошибка получения доступа к Страве'))
-};
+
 
 
 
@@ -80,9 +70,10 @@ export function exchangeToken() {
     body: JSON.stringify({token: accessToken}),
   })
   .then(res => res.json())
-  .then((token: stravaToken) => {        
-      localStorage.setItem('stravaToken', JSON.stringify(token.strToken));
-      localStorage.setItem('accessToStrava', 'true');    
+  .then((token: stravaToken) => {      
+    console.log(token);      
+      localStorage.setItem('stravaToken', token.strToken);
+      localStorage.setItem('accessToStrava', 'true');
   })
   .catch((err) => console.log(`${err} 'Ошибка получения Strava токена'`))
 };
@@ -104,4 +95,16 @@ export function refreshToken() {
     // }
   })
   .catch(() => console.log('Ошибка получения токена обновления'))
+};
+
+
+export function getStravaToken() {
+  return fetch('/strtoken', {    
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem('jwt')}`
+    },
+  })
+  .then((res) => res.json())
+  .catch(() => console.log('Ошибка получения доступа к Страве'))
 };

@@ -35,12 +35,25 @@ export const register = (login: string, password: string) => {
   };
 
 
+  export const getStrTokenExpTime = (id: number) => {
+    return fetch(`${BASE_URL}/strtoken`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+      },
+      body: JSON.stringify({id})
+    })
+    .then((res) => handleResponse(res));
+  }
+
+
   export const addAllBikes = (converted_distance: any, id: any, name: any, retired: any) => {
     return fetch(`${BASE_URL}/bikes`, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem('token')}`,
+        "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
       },
       body: JSON.stringify({converted_distance, id, name, retired})
     })
@@ -53,7 +66,7 @@ export const register = (login: string, password: string) => {
       method: 'GET',
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem('token')}`,
+        "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
       }
     })
     .then((res) => handleResponse(res));

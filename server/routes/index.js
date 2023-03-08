@@ -2,7 +2,7 @@ const { Router } = require('express');
 const { login, createUser } = require('../controllers/users');
 const { addAllBikes, getAllBikes } = require('../controllers/bikes');
 const { auth } = require('../middlewares/auth');
-const { exchangeStrToken, refreshStrToken } = require('../controllers/strToken');
+const { exchangeStrToken, refreshStrToken, getStrTokenExpTime } = require('../controllers/strToken');
 
 
 const router = Router();
@@ -13,6 +13,7 @@ router.post('/signin', login);
 router.post('/strava-access', auth, exchangeStrToken);
 router.post('/strtokenexchange', auth, exchangeStrToken);
 router.get('/strtokenrefresh', auth, refreshStrToken);
+router.post('/strtoken', auth, getStrTokenExpTime);
 router.post('/bikes', auth, addAllBikes);
 // router.get('/bikes', auth, getAllBikes);
 
