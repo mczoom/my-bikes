@@ -35,14 +35,14 @@ export const register = (login: string, password: string) => {
   };
 
 
-  export const getStrTokenExpTime = (id: number) => {
+  export const getStrTokenExpTime = () => {
     return fetch(`${BASE_URL}/strtoken`, {
-      method: 'POST',
+      
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
       },
-      body: JSON.stringify({id})
+      
     })
     .then((res) => handleResponse(res));
   }

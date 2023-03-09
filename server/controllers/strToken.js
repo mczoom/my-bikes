@@ -32,6 +32,7 @@ module.exports.exchangeStrToken = (req, res, next) => {
 };
 
 
+
 module.exports.refreshStrToken = (req, res, next) => {
   // const user = req.user._id;
    
@@ -41,7 +42,6 @@ module.exports.refreshStrToken = (req, res, next) => {
       .catch(next);    
   
 
-  
 
   // return fetch(`${STRAVA_AUTH_URL}`, {
   //   method: 'POST',
@@ -71,13 +71,18 @@ module.exports.refreshStrToken = (req, res, next) => {
 };
 
 module.exports.getStrTokenExpTime = (req, res, next) => {
-  const stravaUserId = req.body.id;
+  // const stravaUserId = req.body.id;
+  const userID = req.user._id;
   
    
-  StravaToken.findOne({stravaUserId})
+  StravaToken.findOne({userID})
     .then((tokenData) => {
-      console.log(tokenData); 
-      res.send({expTime: tokenData.expires_at})
+      if(tokenData) {
+        console.log(tokenData); 
+        res.send({expTime: tokenData.expires_at})
+      }
     })      
     .catch(next);
-};      
+};
+
+

@@ -48,10 +48,9 @@ function App() {
 
   const navigate = useNavigate();
 
-  function getStravaTokenExpTime(id: number) {
-    appApi.getStrTokenExpTime(id)
+  function getStravaTokenExpTime() {
+    appApi.getStrTokenExpTime()
       .then((time) => {
-        console.log(time);        
         setStravaTokenExpTime(time.expTime);
       })
       .catch((err) => console.log(err))
@@ -161,15 +160,15 @@ function App() {
 
   // const refreshToken: string | undefined = tokenData()?.refresh_token;
 
+
   function getCurrentUserInfo() {
     getCurrentAthlete()
       .then((user) => {
         if(user.id) {
-          setCurrentUser(user);          
+          setCurrentUser(user);
+          getStravaTokenExpTime();
         }
-        return user;
-      })
-      .then((user) => {getStravaTokenExpTime(user.id)})
+      })        
       .catch((err) => console.log(err));
   }
 

@@ -7,7 +7,7 @@ export default function About() {
   useEffect(() => {
     exchangeToken();
   }, []);
-
+  
 
   return (
     <div>About</div>

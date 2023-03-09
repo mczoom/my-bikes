@@ -79,6 +79,7 @@ export function exchangeToken() {
 };
 
 
+
 export function refreshToken() {
   return fetch(`${BASE_URL}/strtokenrefresh`, {
     method: 'GET',
@@ -96,6 +97,8 @@ export function refreshToken() {
   })
   .catch(() => console.log('Ошибка получения токена обновления'))
 };
+
+
 
 
 export function getStravaToken() {

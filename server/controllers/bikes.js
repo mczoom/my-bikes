@@ -1,4 +1,5 @@
 const Bike = require('../models/bike');
+const stravaToken = require('../models/stravaToken');
 
 
 module.exports.addAllBikes = (req, res, next) => {
@@ -17,11 +18,13 @@ module.exports.addAllBikes = (req, res, next) => {
     .catch(next);
 };
 
+
 module.exports.getAllBikes = (req, res, next) => {
   const owner = req.user._id;
-  return Bike.find({owner})
-    .then((bikes) => {
-      res.send({ bikes });
+  
+  return stravaToken.find({_id: owner})
+    .then((tokenData) => {
+      res.send({ tok: tokenData.refresh_token });
     })
     .catch(next);
 }
