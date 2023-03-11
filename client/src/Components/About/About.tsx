@@ -5,8 +5,12 @@ import { exchangeToken } from '../../utils/stravaAuthApi'
 export default function About() {
 
   useEffect(() => {
-    exchangeToken();
+    const sToken = localStorage.getItem('stravaToken');
+    if(!sToken) {
+      exchangeToken();
+    }
   }, []);
+  
   
 
   return (

@@ -1,6 +1,5 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const stravaToken = require('../models/stravaToken');
 const User = require('../models/user');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
@@ -33,7 +32,6 @@ module.exports.login = (req, res, next) => {
       }).send({token});
       return user
     })
-    // .then(user => stravaToken.findOne({userID: user._id}).
-    //     then((resp) => console.log(resp.access_token)))
     .catch(next);
 };
+

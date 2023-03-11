@@ -1,15 +1,21 @@
 const StravaToken = require("../models/stravaToken");
 
 
-module.exports.checkStravaToken = (req, res, next) => {
+module.exports.checkStravaToken = async(req, res, next) => {
   const userID = req.user._id;
-  let isStrTokenExpired;
-  StravaToken.findOne({userID})
-    .orFail(new Error('Пользователь не найден'))
+  let refreshToken;
+
+  await StravaToken.findOne({userID})
+    .orFail(new Error('Не найден StravaToken для текущего пользователя'))
     .then((tokenData) => {
-      isStrTokenExpired = tokenData.expires_at - Date.now();      
+      const isStrTokenExpired = tokenData.expires_at - Date.now();
+      if(isStrTokenExpired < 0) {
+        refreshToken = tokenData.refresh_token;
+      };
     })
-    .catch(next);
-  req.isexpired = isStrTokenExpired;
+    .catch(err => console.log(err));
+  if(refreshToken) {
+    req.refreshToken = refreshToken;
+  }
   next();
 };

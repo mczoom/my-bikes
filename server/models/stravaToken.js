@@ -14,7 +14,7 @@ const stravaTokenSchema = new mongoose.Schema({
   refresh_token: {
     type: String,
     required: true,
-    unique: true,
+    // unique: true,
   },
   stravaUserId: {
     type: Number,

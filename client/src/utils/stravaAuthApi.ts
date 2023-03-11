@@ -70,11 +70,11 @@ export function exchangeToken() {
     body: JSON.stringify({token: accessToken}),
   })
   .then(res => res.json())
-  .then((token: stravaToken) => {      
-    console.log(token);      
-      localStorage.setItem('stravaToken', token.strToken);
-      localStorage.setItem('accessToStrava', 'true');
-  })
+  // .then((token: stravaToken) => {      
+  //   console.log(token);      
+  //     localStorage.setItem('stravaToken', token.strToken);
+  //     localStorage.setItem('accessToStrava', 'true');
+  // })
   .catch((err) => console.log(`${err} 'Ошибка получения Strava токена'`))
 };
 
@@ -89,11 +89,11 @@ export function refreshToken() {
     }
   })
   .then((res) => res.json())
-  .then((strToken: any) => {
-    console.log(strToken.tok);
-    // if (strToken) {
-    //   localStorage.setItem('stravaToken', strToken);
-    // }
+  .then((token: any) => {
+    console.log(token);
+    if (token) {
+      localStorage.setItem('stravaToken', token.accessToken);
+    }
   })
   .catch(() => console.log('Ошибка получения токена обновления'))
 };

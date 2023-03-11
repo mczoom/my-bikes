@@ -48,13 +48,13 @@ function App() {
 
   const navigate = useNavigate();
 
-  function getStravaTokenExpTime() {
-    appApi.getStrTokenExpTime()
-      .then((time) => {
-        setStravaTokenExpTime(time.expTime);
-      })
-      .catch((err) => console.log(err))
-  };
+  // function getStravaTokenExpTime() {
+  //   appApi.getStrTokenExpTime()
+  //     .then((time) => {
+  //       setStravaTokenExpTime(time.expTime);
+  //     })
+  //     .catch((err) => console.log(err))
+  // };
 
 
   function addBikes() {
@@ -165,8 +165,7 @@ function App() {
     getCurrentAthlete()
       .then((user) => {
         if(user.id) {
-          setCurrentUser(user);
-          getStravaTokenExpTime();
+          setCurrentUser(user);          
         }
       })        
       .catch((err) => console.log(err));

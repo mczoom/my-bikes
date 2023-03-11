@@ -1,7 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router-dom';
 import {Card} from '../../models/Card';
-import { getAllBikes } from '../../utils/appApi';
 import { refreshToken } from '../../utils/stravaAuthApi';
 
 
@@ -10,7 +9,7 @@ interface SectionCardProps {
 }
 
 function test() {
-  getAllBikes()
+  refreshToken()
     .then(res => console.log(res))
     .catch(err => console.log(err))
 }
