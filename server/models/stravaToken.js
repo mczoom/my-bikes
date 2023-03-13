@@ -5,7 +5,7 @@ const stravaTokenSchema = new mongoose.Schema({
   access_token: {
     type: String,
     required: true,
-    unique: true,
+    //unique: true,
   },
   expires_at: {
     type: Number,

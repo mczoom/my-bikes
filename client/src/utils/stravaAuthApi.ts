@@ -70,11 +70,10 @@ export function exchangeToken() {
     body: JSON.stringify({token: accessToken}),
   })
   .then(res => res.json())
-  // .then((token: stravaToken) => {      
-  //   console.log(token);      
-  //     localStorage.setItem('stravaToken', token.strToken);
-  //     localStorage.setItem('accessToStrava', 'true');
-  // })
+  .then((token: stravaToken) => {    
+    localStorage.setItem('stravaToken', token.strToken);
+    localStorage.setItem('accessToStrava', 'true');
+  })
   .catch((err) => console.log(`${err} 'Ошибка получения Strava токена'`))
 };
 
@@ -99,15 +98,13 @@ export function refreshToken() {
 };
 
 
-
-
-export function getStravaToken() {
-  return fetch('/strtoken', {    
+export function stravaTokenCheck() {
+  return fetch(`${BASE_URL}/tokencheck`, {    
     headers: {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${localStorage.getItem('jwt')}`
     },
   })
   .then((res) => res.json())
-  .catch(() => console.log('Ошибка получения доступа к Страве'))
+  .catch(() => console.log('Ошибка'))
 };

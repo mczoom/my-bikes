@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
 const StravaToken = require('../models/stravaToken');
+const { updateStravaToken, createStravaToken } = require('../utils/services');
 
 const {STRAVA_AUTH_URL, CLIENT_ID, CLIENT_SECRET, STRAVA_API_URL} = process.env;
 
@@ -23,7 +24,8 @@ module.exports.exchangeStrToken = (req, res, next) => {
     .then(res => res.json())
     .then((tokenData) => {          
       if (tokenData.access_token) {
-        StravaToken.create({access_token: tokenData.access_token, refresh_token: tokenData.refresh_token, expires_at: tokenData.expires_at, stravaUserId: tokenData.athlete.id, userID: user});
+        createStravaToken(tokenData, user);
+        //StravaToken.create({access_token: tokenData.access_token, refresh_token: tokenData.refresh_token, expires_at: tokenData.expires_at, stravaUserId: tokenData.athlete.id, userID: user});
         res.status(201).send({strToken: tokenData.access_token});        
       }
     }) 
@@ -32,7 +34,7 @@ module.exports.exchangeStrToken = (req, res, next) => {
 
 
 module.exports.refreshStrToken = (req, res, next) => {
-  const id = req.user._id;
+  const userID = req.user._id;
   const refreshToken = req.refreshToken;
     
   if(refreshToken) {
@@ -49,35 +51,39 @@ module.exports.refreshStrToken = (req, res, next) => {
       })
     })
     .then(res => res.json())
-    .then(async (tokenData) => {
+    .then((tokenData) => {
       if (tokenData.access_token) {
-        const update = await StravaToken.findOne({id});
-        update.access_token = tokenData.access_token;
-        update.expires_at = tokenData.expires_at;
-        update.refresh_token = tokenData.refresh_token;
-        update.save();
+        console.log(userID);
+        updateStravaToken(tokenData, userID);
+        // const tokenDoc = await StravaToken.findOne({userID});
+        // tokenDoc.access_token = tokenData.access_token;
+        // tokenDoc.expires_at = tokenData.expires_at;
+        // tokenDoc.refresh_token = tokenData.refresh_token;
+        // tokenDoc.save();
       }
       return tokenData;
     })
     .then((data) => res.send({accessToken: data.access_token}))
     .catch(next);
-  };  
+  };
+  next();
 };
 
 
-// module.exports.getStrTokenExpTime = (req, res, next) => {
-//   // const stravaUserId = req.body.id;
-//   const userID = req.user._id;
+
+module.exports.tokenCheck = (req, res, next) => {
   
+  const userID = req.user._id; 
+  console.log(userID);
    
-//   StravaToken.findOne({userID})
-//     .then((tokenData) => {
-//       if(tokenData) {
-//         console.log(tokenData); 
-//         res.send({expTime: tokenData.expires_at})
-//       }
-//     })      
-//     .catch(next);
-// };
+  StravaToken.findOne({userID})
+    .then((tokenData) => {
+      
+        
+        res.send({expTime: tokenData.expires_at})
+      
+    })      
+    .catch(next);  
+};
 
 

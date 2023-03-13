@@ -48,14 +48,27 @@ export const register = (login: string, password: string) => {
   }
 
 
-  export const addAllBikes = (converted_distance: any, id: any, name: any, retired: any) => {
+  // export const addAllBikes = (converted_distance: number, id: string, name: string, retired: boolean) => {
+  //   return fetch(`${BASE_URL}/bikes`, {
+  //     method: 'POST',
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+  //     },
+  //     body: JSON.stringify({converted_distance, id, name, retired})
+  //   })
+  //   .then((res) => handleResponse(res));
+  // };
+
+
+  export const addAllBikes = (bikes: any) => {
     return fetch(`${BASE_URL}/bikes`, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
       },
-      body: JSON.stringify({converted_distance, id, name, retired})
+      body: JSON.stringify({bikes})
     })
     .then((res) => handleResponse(res));
   };

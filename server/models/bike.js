@@ -4,12 +4,12 @@ const mongoose = require('mongoose');
 const bikeSchema = new mongoose.Schema({
   id: {
     type: String,
-    required: true,
-    unique: true,
+    //required: true,
+    //unique: true,
   },
   name: {
     type: String,
-    required: true,
+    //required: true,
   },
   brand: {
     type: String,
@@ -23,13 +23,19 @@ const bikeSchema = new mongoose.Schema({
   weight: {
     type: Number,
   },
-  distance: {
+  converted_distance: {
     type: Number,
-    required: true,
+    //required: true,
   },
   retired: {
     type: Boolean,
-  },
+  }
+});
+
+
+
+const gearSchema = new mongoose.Schema({
+  bikes: [bikeSchema],
   userID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user',
@@ -38,4 +44,4 @@ const bikeSchema = new mongoose.Schema({
 });
 
 
-module.exports = mongoose.model('bike', bikeSchema);
+module.exports = mongoose.model('bike', gearSchema);

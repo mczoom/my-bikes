@@ -6,14 +6,13 @@ import * as appApi from '../../utils/appApi';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Stats from '../Stats/Stats';
-import { exchangeToken, refreshToken } from '../../utils/stravaAuthApi';
+import { exchangeToken, refreshToken, stravaTokenCheck } from '../../utils/stravaAuthApi';
 import {getCurrentAthlete, getActivities, getAthlete} from '../../utils/stravaApi';
 import {Profile} from '../../models/Profile';
 import AccessPage from '../AccessPage/AccessPage';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import About from '../About/About';
 import Garage from '../Garage/Garage';
-import { tokenData } from '../../utils/constants';
 import { Activity } from '../../models/Activity';
 import Page404 from '../Page404/Page404';
 import Maintenance from '../Maintenance/Maintenance';
@@ -42,31 +41,37 @@ function App() {
   const dateOfRegAtStrava: string = currentUser.created_at;
   const yearOfRegistrationAtStrava: number = new Date(currentUser.created_at).getFullYear();
 
-  console.log(stravaTokenExpTime);
+  
   // const access = () => localStorage.getItem('accessToStrava');
   const access = () => true;
 
   const navigate = useNavigate();
 
-  // function getStravaTokenExpTime() {
-  //   appApi.getStrTokenExpTime()
-  //     .then((time) => {
-  //       setStravaTokenExpTime(time.expTime);
-  //     })
-  //     .catch((err) => console.log(err))
-  // };
+  function strTokenCheck() {
+    const token = localStorage.getItem('stravaToken');
+    if(token) {
+      stravaTokenCheck()
+        .then((res) => {
+          if(res.accessToken !== token) {
+            localStorage.setItem('stravaToken', res.accessToken);
+          }
+        })
+        .catch((err) => console.log(err));
+    }  
+  }; 
 
 
-  function addBikes() {
-    currentUser.bikes.forEach((bike: Bike) => {
-      const {
-        converted_distance,
-        id,
-        name,
-        retired
-       } = bike
-      appApi.addAllBikes(converted_distance, id, name, retired);
-    })
+  function addAllBikes() {    
+    // currentUser.bikes.forEach((bike: Bike) => {
+    //   const {
+    //     converted_distance,
+    //     id,
+    //     name,
+    //     retired
+    //    } = bike
+    //   appApi.addAllBikes(converted_distance, id, name, retired);
+    // })
+    appApi.addAllBikes(currentUser.bikes);
   }
 
 
@@ -79,7 +84,7 @@ function App() {
         }
       })
       .catch((err) => {
-        console.log('Ошибка при регистрации');
+        console.log(err + 'Ошибка при регистрации');
       })
   }
 
@@ -148,19 +153,6 @@ function App() {
   console.log(allActivities);
 
 
-  // function checkIsStravaTokenExpired() {
-  //   const dateNow: number = Date.now() / 1000;
-  //   const expDate: number = tokenData()?.expires_at;
-  //   const isTokenExpired: number = (expDate - dateNow);
-  //   if(isTokenExpired < 0) {
-  //     setIsStravaTokenExpired(true);
-  //   }
-  // }
-
-
-  // const refreshToken: string | undefined = tokenData()?.refresh_token;
-
-
   function getCurrentUserInfo() {
     getCurrentAthlete()
       .then((user) => {
@@ -222,10 +214,14 @@ function App() {
   //   }
   // }, []);
 
+  useEffect(() => {
+    strTokenCheck();
+  }, []);
+
 
   useEffect(() => {
     //checkToken();
-    getCurrentUserInfo();    
+    getCurrentUserInfo()  
   }, []);
   console.log(currentUser);
 
@@ -239,9 +235,10 @@ function App() {
   useEffect(() => {
     if(currentUser.id) {
       getUserStats(currentUser);
-      
+      addAllBikes();
     }
   }, [currentUser]);
+
 
   useEffect(() => {
     if(dateOfRegAtStrava) {

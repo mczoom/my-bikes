@@ -3,8 +3,6 @@ import { stravaApiUrl, tokenData } from './constants';
 
 
 const stravaToken = localStorage.getItem('stravaToken');
-console.log(stravaToken)
-
 
 export interface ActivitiesRequest {
   fromDate: number
@@ -28,6 +26,7 @@ export const getCurrentAthlete = () => {
 
 
 export const getAthlete = (id: number) => {
+  const stravaToken = localStorage.getItem('stravaToken');
   return fetch(`${stravaApiUrl}/athletes/${id}/stats`, {
     method: 'GET',
     headers: {

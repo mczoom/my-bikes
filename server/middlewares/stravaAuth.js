@@ -4,7 +4,7 @@ const StravaToken = require("../models/stravaToken");
 module.exports.checkStravaToken = async(req, res, next) => {
   const userID = req.user._id;
   let refreshToken;
-
+  
   await StravaToken.findOne({userID})
     .orFail(new Error('Не найден StravaToken для текущего пользователя'))
     .then((tokenData) => {
@@ -14,6 +14,7 @@ module.exports.checkStravaToken = async(req, res, next) => {
       };
     })
     .catch(err => console.log(err));
+
   if(refreshToken) {
     req.refreshToken = refreshToken;
   }
