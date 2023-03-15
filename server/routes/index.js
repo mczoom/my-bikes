@@ -2,7 +2,7 @@ const { Router } = require('express');
 const { login, createUser } = require('../controllers/users');
 const { addAllBikes, getAllBikes } = require('../controllers/bikes');
 const { auth } = require('../middlewares/auth');
-const { exchangeStrToken, refreshStrToken, tokenCheck } = require('../controllers/strToken');
+const { exchangeStrToken, refreshStrToken, tokenCheck, getStrToken } = require('../controllers/strToken');
 const { checkStravaToken } = require('../middlewares/stravaAuth');
 
 
@@ -13,8 +13,9 @@ router.post('/signin', login);
 
 
 router.post('/strtokenexchange', auth, exchangeStrToken);
-router.get('/strtokenrefresh', auth, checkStravaToken, refreshStrToken);
+router.get('/strtokenrefresh', auth, refreshStrToken);
 router.get('/tokencheck', auth, checkStravaToken, refreshStrToken, tokenCheck);
+router.get('/strtoken', auth, getStrToken);
 router.post('/bikes', auth, checkStravaToken, addAllBikes);
 router.get('/bikes', auth, checkStravaToken, getAllBikes);
 

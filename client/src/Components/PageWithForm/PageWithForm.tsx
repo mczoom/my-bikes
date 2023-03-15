@@ -8,13 +8,14 @@ interface PageWithFormProps {
   children: React.ReactNode
   title: string
   btnText: string
-  registrationHandler?: (e: React.SyntheticEvent) => void
-  loginHandler?: (e: React.SyntheticEvent) => void
+  submitHandler?: (e: React.SyntheticEvent) => void
+  // registrationHandler?: (e: React.SyntheticEvent) => void
+  // loginHandler?: (e: React.SyntheticEvent) => void
 }
 
-export default function PageWithForm({name, children, title, btnText, registrationHandler, loginHandler}: PageWithFormProps) {
+export default function PageWithForm({name, children, title, btnText, submitHandler/*, registrationHandler, loginHandler*/}: PageWithFormProps) {
 
-  const submitHandler = name === 'reg' ? registrationHandler : loginHandler;
+  //const submitHandler = name === 'reg' ? registrationHandler : loginHandler;
 
   return (
     <div className='page-with-form'>

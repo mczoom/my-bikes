@@ -22,15 +22,15 @@ module.exports.addAllBikes = async(req, res, next) => {
   const userBikes = req.body.bikes;
   const userID = req.user._id;
 
-  // const aaa = await Bike.findOne({userID});
-  // if(!aaa) {
+  const bikes = await Bike.findOne({userID});
+  if(!bikes) {
   return Bike.create({bikes: userBikes, userID})
-    .then((bike) => {
-      res.send({ bike });
+    .then((garage) => {
+      res.send({ bikes: garage.bikes });
     })
     .catch(next);
-  // };
-  // return;  
+  };
+  return;
 };
 
 

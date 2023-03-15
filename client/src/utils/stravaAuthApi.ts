@@ -72,7 +72,6 @@ export function exchangeToken() {
   .then(res => res.json())
   .then((token: stravaToken) => {    
     localStorage.setItem('stravaToken', token.strToken);
-    localStorage.setItem('accessToStrava', 'true');
   })
   .catch((err) => console.log(`${err} 'Ошибка получения Strava токена'`))
 };

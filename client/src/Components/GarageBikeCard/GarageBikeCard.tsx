@@ -7,17 +7,17 @@ import { Activity } from '../../models/Activity';
 
 interface BikeCardProps {
   bike: MyBike
-  openBikePopup: (bikeData: MyBike | undefined) => void
+  openBikePhotoPopup: (bikeData: MyBike | undefined) => void
   yearsAtStrava: (currentYear: number) => number[]
   activities: Activity[]
   bikeTotalDistance: (bikeId: string) => number
 }
 
 
-export default function GarageBikeCard({bike, openBikePopup, yearsAtStrava, activities, bikeTotalDistance}: BikeCardProps) {
+export default function GarageBikeCard({bike, openBikePhotoPopup, yearsAtStrava, activities, bikeTotalDistance}: BikeCardProps) {
 
-  function openPopup() {
-    openBikePopup(bike);
+  function openPhotoPopup() {
+    openBikePhotoPopup(bike);
   }
 
   function getDistancePerYear (y: number): number {
@@ -35,7 +35,7 @@ export default function GarageBikeCard({bike, openBikePopup, yearsAtStrava, acti
   return (
     <div className='bike-card' >
       <div className='bike-card__wrap'>
-        <img src={bike?.src} className='bike-card__image' onClick={openPopup}></img>
+        <img src={bike?.src} className='bike-card__image' onClick={openPhotoPopup}></img>
         <BikeSpecs bike={bike} bikeTotalDistance={bikeTotalDistance} />
         <DistancePerYearList yearsAtStrava={yearsAtStrava} distancePerYear={getDistancePerYear} />
       </div>

@@ -35,7 +35,7 @@ export const register = (login: string, password: string) => {
   };
 
 
-  export const getStrTokenExpTime = () => {
+  export const getStravaToken = () => {
     return fetch(`${BASE_URL}/strtoken`, {
       
       headers: {

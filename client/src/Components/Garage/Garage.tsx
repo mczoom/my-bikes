@@ -9,19 +9,21 @@ import deli from '../../images/bikes/deli.jpg';
 import deliIndoor from '../../images/bikes/deli_indoor.jpg';
 import trek from '../../images/bikes/trek.jpg';
 import trekIndoor from '../../images/bikes/trek_indoor.jpg';
+import { Bike } from '../../models/Bike';
 
 
 interface GarageProps {
+  bikes: Bike[]
   yearsAtStrava: (currentYear: number) => number[]
   activities: Activity[]
-  bikeTotalDistance: (bikeId: string) => number
+  bikeTotalDistance: (bikeId: string) => number  
 }
 
-export default function Garage({yearsAtStrava, activities, bikeTotalDistance}: GarageProps) {
+export default function Garage({bikes, yearsAtStrava, activities, bikeTotalDistance}: GarageProps) {
 
   const [isBikesFilterChecked, setIsBikesFilterChecked] = useState<boolean>(false);
   const [bikesToRender, setBikesToRender] = useState<MyBike[]>([]);
-  const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
+  const [isBikePhotoPopupOpen, setBikePhotoPopupOpen] = useState<boolean>(false);
   const [bikePopupData, setBikePopupData] = useState<MyBike | undefined>({} as MyBike);
 
 
@@ -92,13 +94,13 @@ function filterBikeCardsToRender() {
   }
 }
 
-function openBikePopup(bikeData: MyBike | undefined) {
-  setIsPopupOpen(true);
+function openBikePhotoPopup(bikeData: MyBike | undefined) {
+  setBikePhotoPopupOpen(true);
   setBikePopupData(bikeData);
 }
 
 function closeBikePopup() {
-  setIsPopupOpen(false);
+  setBikePhotoPopupOpen(false);
 }
 
 useEffect(() => {
@@ -111,12 +113,12 @@ useEffect(() => {
       <BikesTypeFilter toggleBikesFilter={toggleBikesFilter} />
       <GarageBikesList
         bikesToRender={bikesToRender}
-        openBikePopup={openBikePopup}
+        openBikePhotoPopup={openBikePhotoPopup}
         yearsAtStrava={yearsAtStrava}
         activities={activities}
         bikeTotalDistance={bikeTotalDistance}
       />
-      <BikeCardPopup isPopupOpen={isPopupOpen} bikePopupData={bikePopupData} closeBikePopup={closeBikePopup} />
+      <BikeCardPopup isPopupOpen={isBikePhotoPopupOpen} bikePopupData={bikePopupData} closeBikePopup={closeBikePopup} />
     </section>
   )
 }

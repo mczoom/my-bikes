@@ -53,7 +53,6 @@ module.exports.refreshStrToken = (req, res, next) => {
     .then(res => res.json())
     .then((tokenData) => {
       if (tokenData.access_token) {
-        console.log(userID);
         updateStravaToken(tokenData, userID);
         // const tokenDoc = await StravaToken.findOne({userID});
         // tokenDoc.access_token = tokenData.access_token;
@@ -67,6 +66,17 @@ module.exports.refreshStrToken = (req, res, next) => {
     .catch(next);
   };
   next();
+};
+
+
+module.exports.getStrToken = (req, res, next) => {  
+  const userID = req.user._id;
+
+  StravaToken.findOne({userID})
+    .then((tokenData) => {        
+      res.send({strToken: tokenData.access_token});        
+    }) 
+    .catch(next);
 };
 
 

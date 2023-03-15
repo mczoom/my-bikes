@@ -29,7 +29,11 @@ const bikeSchema = new mongoose.Schema({
   },
   retired: {
     type: Boolean,
-  }
+  },
+  photo:{
+    type: String,
+    default: 'http://localhost:3001/default-bike.jpg',
+  },
 });
 
 

@@ -7,7 +7,7 @@ import { Activity } from '../../models/Activity';
 
 
 interface GarageBikesListProps {
-  openBikePopup: (bikeData: MyBike | undefined) => void
+  openBikePhotoPopup: (bikeData: MyBike | undefined) => void
   yearsAtStrava: (currentYear: number) => number[]
   activities: Activity[]
   bikesToRender: MyBike[]
@@ -15,7 +15,7 @@ interface GarageBikesListProps {
 }
 
 
-export default function GarageBikesList({bikesToRender, openBikePopup, yearsAtStrava, activities, bikeTotalDistance}: GarageBikesListProps) {
+export default function GarageBikesList({bikesToRender, openBikePhotoPopup, yearsAtStrava, activities, bikeTotalDistance}: GarageBikesListProps) {
 
   const currentUser = React.useContext<Profile>(CurrentUserContext);
 
@@ -24,7 +24,7 @@ export default function GarageBikesList({bikesToRender, openBikePopup, yearsAtSt
     <ul className='bike-cards-list'>
       {bikesToRender.map((bike) => (
         <li key={bike.id} className='bike-cards-list__item'>
-          <GarageBikeCard bike={bike} openBikePopup={openBikePopup} yearsAtStrava={yearsAtStrava} activities={activities} bikeTotalDistance={bikeTotalDistance} />
+          <GarageBikeCard bike={bike} openBikePhotoPopup={openBikePhotoPopup} yearsAtStrava={yearsAtStrava} activities={activities} bikeTotalDistance={bikeTotalDistance} />
         </li>
       ))}
     </ul>
