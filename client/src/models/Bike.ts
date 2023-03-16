@@ -7,4 +7,5 @@ export interface Bike {
   primary?: boolean
   resource_state?: number
   retired: boolean
+  photo?: string 
 }

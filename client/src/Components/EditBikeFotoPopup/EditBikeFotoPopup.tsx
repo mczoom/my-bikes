@@ -36,8 +36,7 @@ export default function BikeCardPopup({isPopupOpen, closeBikePopup}: BikeCardPop
       <div className='bike-popup__container'>
         <button type='button' className='bike-popup__close-btn' onClick={closeBikePopup}></button>
         <PageWithForm name='edit-bike-photo' title='Редактирование фотографии велосипеда' btnText='Сохранить' submitHandler={updatePhotoHandler}>
-          <Input name='login' label='Логин' inputType='text' placeholder='Логин' getLoginInputValue={getPhotoInputValue} />
-          
+          <Input name='link' label='Ссылка на фото' inputType='text' placeholder='Введите ссылку на фото' getInputValue={getPhotoInputValue} />          
         </PageWithForm>        
       </div>
     </div>

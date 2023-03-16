@@ -35,7 +35,10 @@ export default function GarageBikeCard({bike, openBikePhotoPopup, yearsAtStrava,
   return (
     <div className='bike-card' >
       <div className='bike-card__wrap'>
+      <div className='bike-card__image-wrap'>
+        <button className='bike-card__edit-photo-btn'>Изменить</button>
         <img src={bike?.src} className='bike-card__image' onClick={openPhotoPopup}></img>
+      </div>  
         <BikeSpecs bike={bike} bikeTotalDistance={bikeTotalDistance} />
         <DistancePerYearList yearsAtStrava={yearsAtStrava} distancePerYear={getDistancePerYear} />
       </div>

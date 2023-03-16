@@ -40,8 +40,8 @@ export default function LoginPage({handleLogin}: LoginPageProps) {
 
   return (
     <PageWithForm name='login' title='Вход в сервис My-Bikes' btnText='Войти' submitHandler={login}>
-      <Input name='login' label='Логин' inputType='text' placeholder='Логин' getLoginInputValue={getLoginInputValue} />
-      <Input name='password' label='Пароль' inputType='password' placeholder='Пароль' getPasswordInputValue={getPasswordInputValue} />
+      <Input name='login' label='Логин' inputType='text' placeholder='Логин' getInputValue={getLoginInputValue} />
+      <Input name='password' label='Пароль' inputType='password' placeholder='Пароль' getInputValue={getPasswordInputValue} />
     </PageWithForm>
   )
 }

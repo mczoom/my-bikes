@@ -10,6 +10,7 @@ import deliIndoor from '../../images/bikes/deli_indoor.jpg';
 import trek from '../../images/bikes/trek.jpg';
 import trekIndoor from '../../images/bikes/trek_indoor.jpg';
 import { Bike } from '../../models/Bike';
+import  *  as appApi from '../../utils/appApi';
 
 
 interface GarageProps {
@@ -21,11 +22,24 @@ interface GarageProps {
 
 export default function Garage({bikes, yearsAtStrava, activities, bikeTotalDistance}: GarageProps) {
 
+  const [userBikes, setUserBikes] = useState<Bike[]>([]);
   const [isBikesFilterChecked, setIsBikesFilterChecked] = useState<boolean>(false);
   const [bikesToRender, setBikesToRender] = useState<MyBike[]>([]);
   const [isBikePhotoPopupOpen, setBikePhotoPopupOpen] = useState<boolean>(false);
   const [bikePopupData, setBikePopupData] = useState<MyBike | undefined>({} as MyBike);
 
+
+  function getUserBikes() {
+    appApi.getAllBikes()
+      .then((bikes: Bike[]) => {        
+        
+        if(bikes) {          
+          setUserBikes(bikes);
+        }
+      })
+      .catch(err => console.log(err));
+  };
+  console.log(userBikes);
 
   const myBikes: MyBike[] = [
     {
@@ -105,7 +119,12 @@ function closeBikePopup() {
 
 useEffect(() => {
   filterBikeCardsToRender();
-}, [isBikesFilterChecked])
+}, [isBikesFilterChecked]);
+
+useEffect(() => {
+  getUserBikes();
+}, [])
+
 
 
   return (

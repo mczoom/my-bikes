@@ -35,11 +35,14 @@ module.exports.addAllBikes = async(req, res, next) => {
 
 
 module.exports.getAllBikes = (req, res, next) => {
-  const owner = req.user._id;
+  const userID = req.user._id;
   
-  return stravaToken.find({_id: owner})
-    .then((tokenData) => {
-      res.send({ tok: tokenData.refresh_token });
+  return Bike.findOne({userID})
+    //.orFail(() => console.log('Велосипеды пользователя не найдены'))
+    .then((garage) => {
+      if(garage) {
+      res.send(garage.bikes);
+      }
     })
     .catch(next);
 }

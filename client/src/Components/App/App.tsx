@@ -38,7 +38,7 @@ function App() {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const dateOfRegAtStrava: string = currentUser.created_at;
+  
   const yearOfRegistrationAtStrava: number = new Date(currentUser.created_at).getFullYear();
 
   
@@ -122,7 +122,8 @@ function App() {
   };
 
 
-  async function getAllActivities() {
+  async function getAllActivities(user: Profile) {
+    const dateOfRegAtStrava: string = user.created_at;
     const fromDate: number = Date.parse(dateOfRegAtStrava) / 1000;
     const tillDate: number = Math.round(Date.now() / 1000);
     let activities: Activity[] = [];
@@ -144,7 +145,7 @@ function App() {
       } while(response !== 0 );
 
     setAllActivities(activities);
-  }
+  };
 
   console.log(allActivities);
 
@@ -154,9 +155,12 @@ function App() {
       .then((user) => {
         if(user.id) {
           setCurrentUser(user);          
-        }
+        }        
+        return user
       })
-      .then(() => getAllActivities())
+      .then((currentUser) => {      
+        getAllActivities(currentUser);        
+      })
       .catch((err) => console.log(err));
   }
 

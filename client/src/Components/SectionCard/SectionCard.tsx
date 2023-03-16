@@ -8,18 +8,12 @@ interface SectionCardProps {
   card: Card
 }
 
-function test() {
-  refreshToken()
-    .then(res => console.log(res))
-    .catch(err => console.log(err))
-}
-
 
 
 export default function SectionCard({card}: SectionCardProps) {
   return (
     <>
-    <button type='button' onClick={test}></button>
+    <button type='button'></button>
     <Link to={card.path} className='section-card link' >
         <h2 className='section-card__header'>{card.title}</h2>
         <div className='section-card__wrapper'>
