@@ -60,21 +60,23 @@ function App() {
     }  
   }; 
 
-
-  function addAllBikes() {    
-    // currentUser.bikes.forEach((bike: Bike) => {
-    //   const {
-    //     converted_distance,
-    //     id,
-    //     name,
-    //     retired
-    //    } = bike
-    //   appApi.addAllBikes(converted_distance, id, name, retired);
-    // })
-    appApi.addAllBikes(currentUser.bikes);
+  function isTrainer(bikeId: string): boolean | undefined {
+    const bike = allActivities.find( function(activity) {
+      return activity.gear_id == bikeId;
+    });    
+    return bike?.trainer;
   }
 
 
+  function addAllBikes() {    
+    const userBikes: Bike[] = currentUser?.bikes?.map((bike) => {
+      return {...bike, trainer: isTrainer(bike.id)};
+    });
+    appApi.addAllBikes(userBikes);
+  }
+
+ 
+  
   function handleRegistration(login: string, password: string) {
     appApi.register(login, password)
       .then((res) => {

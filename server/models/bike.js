@@ -34,6 +34,9 @@ const bikeSchema = new mongoose.Schema({
     type: String,
     default: 'http://localhost:3001/default-bike.jpg',
   },
+  trainer: {
+    type: Boolean,
+  }
 });
 
 

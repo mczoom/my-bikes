@@ -42,7 +42,7 @@ module.exports.getAllBikes = (req, res, next) => {
     .then((garage) => {
       if(garage) {
       res.send(garage.bikes);
-      }
+      };
     })
     .catch(next);
 }

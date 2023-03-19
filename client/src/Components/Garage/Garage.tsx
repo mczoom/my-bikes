@@ -29,10 +29,11 @@ export default function Garage({bikes, yearsAtStrava, activities, bikeTotalDista
   const [bikePopupData, setBikePopupData] = useState<MyBike | undefined>({} as MyBike);
 
 
+  
+
   function getUserBikes() {
     appApi.getAllBikes()
       .then((bikes: Bike[]) => {        
-        
         if(bikes) {          
           setUserBikes(bikes);
         }
@@ -40,6 +41,8 @@ export default function Garage({bikes, yearsAtStrava, activities, bikeTotalDista
       .catch(err => console.log(err));
   };
   console.log(userBikes);
+
+
 
   const myBikes: MyBike[] = [
     {
