@@ -11,6 +11,7 @@ import trek from '../../images/bikes/trek.jpg';
 import trekIndoor from '../../images/bikes/trek_indoor.jpg';
 import { Bike } from '../../models/Bike';
 import  *  as appApi from '../../utils/appApi';
+import { UserBike } from '../../models/UserBike';
 
 
 interface GarageProps {
@@ -22,18 +23,18 @@ interface GarageProps {
 
 export default function Garage({bikes, yearsAtStrava, activities, bikeTotalDistance}: GarageProps) {
 
-  const [userBikes, setUserBikes] = useState<Bike[]>([]);
+  const [userBikes, setUserBikes] = useState<UserBike[]>([]);
   const [isBikesFilterChecked, setIsBikesFilterChecked] = useState<boolean>(false);
-  const [bikesToRender, setBikesToRender] = useState<MyBike[]>([]);
+  const [bikesToRender, setBikesToRender] = useState<Bike[]>([]);
   const [isBikePhotoPopupOpen, setBikePhotoPopupOpen] = useState<boolean>(false);
-  const [bikePopupData, setBikePopupData] = useState<MyBike | undefined>({} as MyBike);
+  const [bikePopupData, setBikePopupData] = useState<UserBike | undefined>({} as UserBike);
 
 
   
 
   function getUserBikes() {
     appApi.getAllBikes()
-      .then((bikes: Bike[]) => {        
+      .then((bikes: UserBike[]) => {        
         if(bikes) {          
           setUserBikes(bikes);
         }
@@ -102,16 +103,16 @@ function toggleBikesFilter() {
 
 function filterBikeCardsToRender() {
   if(isBikesFilterChecked) {
-    const trainerBikesToRender = myBikes.filter((bike) => {
+    const trainerBikesToRender = userBikes.filter((bike) => {
       return bike.trainer === true;
   });
   setBikesToRender(trainerBikesToRender);
   } else {
-    setBikesToRender(myBikes);
+    setBikesToRender(userBikes);
   }
 }
 
-function openBikePhotoPopup(bikeData: MyBike | undefined) {
+function openBikePhotoPopup(bikeData: UserBike | undefined) {
   setBikePhotoPopupOpen(true);
   setBikePopupData(bikeData);
 }

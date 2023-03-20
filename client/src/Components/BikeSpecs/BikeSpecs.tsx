@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
-import { MyBike } from '../../models/MyBike';
+import { Bike } from '../../models/Bike';
+import { UserBike } from '../../models/UserBike';
 
 
 interface BikeSpecsProps {
-  bike: MyBike
+  bike: UserBike
   bikeTotalDistance: (bikeId: string) => number
 }
 
@@ -16,10 +17,10 @@ export default function BikeSpecs({bike, bikeTotalDistance}: BikeSpecsProps) {
         <h2 className='bike-specs__bike-name'>{bike.name}</h2>
       </li>
       <li className='bike-specs__spec'>
-        <p className='spec'>Бренд: <span className='bold'>{bike.brand}</span></p>
+        <p className='spec'>Бренд: <span className='bold'>{bike.brand || 'н/д'}</span></p>
       </li>
       <li className='bike-specs__spec'>
-        <p className='spec'>Модель: <span className='bold'>{bike.model}</span></p>
+        <p className='spec'>Модель: <span className='bold'>{bike.model || 'н/д'}</span></p>
       </li>
       <li className='bike-specs__spec'>
         <p className='spec'>Год: <span className='bold'>{bike.year || 'н/д'}</span></p>

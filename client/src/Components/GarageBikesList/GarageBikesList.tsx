@@ -4,13 +4,15 @@ import { Profile } from '../../models/Profile';
 import GarageBikeCard from '../GarageBikeCard/GarageBikeCard';
 import { MyBike } from '../../models/MyBike';
 import { Activity } from '../../models/Activity';
+import { Bike } from '../../models/Bike';
+import { UserBike } from '../../models/UserBike';
 
 
 interface GarageBikesListProps {
-  openBikePhotoPopup: (bikeData: MyBike | undefined) => void
+  openBikePhotoPopup: (bikeData: UserBike | undefined) => void
   yearsAtStrava: (currentYear: number) => number[]
   activities: Activity[]
-  bikesToRender: MyBike[]
+  bikesToRender: Bike[]
   bikeTotalDistance: (bikeId: string) => number
 }
 

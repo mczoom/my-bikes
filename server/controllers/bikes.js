@@ -1,5 +1,6 @@
 const Bike = require('../models/bike');
 const stravaToken = require('../models/stravaToken');
+const { updateBikesOdo, getActualBikesOdo } = require('../utils/services');
 
 
 // module.exports.addAllBikes = (req, res, next) => {
@@ -18,19 +19,39 @@ const stravaToken = require('../models/stravaToken');
 //     .catch(next);
 // };
 
+
+
+
+// module.exports.updateBikesOdo = async(req, res, next) => {
+//   const userBikes = req.body.bikes;
+//   const userID = req.user._id;
+
+//   const bikes = await Bike.findOne({userID});
+//   if(!bikes) {
+//   return Bike.create({bikes: userBikes, userID})
+//     .then((garage) => {
+//       res.send({ bikes: garage.bikes });
+//     })
+//     .catch(next);
+//   };
+//   return;
+// };
+
+
 module.exports.addAllBikes = async(req, res, next) => {
-  const userBikes = req.body.bikes;
+  const actualBikesInfo = req.body.bikes;
   const userID = req.user._id;
 
-  const bikes = await Bike.findOne({userID});
-  if(!bikes) {
+  const storedBikes = await Bike.findOne({userID});
+  if(!storedBikes) {
   return Bike.create({bikes: userBikes, userID})
     .then((garage) => {
       res.send({ bikes: garage.bikes });
     })
     .catch(next);
   };
-  return;
+  await updateBikesOdo(storedBikes, actualBikesInfo);
+  storedBikes.save();
 };
 
 

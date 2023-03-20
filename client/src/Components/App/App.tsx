@@ -131,7 +131,7 @@ function App() {
     let activities: Activity[] = [];
     let page = 1;
     let response = 0;
-
+    if(fromDate) {
       do {
         await getActivities({fromDate, tillDate, page})
           .then((res: Activity[]) => {
@@ -146,7 +146,8 @@ function App() {
 
       } while(response !== 0 );
 
-    setAllActivities(activities);
+      setAllActivities(activities);
+    }
   };
 
   console.log(allActivities);
