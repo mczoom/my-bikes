@@ -12,6 +12,7 @@ import trekIndoor from '../../images/bikes/trek_indoor.jpg';
 import { Bike } from '../../models/Bike';
 import  *  as appApi from '../../utils/appApi';
 import { UserBike } from '../../models/UserBike';
+import EditBikeInfoPopup from '../EditBikeInfoPopup/EditBikeInfoPopup';
 
 
 interface GarageProps {
@@ -27,6 +28,7 @@ export default function Garage({bikes, yearsAtStrava, activities, bikeTotalDista
   const [isBikesFilterChecked, setIsBikesFilterChecked] = useState<boolean>(false);
   const [bikesToRender, setBikesToRender] = useState<Bike[]>([]);
   const [isBikePhotoPopupOpen, setBikePhotoPopupOpen] = useState<boolean>(false);
+  const [isEditPopupOpen, setEditPopupOpen] = useState<boolean>(false);
   const [bikePopupData, setBikePopupData] = useState<UserBike | undefined>({} as UserBike);
 
 
@@ -37,6 +39,7 @@ export default function Garage({bikes, yearsAtStrava, activities, bikeTotalDista
       .then((bikes: UserBike[]) => {        
         if(bikes) {          
           setUserBikes(bikes);
+          setBikesToRender(bikes);
         }
       })
       .catch(err => console.log(err));
@@ -96,6 +99,7 @@ export default function Garage({bikes, yearsAtStrava, activities, bikeTotalDista
     }
   ]
 
+console.log(bikesToRender);
 
 function toggleBikesFilter() {
   setIsBikesFilterChecked(v => !v);
@@ -115,10 +119,18 @@ function filterBikeCardsToRender() {
 function openBikePhotoPopup(bikeData: UserBike | undefined) {
   setBikePhotoPopupOpen(true);
   setBikePopupData(bikeData);
+};
+
+function closeBikePhotoPopup() {
+  setBikePhotoPopupOpen(false);
 }
 
-function closeBikePopup() {
-  setBikePhotoPopupOpen(false);
+function openEditBikeInfoPopup() {
+  setEditPopupOpen(true);  
+}
+
+function closeEditBikeInfoPopup() {
+  setEditPopupOpen(false);
 }
 
 useEffect(() => {
@@ -137,11 +149,13 @@ useEffect(() => {
       <GarageBikesList
         bikesToRender={bikesToRender}
         openBikePhotoPopup={openBikePhotoPopup}
+        openEditInfoPopup={openEditBikeInfoPopup}
         yearsAtStrava={yearsAtStrava}
         activities={activities}
         bikeTotalDistance={bikeTotalDistance}
       />
-      <BikeCardPopup isPopupOpen={isBikePhotoPopupOpen} bikePopupData={bikePopupData} closeBikePopup={closeBikePopup} />
+      <BikeCardPopup isPopupOpen={isBikePhotoPopupOpen} bikePopupData={bikePopupData} closePopup={closeBikePhotoPopup} />
+      <EditBikeInfoPopup isPopupOpen={isEditPopupOpen} closePopup={closeEditBikeInfoPopup} />
     </section>
   )
 }

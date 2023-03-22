@@ -1,12 +1,18 @@
 @import '../../styles/index';
 
 .bike-specs {
+  text-align: end;
   min-width: 180px;
   margin: 0;
   padding: 10px 20px;
   border-bottom-right-radius: 6px;
   border-top-right-radius: 6px;
   background-color: $details-bg;
+}
+
+.bike-specs__specs-list {
+  
+  text-align: start;
 }
 
 .bike-specs__bike-name {

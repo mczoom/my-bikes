@@ -1,18 +1,21 @@
 import React, { useEffect } from 'react';
 import { Bike } from '../../models/Bike';
 import { UserBike } from '../../models/UserBike';
+import EditButton from '../EditButton/EditButton';
 
 
 interface BikeSpecsProps {
   bike: UserBike
   bikeTotalDistance: (bikeId: string) => number
+  openEditInfoPopup: () => void
 }
 
-export default function BikeSpecs({bike, bikeTotalDistance}: BikeSpecsProps) {
+export default function BikeSpecs({bike, bikeTotalDistance, openEditInfoPopup}: BikeSpecsProps) {
 
 
   return (
-    <ul className='bike-specs'>
+    <div className='bike-specs'>
+    <ul className='bike-specs__specs-list'>
       <li className='bike-specs__spec'>
         <h2 className='bike-specs__bike-name'>{bike.name}</h2>
       </li>
@@ -32,5 +35,7 @@ export default function BikeSpecs({bike, bikeTotalDistance}: BikeSpecsProps) {
         <p className='spec'>Пробег: <span className='bold'>{Math.round(bikeTotalDistance(bike.id) / 1000) || '--'} км</span></p>
       </li>
     </ul>
+    <EditButton text={'Редактировать'} openPopup={openEditInfoPopup}/>
+    </div>
   )
 }

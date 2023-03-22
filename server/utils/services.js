@@ -29,8 +29,10 @@ module.exports.getActualBikeOdo = async(id, bikesInfo) => {
 
 
 module.exports.updateBikesOdo = async(storedBikeData, actualData) => {
-  storedBikeData.bikes.forEach((bike) => {    
-    const actualDist = actualData.find(bicycle => bicycle.id === bike.id);    
-    bike.converted_distance = actualDist.converted_distance;    
+  storedBikeData.bikes.forEach(async (bike) => {    
+    const actualDist = await actualData.find(bicycle => bicycle.id === bike.id);
+    if(actualDist.converted_distance !== bike.converted_distance) {
+      bike.converted_distance = actualDist.converted_distance;
+    }
   });  
 };
