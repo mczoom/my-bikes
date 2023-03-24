@@ -16,9 +16,9 @@ export default function Input({name, label, inputType, placeholder, getInputValu
   // const inputHandler = name === 'login' ?  getLoginInputValue : getPasswordInputValue;
 
   return (
-    <>
+    <div className='input'>
       <label className='input-label'>{label}</label>
-      <input className='input-field' type={inputType} placeholder={placeholder} onChange={getInputValue}></input>
-    </>
+      <input className='input-field' name={name} type={inputType} placeholder={placeholder} onChange={getInputValue}></input>
+    </div>
   )
 }

@@ -3,48 +3,13 @@ const stravaToken = require('../models/stravaToken');
 const { updateBikesOdo, getActualBikesOdo } = require('../utils/services');
 
 
-// module.exports.addAllBikes = (req, res, next) => {
-//   const {
-//     converted_distance,
-//     id,
-//     name,
-//     retired
-//    } = req.body;
-//   const userID = req.user._id;
-
-//   return Bike.create({bikes: {distance: converted_distance, id, name, retired}, userID})
-//     .then((bike) => {
-//       res.send({ bike });
-//     })
-//     .catch(next);
-// };
-
-
-
-
-// module.exports.updateBikesOdo = async(req, res, next) => {
-//   const userBikes = req.body.bikes;
-//   const userID = req.user._id;
-
-//   const bikes = await Bike.findOne({userID});
-//   if(!bikes) {
-//   return Bike.create({bikes: userBikes, userID})
-//     .then((garage) => {
-//       res.send({ bikes: garage.bikes });
-//     })
-//     .catch(next);
-//   };
-//   return;
-// };
-
-
 module.exports.addAllBikes = async(req, res, next) => {
   const actualBikesInfo = req.body.bikes;
   const userID = req.user._id;
 
   const storedBikes = await Bike.findOne({userID});
   if(!storedBikes) {
-  return Bike.create({bikes: userBikes, userID})
+  return Bike.create({bikes: actualBikesInfo, userID})
     .then((garage) => {
       res.send({ bikes: garage.bikes });
     })
@@ -52,6 +17,33 @@ module.exports.addAllBikes = async(req, res, next) => {
   };
   await updateBikesOdo(storedBikes, actualBikesInfo);
   storedBikes.save();
+};
+
+
+
+module.exports.updateBikeInfo = async(req, res, next) => {
+  const {bikeId, updatedInfo} = req.body;
+  const userID = req.user._id;  
+
+  const userGear = await Bike.findOne({userID});  
+  const bikeToUpdate = userGear.bikes.find(bike => bike.id === bikeId);
+  
+  bikeToUpdate.brand = updatedInfo.brand;
+  bikeToUpdate.model = updatedInfo.model;
+  bikeToUpdate.year = updatedInfo.year;
+  bikeToUpdate.weight = updatedInfo.weight;
+  bikeToUpdate.photo = updatedInfo.photo;
+
+  // function updateStoredBikeInfo(bikeToUpdate, updatedInfo) {
+  //   Object.keys(updatedInfo).forEach((spec) => {
+  //     //userGear.updateOne(bikeToUpdate, )
+  //     bikeToUpdate.spec = updatedInfo[spec];      
+  //   });
+  // }
+  
+  //updateStoredBikeInfo(bikeToUpdate, updatedInfo);
+  
+  userGear.save();
 };
 
 

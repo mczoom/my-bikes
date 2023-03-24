@@ -8,9 +8,10 @@ interface BikeSpecsProps {
   bike: UserBike
   bikeTotalDistance: (bikeId: string) => number
   openEditInfoPopup: () => void
+  getBikeId: (id: string) => void
 }
 
-export default function BikeSpecs({bike, bikeTotalDistance, openEditInfoPopup}: BikeSpecsProps) {
+export default function BikeSpecs({bike, bikeTotalDistance, openEditInfoPopup, getBikeId}: BikeSpecsProps) {
 
 
   return (
@@ -35,7 +36,7 @@ export default function BikeSpecs({bike, bikeTotalDistance, openEditInfoPopup}: 
         <p className='spec'>Пробег: <span className='bold'>{Math.round(bikeTotalDistance(bike.id) / 1000) || '--'} км</span></p>
       </li>
     </ul>
-    <EditButton text={'Редактировать'} openPopup={openEditInfoPopup}/>
+    <EditButton bike={bike} getBikeId={getBikeId} text={'Редактировать'} openPopup={openEditInfoPopup}/>
     </div>
   )
 }

@@ -74,6 +74,19 @@ export const register = (login: string, password: string) => {
   };
 
 
+  export const updateBikeInfo = (bikeId: any, updatedInfo: any) => {
+    return fetch(`${BASE_URL}/bikeinfo`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+      },
+      body: JSON.stringify({bikeId, updatedInfo})
+    })
+    .then((res) => handleResponse(res));
+  };
+
+
   export const getAllBikes = () => {
     return fetch(`${BASE_URL}/bikes`, {
       method: 'GET',

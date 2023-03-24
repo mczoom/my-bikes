@@ -24,7 +24,7 @@ module.exports.updateStravaToken = async (tokenInfo, id) => {
 module.exports.getActualBikeOdo = async(id, bikesInfo) => {
   const actualBikeInfo = await bikesInfo.find(bike => bike.id === id);
   
-  return bikeInfo.converted_distance;
+  return bikesInfo.converted_distance;
 };
 
 

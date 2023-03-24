@@ -1,5 +1,12 @@
 @import '../../styles/index';
 
+.input {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  padding: 0 200px;
+}
+
 .input-field {
   margin: 3px 0 25px;
   border: none;

@@ -14,10 +14,11 @@ interface BikeCardProps {
   yearsAtStrava: (currentYear: number) => number[]
   activities: Activity[]
   bikeTotalDistance: (bikeId: string) => number
+  getBikeId: (id: string) => void
 }
 
 
-export default function GarageBikeCard({bike, openBikePhotoPopup, openEditInfoPopup, yearsAtStrava, activities, bikeTotalDistance}: BikeCardProps) {
+export default function GarageBikeCard({bike, openBikePhotoPopup, openEditInfoPopup, yearsAtStrava, activities, bikeTotalDistance, getBikeId}: BikeCardProps) {
 
   function openPhotoPopup() {
     openBikePhotoPopup(bike);
@@ -41,7 +42,7 @@ export default function GarageBikeCard({bike, openBikePhotoPopup, openEditInfoPo
       <div className='bike-card__image-wrap'>        
         <img src={bike?.photo} className='bike-card__image' onClick={openPhotoPopup}></img>
       </div>  
-        <BikeSpecs bike={bike} bikeTotalDistance={bikeTotalDistance} openEditInfoPopup={openEditInfoPopup} />
+        <BikeSpecs bike={bike} getBikeId={getBikeId} bikeTotalDistance={bikeTotalDistance} openEditInfoPopup={openEditInfoPopup} />
         <DistancePerYearList yearsAtStrava={yearsAtStrava} distancePerYear={getDistancePerYear} />
       </div>
     </div>

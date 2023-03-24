@@ -9,19 +9,24 @@ const bikeSchema = new mongoose.Schema({
   },
   name: {
     type: String,
+    default: '--',
     //required: true,
   },
   brand: {
     type: String,
+    default: '--',
   },
   model: {
     type: String,
+    default: '--',
   },
   year: {
-    type: Number,
+    type: String,
+    default: '--',
   },
   weight: {
-    type: Number,
+    type: String,
+    default: '--',
   },
   converted_distance: {
     type: Number,
@@ -29,6 +34,7 @@ const bikeSchema = new mongoose.Schema({
   },
   retired: {
     type: Boolean,
+    default: false,
   },
   photo:{
     type: String,
@@ -36,6 +42,7 @@ const bikeSchema = new mongoose.Schema({
   },
   trainer: {
     type: Boolean,
+    default: false,
   }
 });
 

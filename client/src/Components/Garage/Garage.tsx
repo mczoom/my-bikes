@@ -30,7 +30,7 @@ export default function Garage({bikes, yearsAtStrava, activities, bikeTotalDista
   const [isBikePhotoPopupOpen, setBikePhotoPopupOpen] = useState<boolean>(false);
   const [isEditPopupOpen, setEditPopupOpen] = useState<boolean>(false);
   const [bikePopupData, setBikePopupData] = useState<UserBike | undefined>({} as UserBike);
-
+  const [curentBikeId, setCurentBikeId] = useState<string>('');
 
   
 
@@ -133,6 +133,10 @@ function closeEditBikeInfoPopup() {
   setEditPopupOpen(false);
 }
 
+function getBikeId(id: string) {
+  setCurentBikeId(id)
+}
+
 useEffect(() => {
   filterBikeCardsToRender();
 }, [isBikesFilterChecked]);
@@ -153,9 +157,10 @@ useEffect(() => {
         yearsAtStrava={yearsAtStrava}
         activities={activities}
         bikeTotalDistance={bikeTotalDistance}
+        getBikeId={getBikeId}
       />
       <BikeCardPopup isPopupOpen={isBikePhotoPopupOpen} bikePopupData={bikePopupData} closePopup={closeBikePhotoPopup} />
-      <EditBikeInfoPopup isPopupOpen={isEditPopupOpen} closePopup={closeEditBikeInfoPopup} />
+      <EditBikeInfoPopup bikeId={curentBikeId} isPopupOpen={isEditPopupOpen} closePopup={closeEditBikeInfoPopup} />
     </section>
   )
 }
