@@ -22,6 +22,15 @@ interface GarageProps {
   bikeTotalDistance: (bikeId: string) => number  
 }
 
+interface BikeCardInfo {
+  photo: string
+  bikename: string
+  brand: string  
+  model: string
+  year: number
+  weight: number
+}
+
 export default function Garage({bikes, yearsAtStrava, activities, bikeTotalDistance}: GarageProps) {
 
   const [userBikes, setUserBikes] = useState<UserBike[]>([]);
@@ -137,6 +146,12 @@ function getBikeId(id: string) {
   setCurentBikeId(id)
 }
 
+function updateBikeCardInfo(id: string, specs: BikeCardInfo) {
+  appApi.updateBikeInfo(id, specs)
+    .then(updatedInfo => setBikesToRender(updatedInfo))
+    .catch((err) => console.log('Ошибка обновления данных байка'));    
+};
+
 useEffect(() => {
   filterBikeCardsToRender();
 }, [isBikesFilterChecked]);
@@ -160,7 +175,7 @@ useEffect(() => {
         getBikeId={getBikeId}
       />
       <BikeCardPopup isPopupOpen={isBikePhotoPopupOpen} bikePopupData={bikePopupData} closePopup={closeBikePhotoPopup} />
-      <EditBikeInfoPopup bikeId={curentBikeId} isPopupOpen={isEditPopupOpen} closePopup={closeEditBikeInfoPopup} />
+      <EditBikeInfoPopup updateInfo={updateBikeCardInfo} bikeId={curentBikeId} isPopupOpen={isEditPopupOpen} closePopup={closeEditBikeInfoPopup} />
     </section>
   )
 }

@@ -5,6 +5,7 @@ import PopupWithForm from '../PopupWithForm/PopupWithForm';
 
 
 interface EditBikeInfoPopupProps {
+  updateInfo: (id: string, specs: BikeInfo) => void
   isPopupOpen: boolean  
   closePopup: () => void
   bikeId: string
@@ -19,20 +20,22 @@ interface BikeInfo {
   weight: number
 }
 
-export default function EditBikeInfoPopup({isPopupOpen, closePopup, bikeId}: EditBikeInfoPopupProps) {
+export default function EditBikeInfoPopup({updateInfo, isPopupOpen, closePopup, bikeId}: EditBikeInfoPopupProps) {
 
   const [bikeInfo, setBikeInfo] = useState<BikeInfo>({} as BikeInfo);
-  
-console.log(bikeInfo);
+
+  console.log(bikeInfo);
 
 
   function handleInputValue(e: React.ChangeEvent<HTMLInputElement>) {
     setBikeInfo({...bikeInfo, [e.target.name]: e.target.value} );
   };
+
+  
   
   function submitHandler(e: React.SyntheticEvent) {
     e.preventDefault();
-    updateBikeInfo(bikeId, bikeInfo);
+    updateInfo(bikeId, bikeInfo);
     closePopup();
   }  
 
@@ -48,7 +51,7 @@ console.log(bikeInfo);
   return (
     <div className={popupClassName} onClick={closePopupByOverlayClick}>
       <div className='bike-popup__container'>
-        <button type='button' className='bike-popup__close-btn' onClick={closePopup}></button>
+        <button type='button' className='bike-popup__close-btn' onClick={closePopup}></button>        
         <PopupWithForm name='edit-bike-photo' title='Редактирование данных велосипеда' btnText='Сохранить' submitHandler={submitHandler}>
           <Input name='photo' label='Ссылка на фото' inputType='text' placeholder='Введите ссылку на фото' getInputValue={handleInputValue} />
           <Input name='bikename' label='Название байка' inputType='text' placeholder='Введите название' getInputValue={handleInputValue} /> 
@@ -56,7 +59,7 @@ console.log(bikeInfo);
           <Input name='model' label='Модель' inputType='text' placeholder='Введите название модели' getInputValue={handleInputValue} /> 
           <Input name='year' label='Модельный год' inputType='text' placeholder='Введите модельный год' getInputValue={handleInputValue} /> 
           <Input name='weight' label='Вес' inputType='text' placeholder='Введите вес байка' getInputValue={handleInputValue} /> 
-        </PopupWithForm>        
+        </PopupWithForm>            
       </div>
     </div>
   )
