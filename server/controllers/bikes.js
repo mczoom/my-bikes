@@ -20,6 +20,16 @@ module.exports.addAllBikes = async(req, res, next) => {
 };
 
 
+module.exports.updateOdo = async(req, res, next) => {
+  const actualBikesInfo = req.body.bikes;
+  const userID = req.user._id;
+  const storedBikes = await Bike.findOne({userID});
+  
+  updateBikesOdo(storedBikes, actualBikesInfo);
+  storedBikes.save();
+};
+
+
 module.exports.getAllBikes = (req, res, next) => {
   const userID = req.user._id;
   
@@ -42,7 +52,9 @@ module.exports.updateBikeInfo = async(req, res, next) => {
   const bikeToUpdate = userGear.bikes.find(bike => bike.id === bikeId);
 
   Object.keys(updatedInfo).forEach((spec) => {
-    bikeToUpdate[spec] = updatedInfo[spec];  
+    if(updatedInfo[spec]) {
+      bikeToUpdate[spec] = updatedInfo[spec];  
+    }
   });
 
   await userGear.save();

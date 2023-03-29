@@ -27,8 +27,8 @@ interface BikeCardInfo {
   bikename: string
   brand: string  
   model: string
-  year: number
-  weight: number
+  year: string | number
+  weight: string | number
 }
 
 export default function Garage({bikes, yearsAtStrava, activities, bikeTotalDistance}: GarageProps) {

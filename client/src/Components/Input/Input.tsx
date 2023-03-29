@@ -9,16 +9,17 @@ interface InputProps {
   getInputValue?: (e: React.ChangeEvent<HTMLInputElement>) => void
   getLoginInputValue?: (e: React.ChangeEvent<HTMLInputElement>) => void
   getPasswordInputValue?: (e: React.ChangeEvent<HTMLInputElement>) => void
+  value?: string | number
 }
 
-export default function Input({name, label, inputType, placeholder, getInputValue/*, getLoginInputValue, getPasswordInputValue*/}: InputProps) {
+export default function Input({name, label, inputType, placeholder, getInputValue, value}: InputProps) {
 
   // const inputHandler = name === 'login' ?  getLoginInputValue : getPasswordInputValue;
 
   return (
     <div className='input'>
       <label className='input-label'>{label}</label>
-      <input className='input-field' name={name} type={inputType} placeholder={placeholder} onChange={getInputValue}></input>
+      <input className='input-field' name={name} value={value} type={inputType} placeholder={placeholder} onChange={getInputValue}></input>
     </div>
   )
 }

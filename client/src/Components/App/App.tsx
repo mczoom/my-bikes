@@ -68,11 +68,20 @@ function App() {
   }
 
 
-  function addAllBikes() {    
+  function addAllBikes() {
+    if(currentUser && currentUser.bikes.length === 0) {
     const userBikes: Bike[] = currentUser?.bikes?.map((bike) => {
       return {...bike, trainer: isTrainer(bike.id)};
     });
     appApi.addAllBikes(userBikes);
+    }
+  }
+
+  function updateBikeDistance() {
+    if(currentUser) {
+      const userBikes: Bike[] = currentUser.bikes;
+      appApi.updateBikeOdo(userBikes);
+    }
   }
 
  
@@ -230,11 +239,7 @@ function App() {
   //   }
   // }, []);
 
-  useEffect(() => {
-    strTokenCheck();
-  }, []);
-
-
+  
   useEffect(() => {
     //checkToken();
     getCurrentUserInfo()  
@@ -254,6 +259,12 @@ function App() {
       addAllBikes();
     }
   }, [currentUser]);
+
+
+  useEffect(() => {
+    strTokenCheck();
+    updateBikeDistance();
+  }, []);
 
 
   // useEffect(() => {

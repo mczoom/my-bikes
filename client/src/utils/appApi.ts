@@ -87,6 +87,19 @@ export const register = (login: string, password: string) => {
   };
 
 
+  export const updateBikeOdo = (bikes: any) => {
+    return fetch(`${BASE_URL}/bikeodo`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+      },
+      body: JSON.stringify({bikes})
+    })
+    .then((res) => handleResponse(res));
+  };
+
+
   export const getAllBikes = () => {
     return fetch(`${BASE_URL}/bikes`, {
       method: 'GET',
