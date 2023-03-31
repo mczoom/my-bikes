@@ -12,8 +12,6 @@ interface SectionCardProps {
 
 export default function SectionCard({card}: SectionCardProps) {
   return (
-    <>
-    <button type='button'></button>
     <Link to={card.path} className='section-card link' >
         <h2 className='section-card__header'>{card.title}</h2>
         <div className='section-card__wrapper'>
@@ -21,6 +19,5 @@ export default function SectionCard({card}: SectionCardProps) {
           <p className='section-card__text'>{card.text}</p>
         </div>
     </Link>
-    </>
   )
 }

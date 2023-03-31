@@ -1,7 +1,7 @@
 /* eslint-disable no-loop-func */
 import React, {useState, useEffect} from 'react';
 import {CurrentUserContext} from '../../contexts/CurrentUserContext';
-import {Routes, Route, useNavigate} from 'react-router-dom';
+import {Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import * as appApi from '../../utils/appApi';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
@@ -224,6 +224,12 @@ function App() {
   };
 
 
+  function logout() {
+    localStorage.clear();
+    navigate('/access');
+  }
+
+
   // useEffect(() => {
   //   checkIsStravaTokenExpired();
   //   if(isStravaTokenExpired) {
@@ -238,6 +244,10 @@ function App() {
   //     exchangeToken();
   //   }
   // }, []);
+
+  useEffect(() => {
+    checkToken();      
+  }, []);
 
   
   useEffect(() => {
@@ -274,22 +284,24 @@ function App() {
   // }, []);
 
 
+console.log(isLoggedIn);
 
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
     <div className="page">
-      <Header />
+      <Header onLogout={logout}/>
       <main>
         <Routes>
           <Route path='/access' element={<AccessPage />} />
           <Route path='/registration' element={<RegPage handleRegistration={handleRegistration} />} />
           <Route path='/login' element={<LoginPage handleLogin={handleLogin} />} />
-          <Route path='/' element={<ProtectedRoute element={Main} isAuthorized={access}/>}  />
+          
+          <Route path='/' element={<ProtectedRoute element={Main} isAuthorized={isLoggedIn}/>}  />
           <Route path='/about' element={<About />} />
-          <Route path='/stats' element={<ProtectedRoute element={Stats} isAuthorized={access} registrationYear={yearOfRegistrationAtStrava} yearsAtStrava={yearsAtStrava} allRidesTotals={allRidesTotals} allYTDRidesTotals={allYTDRidesTotals} isLoading={isLoading} allActivities={allActivities} />} />
-          <Route path='/garage' element={<ProtectedRoute element={Garage} isAuthorized={access} bikes={userBikes} yearsAtStrava={yearsAtStrava} activities={allActivities} bikeTotalDistance={getBikeTotalDistance} />} />
-          <Route path='/maintenance' element={<ProtectedRoute element={Maintenance} isAuthorized={access} />} />
+          <Route path='/stats' element={<ProtectedRoute element={Stats} isAuthorized={isLoggedIn} registrationYear={yearOfRegistrationAtStrava} yearsAtStrava={yearsAtStrava} allRidesTotals={allRidesTotals} allYTDRidesTotals={allYTDRidesTotals} isLoading={isLoading} allActivities={allActivities} />} />
+          <Route path='/garage' element={<ProtectedRoute element={Garage} isAuthorized={isLoggedIn} bikes={userBikes} yearsAtStrava={yearsAtStrava} activities={allActivities} bikeTotalDistance={getBikeTotalDistance} />} />
+          <Route path='/maintenance' element={<ProtectedRoute element={Maintenance} isAuthorized={isLoggedIn} />} />
           <Route path='/*' element={<Page404 />} />
         </Routes>
       </main>

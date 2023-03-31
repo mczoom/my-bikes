@@ -13,9 +13,9 @@ interface PageWithFormProps {
   // loginHandler?: (e: React.SyntheticEvent) => void
 }
 
-export default function PageWithForm({name, children, title, btnText, submitHandler/*, registrationHandler, loginHandler*/}: PageWithFormProps) {
+export default function PageWithForm({name, children, title, btnText, submitHandler}: PageWithFormProps) {
 
-  //const submitHandler = name === 'reg' ? registrationHandler : loginHandler;
+  
 
   return (
     <div className='page-with-form'>
