@@ -35,17 +35,7 @@ export const register = (login: string, password: string) => {
   };
 
 
-  export const getStravaToken = () => {
-    return fetch(`${BASE_URL}/strtoken`, {
-      
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
-      },
-      
-    })
-    .then((res) => handleResponse(res));
-  }
+  
 
 
   // export const addAllBikes = (converted_distance: number, id: string, name: string, retired: boolean) => {

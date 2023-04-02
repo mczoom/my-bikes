@@ -6,7 +6,7 @@ import * as appApi from '../../utils/appApi';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Stats from '../Stats/Stats';
-import { exchangeToken, refreshToken, stravaTokenCheck } from '../../utils/stravaAuthApi';
+import { exchangeToken, getStravaToken, refreshToken, stravaTokenCheck } from '../../utils/stravaAuthApi';
 import {getCurrentAthlete, getActivities, getAthlete} from '../../utils/stravaApi';
 import {Profile} from '../../models/Profile';
 import AccessPage from '../AccessPage/AccessPage';
@@ -78,13 +78,21 @@ function App() {
   }
 
   function updateBikeDistance() {
-    if(currentUser) {
+    if(currentUser.id) {
       const userBikes: Bike[] = currentUser.bikes;
       appApi.updateBikeOdo(userBikes);
     }
   }
 
- 
+  function setStrTokenToLocalStorage() {
+    getStravaToken()
+      .then((res) => {
+        console.log(res);        
+        localStorage.setItem('stravaToken', res.strToken)
+      })
+      .catch((err) => console.log(err));
+  }
+
   
   function handleRegistration(login: string, password: string) {
     appApi.register(login, password)
@@ -103,8 +111,9 @@ function App() {
   function handleLogin(login: string, password: string) {
     appApi.login(login, password)
     .then((data) => {
-      if(data.token) {
+      if (data.token) {
         localStorage.setItem('jwt', data.token);
+        setStrTokenToLocalStorage();
         setIsLoggedIn(true);
       };
     })
@@ -201,7 +210,6 @@ function App() {
     appApi.getAllBikes()
       .then((bikes: Bike[]) => {
         if(bikes) {
-          setIsLoggedIn(true);
           setUserBikes(bikes);
         }
       })
@@ -212,14 +220,8 @@ function App() {
   function checkToken() {
     const jwt = localStorage.getItem('jwt');
     if(jwt) {
-      appApi.getAllBikes()
-        .then((bikes) => {
-          if(bikes) {
-            setIsLoggedIn(true);
-            setUserBikes(bikes);
-          }
-        })
-        .catch(err => console.log(err));
+      getUserBikes();
+      setIsLoggedIn(true);       
     }
   };
 
@@ -240,8 +242,9 @@ function App() {
 
 
   // useEffect(() => {
-  //   if(!tokenData()) {
-  //     exchangeToken();
+  //   const stravaToken = localStorage.getItem('stravaToken');
+  //   if(!stravaToken) {
+  //     refreshToken();
   //   }
   // }, []);
 
@@ -251,9 +254,10 @@ function App() {
 
   
   useEffect(() => {
-    //checkToken();
-    getCurrentUserInfo()  
-  }, []);
+    if(isLoggedIn) {
+      getCurrentUserInfo()
+    }  
+  }, [isLoggedIn]);
   console.log(currentUser);
 
   // useEffect(() => {
@@ -295,7 +299,7 @@ console.log(isLoggedIn);
         <Routes>
           <Route path='/access' element={<AccessPage />} />
           <Route path='/registration' element={<RegPage handleRegistration={handleRegistration} />} />
-          <Route path='/login' element={<LoginPage handleLogin={handleLogin} />} />
+          <Route path='/login' element={isLoggedIn ? <Main /> : <LoginPage handleLogin={handleLogin} /> } />
           
           <Route path='/' element={<ProtectedRoute element={Main} isAuthorized={isLoggedIn}/>}  />
           <Route path='/about' element={<About />} />

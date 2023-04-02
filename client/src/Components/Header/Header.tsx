@@ -15,14 +15,15 @@ export default function Header({onLogout}: HeaderProps) {
   return (
     <header className='header'>
       <div className='header__wrap'>
-        <img src={logo} className='header__logo' alt='logo'></img>
-        <div className='header__user-avatar'>
-          <Profile />
-          <LogoutButton onLogout={onLogout}/>
-        </div>
+        <img src={logo} className='header__logo' alt='logo'></img>        
+        <Profile />       
       </div>
-      <Navigation />
-
+      <div className='header__auth-buttons'>
+        <LogoutButton onLogout={onLogout}/>
+      </div>
+      <div className='header__nav-wrapper'>
+        <Navigation />      
+      </div>
     </header>
 
   )

@@ -12,10 +12,17 @@
 .header__wrap {
   display: flex;
   justify-content: space-between;
+  height: 100%;
 }
 
-.header__user-avatar {
+.header__auth-buttons {
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.header__nav-wrapper {
+  display: flex;
+  margin-top: 20px;
+  justify-content: center;
 }

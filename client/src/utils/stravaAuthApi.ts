@@ -52,6 +52,14 @@ interface stravaToken {
 // };
 
 
+const handleResponse = (res:any) => {
+  if (res.ok) {
+    return res.json();
+  }
+  return Promise.reject(`Ошибка: ${res.status}`);
+}
+
+
 
 
 
@@ -95,6 +103,17 @@ export function refreshToken() {
   })
   .catch(() => console.log('Ошибка получения токена обновления'))
 };
+
+
+export const getStravaToken = () => {
+  return fetch(`${BASE_URL}/strtoken`, {    
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+    },    
+  })
+  .then((res) => handleResponse(res));
+}
 
 
 export function stravaTokenCheck() {

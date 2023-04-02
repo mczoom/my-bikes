@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { getStravaToken } from '../../utils/appApi';
 import Input from '../Input/Input'
 import PageWithForm from '../PageWithForm/PageWithForm'
 
@@ -25,15 +24,9 @@ export default function LoginPage({handleLogin}: LoginPageProps) {
     setPasswordValue(e.target.value);
   };
 
-  function setStrTokenToLocalStorage() {
-    getStravaToken()
-      .then(res => localStorage.setItem('stravaToken', res.strToken))
-  }
-
   function login(e: React.SyntheticEvent) {
     e.preventDefault();
     handleLogin(loginValue, passwordValue);
-    setStrTokenToLocalStorage();
     navigate('/');
   }
 

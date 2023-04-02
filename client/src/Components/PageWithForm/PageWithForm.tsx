@@ -9,8 +9,6 @@ interface PageWithFormProps {
   title: string
   btnText: string
   submitHandler?: (e: React.SyntheticEvent) => void
-  // registrationHandler?: (e: React.SyntheticEvent) => void
-  // loginHandler?: (e: React.SyntheticEvent) => void
 }
 
 export default function PageWithForm({name, children, title, btnText, submitHandler}: PageWithFormProps) {

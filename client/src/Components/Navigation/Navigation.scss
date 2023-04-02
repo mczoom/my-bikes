@@ -1,4 +1,8 @@
-.navLinks {
+.navigation {
+  
+}
+
+.navigation__nav-links {
   display: flex;
   column-gap: 30px;
   justify-content: center;
@@ -6,7 +10,7 @@
   padding: 0;
 }
 
-.navLinks__navLink {
+.nav-links__link {
   color: aliceblue;
 }
 
