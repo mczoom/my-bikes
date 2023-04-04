@@ -294,7 +294,7 @@ console.log(isLoggedIn);
   return (
     <CurrentUserContext.Provider value={currentUser}>
     <div className="page">
-      <Header onLogout={logout}/>
+      <Header isLoggedIn={isLoggedIn} onLogout={logout}/>
       <main>
         <Routes>
           <Route path='/access' element={<AccessPage />} />

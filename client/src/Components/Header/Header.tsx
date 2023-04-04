@@ -2,14 +2,15 @@ import React from 'react'
 import Profile from '../Profile/Profile';
 import Navigation from '../Navigation/Navigation';
 import logo from '../../images/logo.png'
-import LogoutButton from '../LogoutButton/LogoutButton';
+import AuthButton from '../AuthButton/AuthButton';
 
 
 interface HeaderProps {
+  isLoggedIn: boolean
   onLogout: () => void
 }
 
-export default function Header({onLogout}: HeaderProps) {
+export default function Header({isLoggedIn, onLogout}: HeaderProps) {
 
 
   return (
@@ -17,13 +18,22 @@ export default function Header({onLogout}: HeaderProps) {
       <div className='header__wrap'>
         <img src={logo} className='header__logo' alt='logo'></img>        
         <Profile />       
+      </div> 
+      {isLoggedIn ? (     
+      <div className='header__nav-wrapper'>        
+        <Navigation />     
+        <div className='header__auth-buttons'>          
+          <AuthButton text={'Выйти'} onLogout={onLogout}/>
+        </div>
       </div>
-      <div className='header__auth-buttons'>
-        <LogoutButton onLogout={onLogout}/>
+      ) : (
+        <div className='header__nav-wrapper'>        
+        <div className='header__auth-buttons not-logged-in'>          
+          <AuthButton text={'Войти'} onLogout={onLogout}/>
+          <AuthButton text={'Зарегистрироваться'} onLogout={onLogout}/>
+        </div>
       </div>
-      <div className='header__nav-wrapper'>
-        <Navigation />      
-      </div>
+      )}
     </header>
 
   )
