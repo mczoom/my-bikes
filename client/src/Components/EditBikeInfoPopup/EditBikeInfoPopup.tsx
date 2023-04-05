@@ -22,11 +22,7 @@ interface BikeInfo {
 
 export default function EditBikeInfoPopup({updateInfo, isPopupOpen, closePopup, bikeId}: EditBikeInfoPopupProps) {
 
-  const [bikeInfo, setBikeInfo] = useState<BikeInfo>({} as BikeInfo);
-
-  console.log(bikeInfo);
-
-  const defaultInputValues = {
+  const defaultInputValues: BikeInfo = {
     photo: '',
     bikename: '',
     brand: '',  
@@ -34,6 +30,12 @@ export default function EditBikeInfoPopup({updateInfo, isPopupOpen, closePopup, 
     year: '',
     weight: '',
   }
+
+  const [bikeInfo, setBikeInfo] = useState<BikeInfo>(defaultInputValues);
+
+  console.log(bikeInfo);
+
+  
 
 
   function handleInputValue(e: React.ChangeEvent<HTMLInputElement>) {

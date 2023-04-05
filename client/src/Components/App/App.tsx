@@ -112,9 +112,9 @@ function App() {
     appApi.login(login, password)
     .then((data) => {
       if (data.token) {
-        localStorage.setItem('jwt', data.token);
-        setStrTokenToLocalStorage();
         setIsLoggedIn(true);
+        localStorage.setItem('jwt', data.token);
+        setStrTokenToLocalStorage();        
       };
     })
     .catch((err: string) => {
@@ -228,6 +228,7 @@ function App() {
 
   function logout() {
     localStorage.clear();
+    setIsLoggedIn(false);
     navigate('/access');
   }
 
@@ -250,7 +251,7 @@ function App() {
 
   useEffect(() => {
     checkToken();      
-  }, []);
+  }, [isLoggedIn]);
 
   
   useEffect(() => {
@@ -298,8 +299,8 @@ console.log(isLoggedIn);
       <main>
         <Routes>
           <Route path='/access' element={<AccessPage />} />
-          <Route path='/registration' element={<RegPage handleRegistration={handleRegistration} />} />
-          <Route path='/login' element={isLoggedIn ? <Main /> : <LoginPage handleLogin={handleLogin} /> } />
+          <Route path='/registration' element={!isLoggedIn ? <RegPage handleRegistration={handleRegistration} /> : <Navigate to='/' replace={true} />} />
+          <Route path='/login' element={!isLoggedIn ? <LoginPage handleLogin={handleLogin} /> : <Navigate to='/' replace={true} />} />
           
           <Route path='/' element={<ProtectedRoute element={Main} isAuthorized={isLoggedIn}/>}  />
           <Route path='/about' element={<About />} />

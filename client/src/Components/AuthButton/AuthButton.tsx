@@ -1,13 +1,17 @@
+import { Link } from "react-router-dom"
+
 interface AuthButtonProps {
   text: string
-  onLogout: () => void
+  onClick: () => void
 }
 
 
-export default function AuthButton({text, onLogout}: AuthButtonProps) {
+export default function AuthButton({text, onClick}: AuthButtonProps) {
 
 
   return(
-    <button className="logout-btn" type="button" onClick={onLogout}>{text}</button>
+    <Link to={'/'}>
+    <button className="logout-btn" type="button" onClick={onClick}>{text}</button>
+    </Link>
   )
 }
