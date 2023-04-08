@@ -6,7 +6,7 @@ import * as appApi from '../../utils/appApi';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Stats from '../Stats/Stats';
-import { exchangeToken, getStravaToken, refreshToken, stravaTokenCheck } from '../../utils/stravaAuthApi';
+import { getStravaToken, stravaTokenCheck } from '../../utils/stravaAuthApi';
 import {getCurrentAthlete, getActivities, getAthlete} from '../../utils/stravaApi';
 import {Profile} from '../../models/Profile';
 import AccessPage from '../AccessPage/AccessPage';
@@ -47,7 +47,7 @@ function App() {
 
   const navigate = useNavigate();
 
-  function strTokenCheck() {
+  function checkStravaToken() {
     const token = localStorage.getItem('stravaToken');
     if(token) {
       stravaTokenCheck()
@@ -63,17 +63,19 @@ function App() {
   function isTrainer(bikeId: string): boolean | undefined {
     const bike = allActivities.find( function(activity) {
       return activity.gear_id == bikeId;
-    });    
-    return bike?.trainer;
+    });
+      return bike?.trainer;
   }
 
 
-  function addAllBikes() {
-    if(currentUser && currentUser.bikes.length === 0) {
-    const userBikes: Bike[] = currentUser?.bikes?.map((bike) => {
+  function addAllUserBikes() {
+    if(currentUser && currentUser.bikes.length !== 0) {
+    const userBikes: Bike[] = currentUser.bikes.map((bike) => {      
       return {...bike, trainer: isTrainer(bike.id)};
     });
     appApi.addAllBikes(userBikes);
+    console.log(userBikes);
+    
     }
   }
 
@@ -217,11 +219,16 @@ function App() {
   };
 
 
-  function checkToken() {
+  function checkAppToken() {
     const jwt = localStorage.getItem('jwt');
     if(jwt) {
-      getUserBikes();
-      setIsLoggedIn(true);       
+      appApi.getAllBikes()  //TODO: заменить на надежный запрос ***************************************
+        .then((bikes: Bike[]) => {
+          if(bikes) {
+            setIsLoggedIn(true);
+        }
+      })
+      .catch(err => console.log('Неправильный токен приложения'));             
     }
   };
 
@@ -233,27 +240,7 @@ function App() {
   }
 
 
-  // useEffect(() => {
-  //   checkIsStravaTokenExpired();
-  //   if(isStravaTokenExpired) {
-  //     renewToken(refreshToken);
-  //     renewToken();
-  //   };
-  // });
 
-
-  // useEffect(() => {
-  //   const stravaToken = localStorage.getItem('stravaToken');
-  //   if(!stravaToken) {
-  //     refreshToken();
-  //   }
-  // }, []);
-
-  useEffect(() => {
-    checkToken();      
-  }, [isLoggedIn]);
-
-  
   useEffect(() => {
     if(isLoggedIn) {
       getCurrentUserInfo()
@@ -261,23 +248,18 @@ function App() {
   }, [isLoggedIn]);
   console.log(currentUser);
 
-  // useEffect(() => {
-  //   if(currentUser.id){
-  //   addBikes();
-  //   }
-  // }, [currentUser]);
-
 
   useEffect(() => {
     if(currentUser.id) {
       getUserStats(currentUser);
-      addAllBikes();
+      addAllUserBikes();
     }
   }, [currentUser]);
 
 
   useEffect(() => {
-    strTokenCheck();
+    checkAppToken();
+    checkStravaToken();
     updateBikeDistance();
   }, []);
 
@@ -302,11 +284,31 @@ console.log(isLoggedIn);
           <Route path='/registration' element={!isLoggedIn ? <RegPage handleRegistration={handleRegistration} /> : <Navigate to='/' replace={true} />} />
           <Route path='/login' element={!isLoggedIn ? <LoginPage handleLogin={handleLogin} /> : <Navigate to='/' replace={true} />} />
           
-          <Route path='/' element={<ProtectedRoute element={Main} isAuthorized={isLoggedIn}/>}  />
+          <Route path='/' element={<ProtectedRoute element={Main} loggedIn={isLoggedIn}/>}  />
           <Route path='/about' element={<About />} />
-          <Route path='/stats' element={<ProtectedRoute element={Stats} isAuthorized={isLoggedIn} registrationYear={yearOfRegistrationAtStrava} yearsAtStrava={yearsAtStrava} allRidesTotals={allRidesTotals} allYTDRidesTotals={allYTDRidesTotals} isLoading={isLoading} allActivities={allActivities} />} />
-          <Route path='/garage' element={<ProtectedRoute element={Garage} isAuthorized={isLoggedIn} bikes={userBikes} yearsAtStrava={yearsAtStrava} activities={allActivities} bikeTotalDistance={getBikeTotalDistance} />} />
-          <Route path='/maintenance' element={<ProtectedRoute element={Maintenance} isAuthorized={isLoggedIn} />} />
+          <Route path='/stats' element={
+            <ProtectedRoute
+              element={Stats} 
+              loggedIn={isLoggedIn} 
+              registrationYear={yearOfRegistrationAtStrava} 
+              yearsAtStrava={yearsAtStrava} 
+              allRidesTotals={allRidesTotals} 
+              allYTDRidesTotals={allYTDRidesTotals} 
+              isLoading={isLoading} 
+              allActivities={allActivities} 
+            />} 
+          />
+          <Route path='/garage' element={
+            <ProtectedRoute 
+              element={Garage} 
+              loggedIn={isLoggedIn} 
+              bikes={userBikes} 
+              yearsAtStrava={yearsAtStrava} 
+              activities={allActivities} 
+              bikeTotalDistance={getBikeTotalDistance} 
+            />}
+          />
+          <Route path='/maintenance' element={<ProtectedRoute element={Maintenance} loggedIn={isLoggedIn} />} />
           <Route path='/*' element={<Page404 />} />
         </Routes>
       </main>
