@@ -1,16 +1,18 @@
 import React from 'react';
-import { Route, Navigate } from 'react-router-dom';
+import { Route, Navigate, Outlet } from 'react-router-dom';
 
 interface ProtectedRouteProps {
-  element: any
+  
   loggedIn: boolean | null
 }
 
-export default function ProtectedRoute({ element: Component, ...props  }: any) {
+export default function ProtectedRoute({loggedIn}: ProtectedRouteProps) {
+  
+  const isLogged = localStorage.getItem('logged');
 
   return (
     <div>
-      {props.loggedIn ? <Component {...props} /> : <Navigate to="/login" />}
+      {isLogged ? <Outlet /> : <Navigate to="/login" />}
     </div>
   )
 }

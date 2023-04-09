@@ -6,8 +6,8 @@ const { updateBikesOdo, getActualBikesOdo } = require('../utils/services');
 module.exports.addAllBikes = async(req, res, next) => {
   const actualBikesInfo = req.body.bikes;
   const userID = req.user._id;
-  console.log(actualBikesInfo);
   const storedBikes = await Bike.findOne({userID});
+  
   if(!storedBikes) {
   return Bike.create({bikes: actualBikesInfo, userID})
     .then((garage) => {

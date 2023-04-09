@@ -29,10 +29,8 @@ function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<Profile>({} as Profile);
-  const [stravaTokenExpTime, setStravaTokenExpTime] = useState<number | undefined>(undefined);
   const [allActivities, setAllActivities] = useState<Activity[]>([]);
   const [userBikes, setUserBikes] = useState<Bike[]>([]);
-  const [isStravaTokenExpired, setIsStravaTokenExpired] = useState<boolean>(false);
   const [allRidesTotals, setAllRidesTotals] = useState<AthleteStats>({} as AthleteStats);
   const [allYTDRidesTotals, setAllYTDRidesTotals] = useState<AthleteStats>({} as AthleteStats);
 
@@ -42,10 +40,22 @@ function App() {
   const yearOfRegistrationAtStrava: number = new Date(currentUser.created_at).getFullYear();
 
   
-  // const access = () => localStorage.getItem('accessToStrava');
-  const access = () => true;
-
   const navigate = useNavigate();
+
+  function checkAppToken() {
+    const jwt = localStorage.getItem('jwt');
+    if(jwt) {
+      appApi.getAllBikes()  //TODO: заменить на надежный запрос ***************************************
+        .then((bikes: Bike[]) => {
+          if(bikes) {
+            setIsLoggedIn(true);
+            localStorage.setItem('logged', 'true')
+        }
+      })
+      .catch(err => console.log('Неправильный токен приложения'));             
+    }
+  };
+
 
   function checkStravaToken() {
     const token = localStorage.getItem('stravaToken');
@@ -114,8 +124,9 @@ function App() {
     appApi.login(login, password)
     .then((data) => {
       if (data.token) {
-        setIsLoggedIn(true);
         localStorage.setItem('jwt', data.token);
+        setIsLoggedIn(true);
+        localStorage.setItem('logged', 'true')      
         setStrTokenToLocalStorage();        
       };
     })
@@ -219,20 +230,6 @@ function App() {
   };
 
 
-  function checkAppToken() {
-    const jwt = localStorage.getItem('jwt');
-    if(jwt) {
-      appApi.getAllBikes()  //TODO: заменить на надежный запрос ***************************************
-        .then((bikes: Bike[]) => {
-          if(bikes) {
-            setIsLoggedIn(true);
-        }
-      })
-      .catch(err => console.log('Неправильный токен приложения'));             
-    }
-  };
-
-
   function logout() {
     localStorage.clear();
     setIsLoggedIn(false);
@@ -284,31 +281,34 @@ console.log(isLoggedIn);
           <Route path='/registration' element={!isLoggedIn ? <RegPage handleRegistration={handleRegistration} /> : <Navigate to='/' replace={true} />} />
           <Route path='/login' element={!isLoggedIn ? <LoginPage handleLogin={handleLogin} /> : <Navigate to='/' replace={true} />} />
           
-          <Route path='/' element={<ProtectedRoute element={Main} loggedIn={isLoggedIn}/>}  />
+          
           <Route path='/about' element={<About />} />
-          <Route path='/stats' element={
-            <ProtectedRoute
-              element={Stats} 
-              loggedIn={isLoggedIn} 
-              registrationYear={yearOfRegistrationAtStrava} 
-              yearsAtStrava={yearsAtStrava} 
-              allRidesTotals={allRidesTotals} 
-              allYTDRidesTotals={allYTDRidesTotals} 
-              isLoading={isLoading} 
-              allActivities={allActivities} 
-            />} 
-          />
-          <Route path='/garage' element={
-            <ProtectedRoute 
-              element={Garage} 
-              loggedIn={isLoggedIn} 
+          <Route element={<ProtectedRoute loggedIn={isLoggedIn} />}> 
+
+            <Route path='/' element={<Main />}  />
+            <Route path='/stats' 
+              element={<Stats               
+                registrationYear={yearOfRegistrationAtStrava} 
+                yearsAtStrava={yearsAtStrava} 
+                allRidesTotals={allRidesTotals} 
+                allYTDRidesTotals={allYTDRidesTotals} 
+                isLoading={isLoading} 
+                allActivities={allActivities} 
+              />}
+            />          
+          <Route path='/garage' 
+              element={<Garage 
+               
               bikes={userBikes} 
               yearsAtStrava={yearsAtStrava} 
               activities={allActivities} 
               bikeTotalDistance={getBikeTotalDistance} 
-            />}
-          />
-          <Route path='/maintenance' element={<ProtectedRoute element={Maintenance} loggedIn={isLoggedIn} />} />
+              />} 
+            />
+          
+        
+          <Route path='/maintenance' element={<Maintenance />} />
+        </Route>
           <Route path='/*' element={<Page404 />} />
         </Routes>
       </main>
