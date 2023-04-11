@@ -1,0 +1,24 @@
+@import '../../styles/index';
+
+
+.err-popup {
+    display: inline-block;
+    text-align: center;
+    padding: 10px 20px;
+    min-width: 200px;
+    
+    position: absolute;
+    top: 93vh;
+    right: -100px;
+    background-color: hwb(16 7% 8%);
+    border-radius: $radius;
+}
+
+.err-popup_on {    
+    transform: translateX(55px);
+    right: 0;    
+}
+
+.err-popup__message {
+    margin: 0;
+}

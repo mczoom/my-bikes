@@ -20,6 +20,7 @@ import { AthleteStats } from '../../models/AthleteStats';
 import RegPage from '../RegPage/RegPage';
 import LoginPage from '../LoginPage/LoginPage';
 import { Bike } from '../../models/Bike';
+import ErrorMessagePopup from '../ErrorMessagePopup/ErrorMessagePopup';
 
 
 
@@ -133,13 +134,6 @@ function App() {
     .catch((err: string) => {
       console.log(err);
     });
-    // if(isLoggedIn) {
-    //   getCurrentAthlete()
-    //   .then((user) => {
-    //     setCurrentUser(user)}
-    //   )
-    //   .catch((err) => console.log(err));
-    // }
   };
 
 
@@ -310,8 +304,9 @@ console.log(isLoggedIn);
           <Route path='/maintenance' element={<Maintenance />} />
         </Route>
           <Route path='/*' element={<Page404 />} />
-        </Routes>
+        </Routes>        
       </main>
+      <ErrorMessagePopup />
     </div>
     </CurrentUserContext.Provider>
   );
