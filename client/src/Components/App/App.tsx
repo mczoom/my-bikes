@@ -34,6 +34,7 @@ function App() {
   const [userBikes, setUserBikes] = useState<Bike[]>([]);
   const [allRidesTotals, setAllRidesTotals] = useState<AthleteStats>({} as AthleteStats);
   const [allYTDRidesTotals, setAllYTDRidesTotals] = useState<AthleteStats>({} as AthleteStats);
+  const [errMessage, setErrMessage] = useState<string>('');
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -189,7 +190,10 @@ function App() {
       .then((currentUser) => {      
         getAllActivities(currentUser);        
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setErrMessage(err);
+        console.log(err)
+      });
   }
 
 
@@ -255,12 +259,7 @@ function App() {
   }, []);
 
 
-  // useEffect(() => {
-  //   if(currentUser.id) {
-  //     getAllActivities();
-  //   }
-  // }, []);
-
+  
 
 console.log(isLoggedIn);
 
@@ -306,7 +305,7 @@ console.log(isLoggedIn);
           <Route path='/*' element={<Page404 />} />
         </Routes>        
       </main>
-      <ErrorMessagePopup />
+      <ErrorMessagePopup errMsg={errMessage} />
     </div>
     </CurrentUserContext.Provider>
   );

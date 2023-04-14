@@ -4,6 +4,8 @@ const { addAllBikes, getAllBikes, updateBikeInfo, updateOdo } = require('../cont
 const { auth } = require('../middlewares/auth');
 const { exchangeStrToken, refreshStrToken, tokenCheck, getStrToken } = require('../controllers/strToken');
 const { checkStravaToken } = require('../middlewares/stravaAuth');
+const { updateBikeInfoValidation } = require('../middlewares/validation');
+
 
 
 const router = Router();
@@ -19,7 +21,7 @@ router.get('/tokencheck', auth, checkStravaToken, refreshStrToken, tokenCheck);
 router.post('/bikes', auth, checkStravaToken, addAllBikes);
 router.get('/bikes', auth, checkStravaToken, getAllBikes);
 router.post('/bikeodo', auth, checkStravaToken, updateOdo);
-router.post('/bikeinfo', auth, checkStravaToken, updateBikeInfo);
+router.post('/bikeinfo', auth, checkStravaToken, updateBikeInfoValidation, updateBikeInfo);
 
 router.use('*', () => {
   throw new Error('Страница не найдена');

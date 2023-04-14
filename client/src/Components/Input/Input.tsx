@@ -14,8 +14,6 @@ interface InputProps {
 
 export default function Input({name, label, inputType, placeholder, getInputValue, value}: InputProps) {
 
-  // const inputHandler = name === 'login' ?  getLoginInputValue : getPasswordInputValue;
-
   return (
     <div className='input'>
       <label className='input-label'>{label}</label>

@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const router = require('./routes/index');
+const { errors } = require('celebrate');
 const { BD_ADRESS } = require('./utils/config');
 
 const { PORT = 3001 } = process.env;
@@ -44,6 +45,7 @@ app.use(express.static('images'));
 
 app.use(router);
 
+app.use(errors());
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);

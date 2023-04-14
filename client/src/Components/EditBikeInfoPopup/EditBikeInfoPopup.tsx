@@ -66,7 +66,7 @@ export default function EditBikeInfoPopup({updateInfo, isPopupOpen, closePopup, 
         <button type='button' className='bike-popup__close-btn' onClick={closePopup}></button>        
         <PopupWithForm name='edit-bike-photo' title='Редактирование данных велосипеда' btnText='Сохранить' submitHandler={submitHandler}>
           <Input name='photo' value={bikeInfo.photo} label='Ссылка на фото' inputType='text' placeholder='Введите ссылку на фото' getInputValue={handleInputValue} />
-          <Input name='bikename' value={bikeInfo.bikename } label='Название байка' inputType='text' placeholder='Введите название' getInputValue={handleInputValue} /> 
+          {/* <Input name='bikename' value={bikeInfo.bikename } label='Название байка' inputType='text' placeholder='Введите название' getInputValue={handleInputValue} />  */}
           <Input name='brand' value={bikeInfo.brand} label='Производитель' inputType='text' placeholder='Введите название производителя' getInputValue={handleInputValue} /> 
           <Input name='model' value={bikeInfo.model} label='Модель' inputType='text' placeholder='Введите название модели' getInputValue={handleInputValue} /> 
           <Input name='year'  value={bikeInfo.year} label='Модельный год' inputType='text' placeholder='Введите модельный год' getInputValue={handleInputValue} /> 
