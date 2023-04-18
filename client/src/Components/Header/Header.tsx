@@ -4,6 +4,7 @@ import Navigation from '../Navigation/Navigation';
 import logo from '../../images/logo.png'
 import AuthButton from '../AuthButton/AuthButton';
 import AuthLink from '../AuthLink/AuthLink';
+import { Outlet } from 'react-router-dom';
 
 
 
@@ -16,6 +17,7 @@ export default function Header({isLoggedIn, onLogout}: HeaderProps) {
 
 
   return (
+    <>
     <header className='header'>
       <div className='header__wrap'>
         <img src={logo} className='header__logo' alt='logo'></img>        
@@ -38,6 +40,7 @@ export default function Header({isLoggedIn, onLogout}: HeaderProps) {
       </div>
       )}
     </header>
-
+    <Outlet />
+    </>
   )
 }

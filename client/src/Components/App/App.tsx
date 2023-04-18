@@ -1,7 +1,7 @@
 /* eslint-disable no-loop-func */
 import React, {useState, useEffect} from 'react';
 import {CurrentUserContext} from '../../contexts/CurrentUserContext';
-import {Routes, Route, useNavigate, Navigate } from 'react-router-dom';
+import {createBrowserRouter, RouterProvider, createRoutesFromElements, Routes, Route, useNavigate, Navigate, useNavigation, redirect } from 'react-router-dom';
 import * as appApi from '../../utils/appApi';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
@@ -26,6 +26,8 @@ import ErrorMessagePopup from '../ErrorMessagePopup/ErrorMessagePopup';
 
 function App() {
 
+  
+
   const accessToStrava: string | null = localStorage.getItem('accessToStrava');
 
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -42,7 +44,7 @@ function App() {
   const yearOfRegistrationAtStrava: number = new Date(currentUser.created_at).getFullYear();
 
   
-  const navigate = useNavigate();
+  
 
   function checkAppToken() {
     const jwt = localStorage.getItem('jwt');
@@ -113,7 +115,7 @@ function App() {
       .then((res) => {
         if(res) {
           handleLogin(login, password);
-          navigate('/access', {replace: true});
+          redirect('/access');
         }
       })
       .catch((err) => {
@@ -231,7 +233,7 @@ function App() {
   function logout() {
     localStorage.clear();
     setIsLoggedIn(false);
-    navigate('/access');
+    redirect('/access');
   }
 
 
@@ -264,49 +266,59 @@ function App() {
 console.log(isLoggedIn);
 
 
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    
+      <>
+      <Route element={<Header isLoggedIn={isLoggedIn} onLogout={logout}/>}>
+        <Route path='/access' element={<AccessPage />} />
+        <Route path='/registration' element={!isLoggedIn ? <RegPage handleRegistration={handleRegistration} /> : <Navigate to='/' replace={true} />} />
+        <Route path='/login' element={!isLoggedIn ? <LoginPage handleLogin={handleLogin} /> : <Navigate to='/' replace={true} />} />
+        
+        
+        <Route path='/about' element={<About />} />
+        <Route element={<ProtectedRoute loggedIn={isLoggedIn} />}> 
+
+          <Route path='/' element={<Main />}  />
+          <Route path='/stats' 
+            element={<Stats               
+              registrationYear={yearOfRegistrationAtStrava} 
+              yearsAtStrava={yearsAtStrava} 
+              allRidesTotals={allRidesTotals} 
+              allYTDRidesTotals={allYTDRidesTotals} 
+              isLoading={isLoading} 
+              allActivities={allActivities} 
+            />}
+          />          
+        <Route path='/garage' 
+            element={<Garage 
+             
+            bikes={userBikes} 
+            yearsAtStrava={yearsAtStrava} 
+            activities={allActivities} 
+            bikeTotalDistance={getBikeTotalDistance} 
+            />} 
+          />
+        
+      
+        <Route path='/maintenance' element={<Maintenance />} />
+      </Route>
+        <Route path='/*' element={<Page404 />} />
+      </Route>        
+        </>
+  )
+  );
+
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
-    <div className="page">
-      <Header isLoggedIn={isLoggedIn} onLogout={logout}/>
-      <main>
-        <Routes>
-          <Route path='/access' element={<AccessPage />} />
-          <Route path='/registration' element={!isLoggedIn ? <RegPage handleRegistration={handleRegistration} /> : <Navigate to='/' replace={true} />} />
-          <Route path='/login' element={!isLoggedIn ? <LoginPage handleLogin={handleLogin} /> : <Navigate to='/' replace={true} />} />
-          
-          
-          <Route path='/about' element={<About />} />
-          <Route element={<ProtectedRoute loggedIn={isLoggedIn} />}> 
-
-            <Route path='/' element={<Main />}  />
-            <Route path='/stats' 
-              element={<Stats               
-                registrationYear={yearOfRegistrationAtStrava} 
-                yearsAtStrava={yearsAtStrava} 
-                allRidesTotals={allRidesTotals} 
-                allYTDRidesTotals={allYTDRidesTotals} 
-                isLoading={isLoading} 
-                allActivities={allActivities} 
-              />}
-            />          
-          <Route path='/garage' 
-              element={<Garage 
-               
-              bikes={userBikes} 
-              yearsAtStrava={yearsAtStrava} 
-              activities={allActivities} 
-              bikeTotalDistance={getBikeTotalDistance} 
-              />} 
-            />
-          
-        
-          <Route path='/maintenance' element={<Maintenance />} />
-        </Route>
-          <Route path='/*' element={<Page404 />} />
-        </Routes>        
+      <div className="page">
+    
+    <main>
+      <RouterProvider router={router} />
       </main>
-      <ErrorMessagePopup errMsg={errMessage} />
-    </div>
+    <ErrorMessagePopup errMsg={errMessage} />
+  </div>
     </CurrentUserContext.Provider>
   );
 }

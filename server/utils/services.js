@@ -11,13 +11,13 @@ module.exports.createStravaToken = async (tokenInfo, userId) => {
 };
 
 
-module.exports.updateStravaToken = async (tokenInfo, id) => {    
-    const tokenDoc = await StravaToken.findOne({id});
-    
-    tokenDoc.access_token = tokenInfo.access_token;
-    tokenDoc.expires_at = tokenInfo.expires_at;
-    tokenDoc.refresh_token = tokenInfo.refresh_token;
-    tokenDoc.save();    
+module.exports.updateStravaToken = async (tokenInfo, id) => {   
+  const tokenDoc = await StravaToken.findOne({userID: id});
+  
+  tokenDoc.access_token = tokenInfo.access_token;
+  tokenDoc.expires_at = tokenInfo.expires_at;
+  tokenDoc.refresh_token = tokenInfo.refresh_token;
+  tokenDoc.save();    
 };
 
 

@@ -1,6 +1,8 @@
 import React from 'react';
 import Input from '../Input/Input';
 import FormButton from '../FormButton/FormButton';
+import AuthLink from '../AuthLink/AuthLink';
+import { useNavigation } from 'react-router-dom';
 
 
 interface PageWithFormProps {
@@ -13,6 +15,8 @@ interface PageWithFormProps {
 
 export default function PageWithForm({name, children, title, btnText, submitHandler}: PageWithFormProps) {
 
+  const navigation = useNavigation();
+  console.log(navigation.location);
   
 
   return (
@@ -27,6 +31,12 @@ export default function PageWithForm({name, children, title, btnText, submitHand
           <FormButton btnText={btnText} btnType={'submit'}/>
         </div>
       </form>
+      {/* {navigation.location === /login && ( 
+      <div className='page-with-form__auth-text'>
+        <p>Нет аккаунта?</p>
+        <AuthLink link={'/registration'} text={'Регистрация'} />
+      </div>)
+} */}
     </div>
   )
 }
