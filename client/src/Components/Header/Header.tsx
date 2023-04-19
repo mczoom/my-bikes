@@ -17,7 +17,6 @@ export default function Header({isLoggedIn, onLogout}: HeaderProps) {
 
 
   return (
-    <>
     <header className='header'>
       <div className='header__wrap'>
         <img src={logo} className='header__logo' alt='logo'></img>        
@@ -32,15 +31,12 @@ export default function Header({isLoggedIn, onLogout}: HeaderProps) {
       </div>
       ) : (
         <div className='header__nav-wrapper'>        
-        <div className='header__auth-buttons not-logged-in'>   
-               
+        <div className='header__auth-buttons not-logged-in'>               
           <AuthLink text={'Войти'} link={'/login'} />
           <AuthLink text={'Зарегистрироваться'} link={'/registration'} />
         </div>
       </div>
       )}
-    </header>
-    <Outlet />
-    </>
+    </header>   
   )
 }

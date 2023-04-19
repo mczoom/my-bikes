@@ -21,7 +21,7 @@ export const getCurrentAthlete = () => {
     }
   })
   .then((res) => res.json())
-  .catch((err) => console.log(err + 'не удалось получить данные атлета'))
+  .catch((err) => console.log('не удалось получить данные атлета'))
 };
 
 

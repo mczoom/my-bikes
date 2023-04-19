@@ -21,6 +21,7 @@ import RegPage from '../RegPage/RegPage';
 import LoginPage from '../LoginPage/LoginPage';
 import { Bike } from '../../models/Bike';
 import ErrorMessagePopup from '../ErrorMessagePopup/ErrorMessagePopup';
+import AppLayout from '../AppLayout/AppLayout';
 
 
 
@@ -193,7 +194,9 @@ function App() {
         getAllActivities(currentUser);        
       })
       .catch((err) => {
-        setErrMessage(err);
+        setErrMessage('Ошибка');
+        console.log(errMessage);
+        
         console.log(err)
       });
   }
@@ -267,18 +270,15 @@ console.log(isLoggedIn);
 
 
 const router = createBrowserRouter(
-  createRoutesFromElements(
-    
-      <>
-      <Route element={<Header isLoggedIn={isLoggedIn} onLogout={logout}/>}>
+  createRoutesFromElements(    
+    <>
+      <Route element={<AppLayout isLoggedIn={isLoggedIn} onLogout={logout} errMessage={errMessage}/>}>
         <Route path='/access' element={<AccessPage />} />
         <Route path='/registration' element={!isLoggedIn ? <RegPage handleRegistration={handleRegistration} /> : <Navigate to='/' replace={true} />} />
-        <Route path='/login' element={!isLoggedIn ? <LoginPage handleLogin={handleLogin} /> : <Navigate to='/' replace={true} />} />
-        
+        <Route path='/login' element={!isLoggedIn ? <LoginPage handleLogin={handleLogin} /> : <Navigate to='/' replace={true} />} />        
         
         <Route path='/about' element={<About />} />
-        <Route element={<ProtectedRoute loggedIn={isLoggedIn} />}> 
-
+        <Route element={<ProtectedRoute loggedIn={isLoggedIn} />}>
           <Route path='/' element={<Main />}  />
           <Route path='/stats' 
             element={<Stats               
@@ -290,35 +290,28 @@ const router = createBrowserRouter(
               allActivities={allActivities} 
             />}
           />          
-        <Route path='/garage' 
-            element={<Garage 
-             
-            bikes={userBikes} 
-            yearsAtStrava={yearsAtStrava} 
-            activities={allActivities} 
-            bikeTotalDistance={getBikeTotalDistance} 
+          <Route path='/garage' 
+            element={<Garage             
+              bikes={userBikes} 
+              yearsAtStrava={yearsAtStrava} 
+              activities={allActivities} 
+              bikeTotalDistance={getBikeTotalDistance} 
             />} 
           />
-        
-      
-        <Route path='/maintenance' element={<Maintenance />} />
-      </Route>
+          <Route path='/maintenance' element={<Maintenance />} />
+        </Route>
         <Route path='/*' element={<Page404 />} />
       </Route>        
-        </>
+    </>
   )
-  );
+);
 
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <div className="page">
-    
-    <main>
-      <RouterProvider router={router} />
+      <main>        
+        <RouterProvider router={router} />        
       </main>
-    <ErrorMessagePopup errMsg={errMessage} />
-  </div>
     </CurrentUserContext.Provider>
   );
 }
