@@ -11,7 +11,7 @@ const handleResponse = (res:any) => {
 }
 
 
-export const register = (login: string, password: string) => {
+  export const register = (login: string, password: string) => {
     return fetch(`${BASE_URL}/signup`, {
       method: 'POST',
       headers: {
@@ -38,19 +38,6 @@ export const register = (login: string, password: string) => {
   
 
 
-  // export const addAllBikes = (converted_distance: number, id: string, name: string, retired: boolean) => {
-  //   return fetch(`${BASE_URL}/bikes`, {
-  //     method: 'POST',
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
-  //     },
-  //     body: JSON.stringify({converted_distance, id, name, retired})
-  //   })
-  //   .then((res) => handleResponse(res));
-  // };
-
-
   export const addAllBikes = (bikes: any) => {
     return fetch(`${BASE_URL}/bikes`, {
       method: 'POST',
@@ -59,6 +46,19 @@ export const register = (login: string, password: string) => {
         "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
       },
       body: JSON.stringify({bikes})
+    })
+    .then((res) => handleResponse(res));
+  };
+
+
+  export const addBike = (bike: any) => {
+    return fetch(`${BASE_URL}/bikes`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+      },
+      body: JSON.stringify({bike})
     })
     .then((res) => handleResponse(res));
   };

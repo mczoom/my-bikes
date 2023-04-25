@@ -80,9 +80,9 @@ function App() {
       return activity.gear_id == bikeId;
     });
       return bike?.trainer;
-  }
+  };
 
-
+  
   function addAllUserBikes() {
     if(currentUser && currentUser.bikes.length !== 0) {
     const userBikes: Bike[] = currentUser.bikes.map((bike) => {      
@@ -191,7 +191,8 @@ function App() {
         return user
       })
       .then((currentUser) => {      
-        getAllActivities(currentUser);        
+        getAllActivities(currentUser); 
+        setUserBikes(currentUser.bikes)       
       })
       .catch((err) => {
         setErrMessage('Ошибка');
@@ -222,15 +223,8 @@ function App() {
   };
 
 
-  function getUserBikes() {
-    appApi.getAllBikes()
-      .then((bikes: Bike[]) => {
-        if(bikes) {
-          setUserBikes(bikes);
-        }
-      })
-      .catch(err => console.log(err));
-  };
+  
+console.log(userBikes);
 
 
   function logout() {
@@ -261,6 +255,7 @@ function App() {
     checkAppToken();
     checkStravaToken();
     updateBikeDistance();
+    
   }, []);
 
 
@@ -292,7 +287,7 @@ const router = createBrowserRouter(
           />          
           <Route path='/garage' 
             element={<Garage             
-              bikes={userBikes} 
+              userBikesStrava={userBikes} 
               yearsAtStrava={yearsAtStrava} 
               activities={allActivities} 
               bikeTotalDistance={getBikeTotalDistance} 

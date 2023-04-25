@@ -35,7 +35,7 @@ export const getAthlete = (id: number) => {
     }
   })
   .then((res) => res.json())
-  .catch((err) => console.log(err))
+  .catch((err) => console.log(err.message))
 };
 
 

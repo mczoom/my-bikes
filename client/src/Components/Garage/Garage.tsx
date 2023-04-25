@@ -11,7 +11,7 @@ import EditBikeInfoPopup from '../EditBikeInfoPopup/EditBikeInfoPopup';
 
 
 interface GarageProps {
-  bikes: Bike[]
+  userBikesStrava: Bike[]
   yearsAtStrava: (currentYear: number) => number[]
   activities: Activity[]
   bikeTotalDistance: (bikeId: string) => number  
@@ -26,7 +26,7 @@ interface BikeCardInfo {
   weight: string | number
 }
 
-export default function Garage({bikes, yearsAtStrava, activities, bikeTotalDistance}: GarageProps) {
+export default function Garage({userBikesStrava, yearsAtStrava, activities, bikeTotalDistance}: GarageProps) {
 
   const [userBikes, setUserBikes] = useState<UserBike[]>([]);
   const [isBikesFilterChecked, setIsBikesFilterChecked] = useState<boolean>(false);
@@ -37,11 +37,19 @@ export default function Garage({bikes, yearsAtStrava, activities, bikeTotalDista
   const [curentBikeId, setCurentBikeId] = useState<string>('');
 
   
+  function checkForNewBikesInStrava(strBikes: any, savedBikes: any) {
+    return savedBikes.filter((b: any)=> console.log(strBikes.indexOf(b)))
+  }
+
+    
 
   function getUserBikes() {
     appApi.getAllBikes()
       .then((bikes: UserBike[]) => {        
-        if(bikes) {          
+        if(bikes) {   
+          const bbb = checkForNewBikesInStrava(userBikesStrava, bikes);
+          console.log(bbb);
+          
           setUserBikes(bikes);
           setBikesToRender(bikes);
         }
@@ -50,8 +58,9 @@ export default function Garage({bikes, yearsAtStrava, activities, bikeTotalDista
   };
   console.log(userBikes);
 
+console.log(userBikesStrava);
 
-console.log(bikesToRender);
+
 
 function toggleBikesFilter() {
   setIsBikesFilterChecked(v => !v);
