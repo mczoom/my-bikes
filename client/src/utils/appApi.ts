@@ -51,8 +51,8 @@ const handleResponse = (res:any) => {
   };
 
 
-  export const addBike = (bike: any) => {
-    return fetch(`${BASE_URL}/bikes`, {
+  export const addBike = (bike: Bike | Bike[]) => {
+    return fetch(`${BASE_URL}/addbike`, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",

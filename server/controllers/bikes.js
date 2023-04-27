@@ -20,6 +20,15 @@ module.exports.addAllBikes = async(req, res, next) => {
 };
 
 
+module.exports.addBike = async(req, res, next) => {
+  const newBike = await req.body.bike;
+  const userID = req.user._id;
+  const storedBikes = await Bike.findOneAndUpdate({userID}, {$push: {"bikes": newBike}});  
+  
+  storedBikes.save();
+};
+
+
 module.exports.updateOdo = async(req, res, next) => {
   const actualBikesInfo = req.body.bikes;
   const userID = req.user._id;
