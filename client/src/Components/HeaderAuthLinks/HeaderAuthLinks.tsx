@@ -3,7 +3,7 @@ import AuthLink from '../AuthLink/AuthLink';
 
 
 
-export default function HeaderAuthLinks() {
+export default function HeaderAuthLinks() { 
 
   const location = useLocation();    
 
