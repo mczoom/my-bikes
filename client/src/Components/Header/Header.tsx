@@ -3,8 +3,7 @@ import Profile from '../Profile/Profile';
 import Navigation from '../Navigation/Navigation';
 import logo from '../../images/logo.png'
 import AuthButton from '../AuthButton/AuthButton';
-import AuthLink from '../AuthLink/AuthLink';
-import { Outlet } from 'react-router-dom';
+import HeaderAuthLinks from '../HeaderAuthLinks/HeaderAuthLinks';
 
 
 
@@ -31,11 +30,8 @@ export default function Header({isLoggedIn, onLogout}: HeaderProps) {
       </div>
       ) : (
         <div className='header__nav-wrapper'>        
-        <div className='header__auth-buttons not-logged-in'>               
-          <AuthLink text={'Войти'} link={'/login'} />
-          <AuthLink text={'Зарегистрироваться'} link={'/registration'} />
+          <HeaderAuthLinks />
         </div>
-      </div>
       )}
     </header>   
   )
