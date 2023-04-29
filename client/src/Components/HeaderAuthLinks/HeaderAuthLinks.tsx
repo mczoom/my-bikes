@@ -5,8 +5,7 @@ import AuthLink from '../AuthLink/AuthLink';
 
 export default function HeaderAuthLinks() {
 
-  const location = useLocation();
-    
+  const location = useLocation();    
 
 return (         
   <div className='header__auth-buttons not-logged-in'>               
