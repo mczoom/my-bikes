@@ -1,4 +1,3 @@
-import { ExchangeToken } from '../models/ExchangeToken';
 import { stravaApiUrl, tokenData } from './constants';
 
 
@@ -21,7 +20,7 @@ export const getCurrentAthlete = () => {
     }
   })
   .then((res) => res.json())
-  .catch((err) => console.log('не удалось получить данные атлета'))
+  .catch(() => console.log('не удалось получить данные атлета'))
 };
 
 

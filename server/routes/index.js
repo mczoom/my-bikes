@@ -21,8 +21,8 @@ router.get('/tokencheck', auth, checkStravaToken, refreshStrToken, tokenCheck);
 router.post('/bikes', auth, checkStravaToken, addAllBikes);
 router.get('/bikes', auth, checkStravaToken, getAllBikes);
 router.post('/addbike', auth, checkStravaToken, addBike);
-router.post('/bikeodo', auth, checkStravaToken, updateOdo);
-router.post('/bikeinfo', auth, checkStravaToken, updateBikeInfoValidation, updateBikeInfo);
+router.patch('/bikeodo', auth, checkStravaToken, updateOdo);
+router.patch('/bikeinfo', auth, checkStravaToken, updateBikeInfoValidation, updateBikeInfo);
 
 router.use('*', () => {
   throw new Error('Страница не найдена');

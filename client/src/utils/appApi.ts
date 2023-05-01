@@ -66,7 +66,7 @@ const handleResponse = (res:any) => {
 
   export const updateBikeInfo = (bikeId: any, updatedInfo: any) => {
     return fetch(`${BASE_URL}/bikeinfo`, {
-      method: 'POST',
+      method: 'PATCH',
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
@@ -79,7 +79,7 @@ const handleResponse = (res:any) => {
 
   export const updateBikeOdo = (bikes: any) => {
     return fetch(`${BASE_URL}/bikeodo`, {
-      method: 'POST',
+      method: 'PATCH',
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${localStorage.getItem('jwt')}`,

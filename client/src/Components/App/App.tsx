@@ -202,7 +202,7 @@ function App() {
         setErrMessage('Ошибка');
         console.log(errMessage);
         
-        console.log(err)
+        console.log('не удалось получить данные атлета')
       });
   }
 
