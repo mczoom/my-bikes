@@ -25,7 +25,6 @@ module.exports.exchangeStrToken = (req, res, next) => {
     .then((tokenData) => {          
       if (tokenData.access_token) {
         createStravaToken(tokenData, user);
-        //StravaToken.create({access_token: tokenData.access_token, refresh_token: tokenData.refresh_token, expires_at: tokenData.expires_at, stravaUserId: tokenData.athlete.id, userID: user});
         res.status(201).send({strToken: tokenData.access_token});        
       }
     }) 
@@ -54,11 +53,6 @@ module.exports.refreshStrToken = (req, res, next) => {
     .then((tokenData) => {
       if (tokenData.access_token) {
         updateStravaToken(tokenData, userID);
-        // const tokenDoc = await StravaToken.findOne({userID});
-        // tokenDoc.access_token = tokenData.access_token;
-        // tokenDoc.expires_at = tokenData.expires_at;
-        // tokenDoc.refresh_token = tokenData.refresh_token;
-        // tokenDoc.save();
       }
       return tokenData;
     })

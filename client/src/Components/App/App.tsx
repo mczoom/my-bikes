@@ -51,14 +51,17 @@ function App() {
   function checkAppToken() {
     const jwt = localStorage.getItem('jwt');
     if(jwt) {
-      appApi.getAllBikes()  //TODO: заменить на надежный запрос ***************************************
-        .then((bikes: Bike[]) => {
-          if(bikes) {
+      appApi.getCurrentUser()
+        .then((userData: {login: string}) => {
+          if(userData.login) {            
             setIsLoggedIn(true);
             localStorage.setItem('logged', 'true')
         }
       })
-      .catch(err => console.log('Неправильный токен приложения'));             
+      .catch(() => {
+        setIsLoggedIn(false);
+        localStorage.setItem('logged', '')
+      });             
     }
   };
 
@@ -86,11 +89,10 @@ function App() {
   
   function addAllUserBikes() {
     if(currentUser.id && currentUser.bikes.length !== 0) {
-    const userBikes: Bike[] = currentUser.bikes.map((bike) => {  
-      const isTrainer = checkTrainer(bike.id)
-      console.log(isTrainer);
-      return {...bike, trainer: isTrainer};
-    });
+      const userBikes: Bike[] = currentUser.bikes.map((bike) => {  
+        const isTrainer = checkTrainer(bike.id)
+        return {...bike, trainer: isTrainer};
+      });
     appApi.addAllBikes(userBikes);    
     }
   }

@@ -35,6 +35,18 @@ const handleResponse = (res:any) => {
   };
 
 
+  export const getCurrentUser = () => {
+    return fetch(`${BASE_URL}/user`, {
+      method: 'GET',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+      }
+    })
+    .then((res) => handleResponse(res));
+  };
+
+
   
 
 

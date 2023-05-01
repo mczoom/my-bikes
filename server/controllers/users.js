@@ -35,3 +35,15 @@ module.exports.login = (req, res, next) => {
     .catch(next);
 };
 
+
+module.exports.getUser = (req, res, next) => {
+  const userID = req.user._id;
+    
+  User.findOne({_id: userID})
+    //.orFail(() => console.log('Пользователь не найден'))
+    .then((user) => {
+      res.send({login: user.login});      
+    })
+    .catch(next);
+};
+
