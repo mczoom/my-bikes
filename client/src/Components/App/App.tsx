@@ -34,6 +34,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<Profile>({} as Profile);
   const [allActivities, setAllActivities] = useState<Activity[]>([]);
+  const [hasAllActivitiesLoaded, setHasAllActivitiesLoaded] = useState<Boolean>(false)
   const [userBikes, setUserBikes] = useState<Bike[]>([]);
   const [allRidesTotals, setAllRidesTotals] = useState<AthleteStats>({} as AthleteStats);
   const [allYTDRidesTotals, setAllYTDRidesTotals] = useState<AthleteStats>({} as AthleteStats);
@@ -75,24 +76,25 @@ function App() {
     }  
   }; 
 
-  function isTrainer(bikeId: string): boolean | undefined {
-    const bike = allActivities.find( function(activity) {
-      return activity.gear_id == bikeId;
+  function checkTrainer(bikeId: string): boolean | undefined {
+    const bike = allActivities.find((activity) => {
+      return activity.gear_id === bikeId;
     });
       return bike?.trainer;
   };
 
   
   function addAllUserBikes() {
-    if(currentUser && currentUser.bikes.length !== 0) {
-    const userBikes: Bike[] = currentUser.bikes.map((bike) => {      
-      return {...bike, trainer: isTrainer(bike.id)};
+    if(currentUser.id && currentUser.bikes.length !== 0) {
+    const userBikes: Bike[] = currentUser.bikes.map((bike) => {  
+      const isTrainer = checkTrainer(bike.id)
+      console.log(isTrainer);
+      return {...bike, trainer: isTrainer};
     });
-    appApi.addAllBikes(userBikes);
-    console.log(userBikes);
-    
+    appApi.addAllBikes(userBikes);    
     }
   }
+
 
   function updateBikeDistance() {
     if(currentUser.id) {
@@ -154,6 +156,7 @@ function App() {
 
 
   async function getAllActivities(user: Profile) {
+    setHasAllActivitiesLoaded(false);
     const dateOfRegAtStrava: string = user.created_at;
     const fromDate: number = Date.parse(dateOfRegAtStrava) / 1000;
     const tillDate: number = Math.round(Date.now() / 1000);
@@ -175,8 +178,9 @@ function App() {
 
       } while(response !== 0 );
 
-      setAllActivities(activities);
+      setAllActivities(activities);      
     }
+    setHasAllActivitiesLoaded(true);
   };
 
   console.log(allActivities);
@@ -246,9 +250,16 @@ console.log(userBikes);
   useEffect(() => {
     if(currentUser.id) {
       getUserStats(currentUser);
-      addAllUserBikes();
+      //addAllUserBikes();
     }
   }, [currentUser]);
+
+
+  useEffect(() => {
+    if(hasAllActivitiesLoaded) {      
+      addAllUserBikes();
+    }
+  }, [hasAllActivitiesLoaded]);
 
 
   useEffect(() => {

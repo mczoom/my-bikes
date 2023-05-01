@@ -2,7 +2,7 @@ import React from 'react';
 import Input from '../Input/Input';
 import FormButton from '../FormButton/FormButton';
 import AuthLink from '../AuthLink/AuthLink';
-import { useNavigation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 
 interface PageWithFormProps {
@@ -15,9 +15,7 @@ interface PageWithFormProps {
 
 export default function PageWithForm({name, children, title, btnText, submitHandler}: PageWithFormProps) {
 
-  const navigation = useNavigation();
-  console.log(navigation.location);
-  
+  const location = useLocation();
 
   return (
     <div className='page-with-form'>
@@ -31,12 +29,18 @@ export default function PageWithForm({name, children, title, btnText, submitHand
           <FormButton btnText={btnText} btnType={'submit'}/>
         </div>
       </form>
-      {/* {navigation.location === /login && ( 
-      <div className='page-with-form__auth-text'>
-        <p>Нет аккаунта?</p>
-        <AuthLink link={'/registration'} text={'Регистрация'} />
-      </div>)
-} */}
+      {location.pathname === '/login' && ( 
+        <div className='page-with-form__auth-text'>
+          <p>Нет аккаунта?</p>
+          <AuthLink link={'/registration'} text={'Зарегистрироваться'} />
+        </div>
+      )}
+      {location.pathname === '/registration' && ( 
+        <div className='page-with-form__auth-text'>
+          <p>Уже есть аккаунт?</p>
+          <AuthLink link={'/login'} text={'Войти'} />
+        </div>
+      )}
     </div>
   )
 }
