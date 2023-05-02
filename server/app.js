@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const router = require('./routes/index');
 const { errors } = require('celebrate');
 const { BD_ADRESS } = require('./utils/config');
+const { errorHandler } = require('./middlewares/errorHandler');
 
 const { PORT = 3001 } = process.env;
 const app = express();
@@ -46,6 +47,7 @@ app.use(express.static('images'));
 app.use(router);
 
 app.use(errors());
+app.use(errorHandler());
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);

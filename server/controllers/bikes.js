@@ -1,3 +1,4 @@
+const NotFoundError = require('../errors/NotFoundError');
 const Bike = require('../models/bike');
 const stravaToken = require('../models/stravaToken');
 const { updateBikesOdo, getActualBikesOdo } = require('../utils/services');
@@ -43,7 +44,7 @@ module.exports.getAllBikes = (req, res, next) => {
   const userID = req.user._id;
   
   Bike.findOne({userID})
-    //.orFail(() => console.log('Велосипеды пользователя не найдены'))
+    .orFail(() => {throw new NotFoundError('Велосипеды пользователя не найдены')})
     .then((garage) => {
       if(garage) {
       res.send(garage.bikes);

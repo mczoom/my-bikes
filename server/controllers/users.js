@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
+const NotFoundError = require('../errors/NotFoundError');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -40,7 +41,7 @@ module.exports.getUser = (req, res, next) => {
   const userID = req.user._id;
     
   User.findOne({_id: userID})
-    //.orFail(() => console.log('Пользователь не найден'))
+    .orFail(() => {throw new NotFoundError('Пользователь не найден')})
     .then((user) => {
       res.send({login: user.login});      
     })
