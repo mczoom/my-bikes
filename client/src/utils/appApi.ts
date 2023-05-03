@@ -6,8 +6,9 @@ import {BASE_URL} from './constants';
 const handleResponse = (res:any) => {
   if (res.ok) {
     return res.json();
-  }
+  }  
   return Promise.reject(`Ошибка: ${res.status}`);
+
 }
 
 

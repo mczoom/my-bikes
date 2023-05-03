@@ -60,7 +60,8 @@ function App() {
       })
       .catch(() => {
         setIsLoggedIn(false);
-        localStorage.setItem('logged', '')
+        localStorage.setItem('logged', '');
+        setErrMessage('Неправильный токен приложения');
       });             
     }
   };
@@ -190,21 +191,19 @@ function App() {
 
   function getCurrentUserInfo() {
     getCurrentAthlete()
-      .then((user) => {
-        if(user.id) {
-          setCurrentUser(user);          
-        }        
-        return user
+      .then((res) => {
+        if(!res.id) {
+         throw new Error(res.message)         
+        }                
+        setCurrentUser(res); 
+        return res; 
       })
       .then((currentUser) => {      
         getAllActivities(currentUser); 
         setUserBikes(currentUser.bikes)       
       })
       .catch((err) => {
-        setErrMessage('Ошибка');
-        console.log(errMessage);
-        
-        console.log('не удалось получить данные атлета')
+        setErrMessage(`Не удалось получить данные атлета: ${err.message}`);        
       });
   }
 
@@ -265,6 +264,7 @@ console.log(userBikes);
 
 
   useEffect(() => {
+    setErrMessage('');
     checkAppToken();
     checkStravaToken();
     updateBikeDistance();

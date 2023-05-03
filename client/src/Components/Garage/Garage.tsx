@@ -45,10 +45,9 @@ export default function Garage({userBikesStrava, yearsAtStrava, activities, bike
 
   function getUserBikes() {
     appApi.getAllBikes()
-      .then((bikes: UserBike[]) => {        
-        console.log(bikes);
+      .then((bikes: UserBike[]) => {
         const newBikes = checkForNewBikesInStrava(userBikesStrava, bikes);
-          if(newBikes.length > 0) {
+          if(newBikes.length > 0) {        
             appApi.addBike(newBikes);
           }          
           setUserBikes(bikes); 
@@ -58,6 +57,9 @@ export default function Garage({userBikesStrava, yearsAtStrava, activities, bike
       .catch(err => console.log(err));
   };
   console.log(userBikes);
+
+console.log(userBikesStrava);
+
 
 
 function toggleBikesFilter() {
