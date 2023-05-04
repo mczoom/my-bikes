@@ -3,16 +3,14 @@ import { Route, Navigate, Outlet } from 'react-router-dom';
 
 interface ProtectedRouteProps {
   
-  loggedIn: boolean | null
+  hasAccess: boolean | string | null
 }
 
-export default function ProtectedRoute({loggedIn}: ProtectedRouteProps) {
+export default function ProtectedRoute({hasAccess}: ProtectedRouteProps) {
   
-  const isLogged = localStorage.getItem('logged');
-
   return (
     <div>
-      {isLogged ? <Outlet /> : <Navigate to="/login" />}
+      {hasAccess ? <Outlet /> : <Navigate to="/login" />}
     </div>
   )
 }

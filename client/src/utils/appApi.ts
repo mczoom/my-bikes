@@ -7,7 +7,7 @@ const handleResponse = (res:any) => {
   if (res.ok) {
     return res.json();
   }  
-  return Promise.reject(`Ошибка: ${res.status}`);
+  return Promise.reject(`Ошибка ${res.status}`);
 
 }
 
@@ -20,7 +20,8 @@ const handleResponse = (res:any) => {
       },
       body: JSON.stringify({login, password})
     })
-    .then((res) => handleResponse(res));
+    .then((res) => res.json())
+    .catch(err => console.log(err))
   };
 
 

@@ -1,7 +1,7 @@
 /* eslint-disable no-loop-func */
 import React, {useState, useEffect} from 'react';
 import {CurrentUserContext} from '../../contexts/CurrentUserContext';
-import {createBrowserRouter, RouterProvider, createRoutesFromElements, Routes, Route, useNavigate, Navigate, useNavigation, redirect } from 'react-router-dom';
+import {createBrowserRouter, RouterProvider, createRoutesFromElements, Route, useNavigate, Navigate, useNavigation, redirect, useLocation } from 'react-router-dom';
 import * as appApi from '../../utils/appApi';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
@@ -42,10 +42,11 @@ function App() {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  
   const yearOfRegistrationAtStrava: number = new Date(currentUser.created_at).getFullYear();
 
-  
+  const isLogged = localStorage.getItem('logged');
+
+  //const navigate = useNavigate();
   
 
   function checkAppToken() {
@@ -119,13 +120,14 @@ function App() {
   function handleRegistration(login: string, password: string) {
     appApi.register(login, password)
       .then((res) => {
-        if(res) {
-          handleLogin(login, password);
-          redirect('/access');
+        console.log(res);        
+        if(res.message) {
+          throw new Error(res.message);
         }
+        handleLogin(login, password);
       })
       .catch((err) => {
-        console.log(err + 'Ошибка при регистрации');
+        setErrMessage(`Ошибка при регистрации: ${err.message}`)        
       })
   }
 
@@ -203,7 +205,7 @@ function App() {
         setUserBikes(currentUser.bikes)       
       })
       .catch((err) => {
-        setErrMessage(`Не удалось получить данные атлета: ${err.message}`);        
+        setErrMessage(`Не удалось получить данные пользователя: ${err.message}`);        
       });
   }
 
@@ -226,8 +228,7 @@ function App() {
     };
     return years;
   };
-
-
+  
   
 console.log(userBikes);
 
@@ -235,7 +236,6 @@ console.log(userBikes);
   function logout() {
     localStorage.clear();
     setIsLoggedIn(false);
-    redirect('/access');
   }
 
 
@@ -261,6 +261,7 @@ console.log(userBikes);
       addAllUserBikes();
     }
   }, [hasAllActivitiesLoaded]);
+  
 
 
   useEffect(() => {
@@ -271,22 +272,24 @@ console.log(userBikes);
     
   }, []);
 
-
   
-
-console.log(isLoggedIn);
 
 
 const router = createBrowserRouter(
   createRoutesFromElements(    
     <>
       <Route element={<AppLayout isLoggedIn={isLoggedIn} onLogout={logout} errMessage={errMessage}/>}>
-        <Route path='/access' element={<AccessPage />} />
+        
         <Route path='/registration' element={!isLoggedIn ? <RegPage handleRegistration={handleRegistration} /> : <Navigate to='/' replace={true} />} />
         <Route path='/login' element={!isLoggedIn ? <LoginPage handleLogin={handleLogin} /> : <Navigate to='/' replace={true} />} />        
         
         <Route path='/about' element={<About />} />
-        <Route element={<ProtectedRoute loggedIn={isLoggedIn} />}>
+
+        <Route element={<ProtectedRoute hasAccess={!accessToStrava} />}>
+          <Route path='/access' element={<AccessPage />} />
+        </Route>  
+        <Route element={<ProtectedRoute hasAccess={isLogged} />}>
+          
           <Route path='/' element={<Main />}  />
           <Route path='/stats' 
             element={<Stats               
@@ -317,9 +320,9 @@ const router = createBrowserRouter(
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <main>        
-        <RouterProvider router={router} />        
-      </main>
+             
+      <RouterProvider router={router} />        
+      
     </CurrentUserContext.Provider>
   );
 }

@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const NotFoundError = require('../errors/NotFoundError');
+const RegistrationError = require('../errors/RegistrationError');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -12,9 +13,9 @@ module.exports.createUser = (req, res, next) => {
     .then((user) => res.status(201).send({ login: user.login }))
     .catch((err) => {
       if (err.code === 11000) {
-        next(Promise.reject(new Error('Пользователь с таким логином уже зарегистрирован')));
+        next(new RegistrationError ('Пользователь с таким логином уже зарегистрирован'));
       } else if (err.name === 'ValidationError') {
-        next(Promise.reject(new Error('Переданы некорректные данные')));
+        next(new Error('Переданы некорректные данные'));
       } else {
         next(err);
       }

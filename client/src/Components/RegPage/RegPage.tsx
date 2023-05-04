@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Input from '../Input/Input'
 import PageWithForm from '../PageWithForm/PageWithForm'
+import { useNavigate } from 'react-router-dom';
 
 
 interface RegPageProps {
@@ -12,6 +13,8 @@ export default function RegPage({handleRegistration}: RegPageProps) {
   const [loginValue, setLoginValue] = useState<string>('');
   const [passwordValue, setPasswordValue] = useState<string>('');
 
+  const navigate = useNavigate();
+
   function getLoginInputValue(e: React.ChangeEvent<HTMLInputElement>) {
     setLoginValue(e.target.value);
   };
@@ -20,11 +23,14 @@ export default function RegPage({handleRegistration}: RegPageProps) {
     setPasswordValue(e.target.value);
   };
 
-  function registrationHandler(e: React.SyntheticEvent) {
-    e.preventDefault();
-    handleRegistration(loginValue, passwordValue);
+  async function registrationHandler(e: React.SyntheticEvent) {
+    e.preventDefault();    
+    handleRegistration(loginValue, passwordValue);    
+    navigate('/access');    
   }
+  
 
+  
   return (
     <PageWithForm name='reg' title='Регистрация в сервисе My-Bikes' btnText='Зарегаться' submitHandler={registrationHandler} >
       <Input name='login' label='Логин' inputType='text' placeholder='Логин' getInputValue={getLoginInputValue} />
