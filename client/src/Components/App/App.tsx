@@ -107,13 +107,18 @@ function App() {
     }
   }
 
-  function setStrTokenToLocalStorage() {
+  function setActualStrTokenToLocalStorage() {
     getStravaToken()
       .then((res) => {
-        console.log(res);        
+        console.log(res);
+        if(res.message) {
+          throw new Error(res.message);
+        }  
         localStorage.setItem('stravaToken', res.strToken)
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setErrMessage(`Ошибка: ${err.message}`)
+      });
   }
 
   
@@ -123,8 +128,9 @@ function App() {
         console.log(res);        
         if(res.message) {
           throw new Error(res.message);
+        } else {
+          handleLogin(login, password);
         }
-        handleLogin(login, password);
       })
       .catch((err) => {
         setErrMessage(`Ошибка при регистрации: ${err.message}`)        
@@ -136,10 +142,11 @@ function App() {
     appApi.login(login, password)
     .then((data) => {
       if (data.token) {
+        setActualStrTokenToLocalStorage();
         localStorage.setItem('jwt', data.token);
         setIsLoggedIn(true);
         localStorage.setItem('logged', 'true')      
-        setStrTokenToLocalStorage();        
+        setActualStrTokenToLocalStorage();        
       };
     })
     .catch((err: string) => {
@@ -191,22 +198,22 @@ function App() {
   console.log(allActivities);
 
 
-  function getCurrentUserInfo() {
+  function getCurrentUserInfo() {    
     getCurrentAthlete()
       .then((res) => {
         if(!res.id) {
          throw new Error(res.message)         
-        }                
+        }
         setCurrentUser(res); 
-        return res; 
-      })
+        return res;       
+      })      
       .then((currentUser) => {      
         getAllActivities(currentUser); 
         setUserBikes(currentUser.bikes)       
       })
       .catch((err) => {
-        setErrMessage(`Не удалось получить данные пользователя: ${err.message}`);        
-      });
+        console.log(`Не удалось получить данные пользователя: ${err.message}`);        
+      });    
   }
 
 
@@ -251,7 +258,6 @@ console.log(userBikes);
   useEffect(() => {
     if(currentUser.id) {
       getUserStats(currentUser);
-      //addAllUserBikes();
     }
   }, [currentUser]);
 
@@ -319,10 +325,8 @@ const router = createBrowserRouter(
 
 
   return (
-    <CurrentUserContext.Provider value={currentUser}>
-             
-      <RouterProvider router={router} />        
-      
+    <CurrentUserContext.Provider value={currentUser}>             
+      <RouterProvider router={router} />      
     </CurrentUserContext.Provider>
   );
 }

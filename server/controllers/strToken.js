@@ -1,6 +1,7 @@
 const fetch = require('node-fetch');
 const StravaToken = require('../models/stravaToken');
 const { updateStravaToken, createStravaToken } = require('../utils/services');
+const NotFoundError = require('../errors/NotFoundError');
 
 const {STRAVA_AUTH_URL, CLIENT_ID, CLIENT_SECRET, STRAVA_API_URL} = process.env;
 
@@ -67,6 +68,7 @@ module.exports.getStrToken = (req, res, next) => {
   const userID = req.user._id;
 
   StravaToken.findOne({userID})
+    .orFail(() => {throw new NotFoundError('Strava токен не найден')})
     .then((tokenData) => {        
       res.send({strToken: tokenData.access_token});        
     }) 

@@ -112,8 +112,9 @@ export const getStravaToken = () => {
       "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
     },    
   })
-  .then((res) => handleResponse(res));
-}
+  .then((res) => res.json())
+  .catch(err => console.log(err));
+};
 
 
 export function stravaTokenCheck() {
