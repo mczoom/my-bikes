@@ -46,7 +46,7 @@ function App() {
 
   const isLogged = localStorage.getItem('logged');
 
-  //const navigate = useNavigate();
+  
   
 
   function checkAppToken() {
@@ -278,57 +278,57 @@ console.log(userBikes);
     
   }, []);
 
-  
+ 
+  //const navigate = useNavigate();
 
-
-const router = createBrowserRouter(
-  createRoutesFromElements(    
-    <>
-      <Route element={<AppLayout isLoggedIn={isLoggedIn} onLogout={logout} errMessage={errMessage}/>}>
-        
-        <Route path='/registration' element={!isLoggedIn ? <RegPage handleRegistration={handleRegistration} /> : <Navigate to='/' replace={true} />} />
-        <Route path='/login' element={!isLoggedIn ? <LoginPage handleLogin={handleLogin} /> : <Navigate to='/' replace={true} />} />        
-        
-        <Route path='/about' element={<About />} />
-
-        <Route element={<ProtectedRoute hasAccess={!accessToStrava} />}>
-          <Route path='/access' element={<AccessPage />} />
-        </Route>  
-        <Route element={<ProtectedRoute hasAccess={isLogged} />}>
+  const router = createBrowserRouter(
+    createRoutesFromElements(    
+      <>
+        <Route path='/' element={<AppLayout isLoggedIn={isLoggedIn} onLogout={logout} errMessage={errMessage}/>}>
           
-          <Route path='/' element={<Main />}  />
-          <Route path='/stats' 
-            element={<Stats               
-              registrationYear={yearOfRegistrationAtStrava} 
-              yearsAtStrava={yearsAtStrava} 
-              allRidesTotals={allRidesTotals} 
-              allYTDRidesTotals={allYTDRidesTotals} 
-              isLoading={isLoading} 
-              allActivities={allActivities} 
-            />}
-          />          
-          <Route path='/garage' 
-            element={<Garage             
-              userBikesStrava={userBikes} 
-              yearsAtStrava={yearsAtStrava} 
-              activities={allActivities} 
-              bikeTotalDistance={getBikeTotalDistance} 
-            />} 
-          />
-          <Route path='/maintenance' element={<Maintenance />} />
-        </Route>
-        <Route path='/*' element={<Page404 />} />
-      </Route>        
-    </>
-  )
-);
-
-
-  return (
-    <CurrentUserContext.Provider value={currentUser}>             
-      <RouterProvider router={router} />      
-    </CurrentUserContext.Provider>
+          <Route path='/registration' element={!isLoggedIn ? <RegPage handleRegistration={handleRegistration} /> : <Navigate to='/' replace={true} />} />
+          <Route path='/login' element={!isLoggedIn ? <LoginPage handleLogin={handleLogin} /> : <Navigate to='/' replace={true} />} />        
+          
+          <Route path='/about' element={<About />} />
+  
+          <Route element={<ProtectedRoute hasAccess={!accessToStrava} />}>
+            <Route path='/access' element={<AccessPage />} />
+          </Route>  
+          <Route element={<ProtectedRoute hasAccess={isLogged} />}>
+            
+            <Route index element={<Main />}  />
+            <Route path='/stats' 
+              element={<Stats               
+                registrationYear={yearOfRegistrationAtStrava} 
+                yearsAtStrava={yearsAtStrava} 
+                allRidesTotals={allRidesTotals} 
+                allYTDRidesTotals={allYTDRidesTotals} 
+                isLoading={isLoading} 
+                allActivities={allActivities} 
+              />}
+            />          
+            <Route path='/garage' 
+              element={<Garage             
+                userBikesStrava={userBikes} 
+                yearsAtStrava={yearsAtStrava} 
+                activities={allActivities} 
+                bikeTotalDistance={getBikeTotalDistance} 
+              />} 
+            />
+            <Route path='/maintenance' element={<Maintenance />} />
+          </Route>
+          <Route path='/*' element={<Page404 />} />
+        </Route>        
+      </>
+    )
   );
-}
+  
+  
+    return (
+      <CurrentUserContext.Provider value={currentUser}>             
+        <RouterProvider router={router} />      
+      </CurrentUserContext.Provider>
+    );
+  }
 
 export default App;

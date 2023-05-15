@@ -15,7 +15,7 @@ module.exports.createUser = (req, res, next) => {
       if (err.code === 11000) {
         next(new RegistrationError ('Пользователь с таким логином уже зарегистрирован'));
       } else if (err.name === 'ValidationError') {
-        next(new Error('Переданы некорректные данные'));
+        next(new RegistrationError('Переданы некорректные данные'));
       } else {
         next(err);
       }
