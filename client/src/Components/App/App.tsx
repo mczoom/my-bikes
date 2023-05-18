@@ -1,7 +1,7 @@
 /* eslint-disable no-loop-func */
 import React, {useState, useEffect} from 'react';
 import {CurrentUserContext} from '../../contexts/CurrentUserContext';
-import {createBrowserRouter, RouterProvider, createRoutesFromElements, Route, useNavigate, Navigate, useNavigation, redirect, useLocation } from 'react-router-dom';
+import {createBrowserRouter, RouterProvider, createRoutesFromElements, Route, useNavigate, Navigate, useNavigation, redirect, useLocation, Routes } from 'react-router-dom';
 import * as appApi from '../../utils/appApi';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
@@ -281,9 +281,13 @@ console.log(userBikes);
  
   //const navigate = useNavigate();
 
-  const router = createBrowserRouter(
-    createRoutesFromElements(    
-      <>
+  
+ 
+  
+  
+    return (
+      <CurrentUserContext.Provider value={currentUser}>             
+        <Routes>
         <Route path='/' element={<AppLayout isLoggedIn={isLoggedIn} onLogout={logout} errMessage={errMessage}/>}>
           
           <Route path='/registration' element={!isLoggedIn ? <RegPage handleRegistration={handleRegistration} /> : <Navigate to='/' replace={true} />} />
@@ -319,14 +323,7 @@ console.log(userBikes);
           </Route>
           <Route path='/*' element={<Page404 />} />
         </Route>        
-      </>
-    )
-  );
-  
-  
-    return (
-      <CurrentUserContext.Provider value={currentUser}>             
-        <RouterProvider router={router} />      
+      </Routes>      
       </CurrentUserContext.Provider>
     );
   }
