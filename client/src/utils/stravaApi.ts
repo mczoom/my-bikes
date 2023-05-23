@@ -1,4 +1,4 @@
-import { stravaApiUrl, tokenData } from './constants';
+import { stravaApiUrl } from './constants';
 
 
 const stravaToken = localStorage.getItem('stravaToken');

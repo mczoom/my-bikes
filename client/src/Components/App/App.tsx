@@ -38,7 +38,7 @@ function App() {
   const [userBikes, setUserBikes] = useState<Bike[]>([]);
   const [allRidesTotals, setAllRidesTotals] = useState<AthleteStats>({} as AthleteStats);
   const [allYTDRidesTotals, setAllYTDRidesTotals] = useState<AthleteStats>({} as AthleteStats);
-  const [errMessage, setErrMessage] = useState<string>('');
+  const [errMessage, setErrMessage] = useState<string[]>([]);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -62,7 +62,7 @@ function App() {
       .catch(() => {
         setIsLoggedIn(false);
         localStorage.setItem('logged', '');
-        setErrMessage('Неправильный токен приложения');
+        setErrMessage([...errMessage, 'Неправильный токен приложения']);
       });             
     }
   };
@@ -117,7 +117,7 @@ function App() {
         localStorage.setItem('stravaToken', res.strToken)
       })
       .catch((err) => {
-        setErrMessage(`Ошибка: ${err.message}`)
+        setErrMessage([...errMessage, `Ошибка: ${err.message}`])
       });
   }
 
@@ -133,7 +133,7 @@ function App() {
         }
       })
       .catch((err) => {
-        setErrMessage(`Ошибка при регистрации: ${err.message}`)        
+        setErrMessage([...errMessage, `Ошибка при регистрации: ${err.message}`])        
       })
   }
 
@@ -271,7 +271,7 @@ console.log(userBikes);
 
 
   useEffect(() => {
-    setErrMessage('');
+    setErrMessage([]);
     checkAppToken();
     checkStravaToken();
     updateBikeDistance();
@@ -288,41 +288,41 @@ console.log(userBikes);
     return (
       <CurrentUserContext.Provider value={currentUser}>             
         <Routes>
-        <Route path='/' element={<AppLayout isLoggedIn={isLoggedIn} onLogout={logout} errMessage={errMessage}/>}>
-          
-          <Route path='/registration' element={!isLoggedIn ? <RegPage handleRegistration={handleRegistration} /> : <Navigate to='/' replace={true} />} />
-          <Route path='/login' element={!isLoggedIn ? <LoginPage handleLogin={handleLogin} /> : <Navigate to='/' replace={true} />} />        
-          
-          <Route path='/about' element={<About />} />
-  
-          <Route element={<ProtectedRoute hasAccess={!accessToStrava} />}>
-            <Route path='/access' element={<AccessPage />} />
-          </Route>  
-          <Route element={<ProtectedRoute hasAccess={isLogged} />}>
+          <Route element={<AppLayout isLoggedIn={isLoggedIn} onLogout={logout} errMessage={errMessage}/>}>
             
-            <Route index element={<Main />}  />
-            <Route path='/stats' 
-              element={<Stats               
-                registrationYear={yearOfRegistrationAtStrava} 
-                yearsAtStrava={yearsAtStrava} 
-                allRidesTotals={allRidesTotals} 
-                allYTDRidesTotals={allYTDRidesTotals} 
-                isLoading={isLoading} 
-                allActivities={allActivities} 
-              />}
-            />          
-            <Route path='/garage' 
-              element={<Garage             
-                userBikesStrava={userBikes} 
-                yearsAtStrava={yearsAtStrava} 
-                activities={allActivities} 
-                bikeTotalDistance={getBikeTotalDistance} 
-              />} 
-            />
-            <Route path='/maintenance' element={<Maintenance />} />
-          </Route>
-          <Route path='/*' element={<Page404 />} />
-        </Route>        
+            <Route path='/registration' element={!isLoggedIn ? <RegPage handleRegistration={handleRegistration} /> : <Navigate to='/' replace={true} />} />
+            <Route path='/login' element={!isLoggedIn ? <LoginPage handleLogin={handleLogin} /> : <Navigate to='/' replace={true} />} />        
+            
+            <Route path='/about' element={<About />} />
+    
+            <Route element={<ProtectedRoute hasAccess={!accessToStrava} />}>
+              <Route path='/access' element={<AccessPage />} />
+            </Route>  
+            <Route element={<ProtectedRoute hasAccess={isLogged} />}>
+              
+              <Route path='/' element={<Main />}  />
+              <Route path='/stats' 
+                element={<Stats               
+                  registrationYear={yearOfRegistrationAtStrava} 
+                  yearsAtStrava={yearsAtStrava} 
+                  allRidesTotals={allRidesTotals} 
+                  allYTDRidesTotals={allYTDRidesTotals} 
+                  isLoading={isLoading} 
+                  allActivities={allActivities} 
+                />}
+              />          
+              <Route path='/garage' 
+                element={<Garage             
+                  userBikesStrava={userBikes} 
+                  yearsAtStrava={yearsAtStrava} 
+                  activities={allActivities} 
+                  bikeTotalDistance={getBikeTotalDistance} 
+                />} 
+              />
+              <Route path='/maintenance' element={<Maintenance />} />
+            </Route>
+            <Route path='/*' element={<Page404 />} />
+          </Route>        
       </Routes>      
       </CurrentUserContext.Provider>
     );

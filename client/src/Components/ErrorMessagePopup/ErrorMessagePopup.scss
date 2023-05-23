@@ -4,13 +4,10 @@
 .err-popup {
     display: inline-block;
     text-align: center;
-    padding: 10px 20px;
-    min-width: 200px;
-    
-    position: absolute;
-    top: 93vh;
+    min-width: 300px;    
+    position: fixed;
+    top: 80vh;
     right: -900px;
-    background-color: hwb(16 7% 8%);
     border-radius: $radius;
 }
 
@@ -20,5 +17,6 @@
 }
 
 .err-popup__message {
-    margin: 0;
+    background-color: hwb(16 7% 8%);    
+    padding: 6px 0;
 }

@@ -6,7 +6,7 @@ import { useEffect } from "react";
 interface AppLayoutProps {
     isLoggedIn: boolean
     onLogout: () => void
-    errMessage: string
+    errMessage: string[]
   }
 
 export default function AppLayout({isLoggedIn, onLogout, errMessage}: AppLayoutProps) {
@@ -16,7 +16,9 @@ export default function AppLayout({isLoggedIn, onLogout, errMessage}: AppLayoutP
     return (
       <div className="page">
         <Header isLoggedIn={isLoggedIn} onLogout={onLogout} />
-        <Outlet />
+        <main>
+          <Outlet />
+        </main>  
         <ErrorMessagePopup errMsg={errMessage}/>
       </div>
     )

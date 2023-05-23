@@ -16,12 +16,4 @@ export const fromYear = (y: number): number => {
 
 export const tillYear = (y:number): number => {
   return Date.parse((y + 1).toString()) / 1000 - 1;
-}
-
-export const tokenData = (): ExchangeToken | RefreshToken => {
-  let token;
-  if(localStorage.getItem('stravaToken')) {
-    token = JSON.parse(localStorage.getItem('stravaToken') || "");
-  }
-  return token;
-}
+};
