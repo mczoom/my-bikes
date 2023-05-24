@@ -42,7 +42,7 @@ module.exports.getUser = (req, res, next) => {
   const userID = req.user._id;
     
   User.findOne({_id: userID})
-    .orFail(() => {throw new NotFoundError('Пользователь не найден')})
+    .orFail(() => {new NotFoundError('Пользователь не найден')})
     .then((user) => {
       res.send({login: user.login});      
     })

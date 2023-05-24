@@ -18,7 +18,8 @@ router.post('/strtokenexchange', auth, exchangeStrToken);
 router.get('/strtokenrefresh', auth, refreshStrToken);
 
 router.get('/user', auth, getUser);
-router.get('/tokencheck', auth, checkStravaToken, refreshStrToken, tokenCheck);
+//router.get('/tokencheck', auth, checkStravaToken, refreshStrToken, tokenCheck);
+router.get('/tokencheck', auth, checkStravaToken, refreshStrToken);
 router.post('/bikes', auth, checkStravaToken, addAllBikes);
 router.get('/bikes', auth, checkStravaToken, getAllBikes);
 router.post('/addbike', auth, checkStravaToken, addBike);

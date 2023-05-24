@@ -44,7 +44,7 @@ module.exports.getAllBikes = (req, res, next) => {
   const userID = req.user._id;
   
   Bike.findOne({userID})
-    .orFail(() => {throw new NotFoundError('Велосипеды пользователя не найдены')})
+    .orFail(() => {new NotFoundError('Велосипеды пользователя не найдены')})
     .then((garage) => {
       if(garage) {
       res.send(garage.bikes);

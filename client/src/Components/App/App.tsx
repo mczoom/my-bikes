@@ -243,7 +243,15 @@ console.log(userBikes);
   function logout() {
     localStorage.clear();
     setIsLoggedIn(false);
-  }
+  };
+
+
+  useEffect(() => {
+    setErrMessage([]);
+    checkAppToken();
+    checkStravaToken();
+    updateBikeDistance();    
+  }, []);
 
 
 
@@ -270,16 +278,10 @@ console.log(userBikes);
   
 
 
-  useEffect(() => {
-    setErrMessage([]);
-    checkAppToken();
-    checkStravaToken();
-    updateBikeDistance();
-    
-  }, []);
+  
 
  
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
 
   
  

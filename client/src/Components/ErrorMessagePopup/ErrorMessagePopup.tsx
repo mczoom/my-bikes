@@ -10,8 +10,8 @@ interface ErrorMessagePopupProps {
      
     return (      
       <ul className={errPopupClassName}>
-       {errMsg.map((message) => (
-        <li>
+       {errMsg.map((message, i) => (
+        <li key={i}>
           <p className="err-popup__message">{message}</p>
         </li>
       ))}
