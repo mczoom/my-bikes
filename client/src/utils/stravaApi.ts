@@ -1,7 +1,26 @@
 import { stravaApiUrl } from './constants';
+import { getStravaToken } from './stravaAuthApi';
+
+let actualStravaToken: string | undefined;
+const stravaToken = localStorage.getItem('stravaToken')
+
+async function getActualStrToken() {
+  
+  await getStravaToken()
+    .then((res) => {
+      console.log(res);
+      if(res.message) {
+        throw new Error(res.message);
+      }  
+      localStorage.setItem('stravaToken', res.strToken)
+      actualStravaToken = res.strToken;
+      
+    })
+    .catch((err: string) => console.log(err));
+    
+}
 
 
-const stravaToken = localStorage.getItem('stravaToken');
 
 export interface ActivitiesRequest {
   fromDate: number
@@ -11,12 +30,14 @@ export interface ActivitiesRequest {
 }
 
 
-export const getCurrentAthlete = () => {
+export const getCurrentAthlete = async () => {
+  await getActualStrToken();
+
   return fetch(`${stravaApiUrl}/athlete`, {
     method: 'GET',
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${stravaToken}`,
+      "Authorization": `Bearer ${actualStravaToken}`,
     }
   })
   .then((res) => res.json())

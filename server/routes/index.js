@@ -2,7 +2,7 @@ const { Router } = require('express');
 const { login, createUser, getUser } = require('../controllers/users');
 const { addAllBikes, getAllBikes, updateBikeInfo, updateOdo, addBike } = require('../controllers/bikes');
 const { auth } = require('../middlewares/auth');
-const { exchangeStrToken, refreshStrToken, tokenCheck, getStrToken } = require('../controllers/strToken');
+const { exchangeStrToken, refreshStrToken, getStrToken } = require('../controllers/strToken');
 const { checkStravaToken } = require('../middlewares/stravaAuth');
 const { updateBikeInfoValidation } = require('../middlewares/validation');
 

@@ -1,9 +1,8 @@
 /* eslint-disable no-loop-func */
 import React, {useState, useEffect} from 'react';
 import {CurrentUserContext} from '../../contexts/CurrentUserContext';
-import {createBrowserRouter, RouterProvider, createRoutesFromElements, Route, useNavigate, Navigate, useNavigation, redirect, useLocation, Routes } from 'react-router-dom';
+import {Route, useNavigate, Navigate, useNavigation, redirect, useLocation, Routes } from 'react-router-dom';
 import * as appApi from '../../utils/appApi';
-import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Stats from '../Stats/Stats';
 import { getStravaToken, stravaTokenCheck } from '../../utils/stravaAuthApi';
@@ -20,7 +19,6 @@ import { AthleteStats } from '../../models/AthleteStats';
 import RegPage from '../RegPage/RegPage';
 import LoginPage from '../LoginPage/LoginPage';
 import { Bike } from '../../models/Bike';
-import ErrorMessagePopup from '../ErrorMessagePopup/ErrorMessagePopup';
 import AppLayout from '../AppLayout/AppLayout';
 
 
@@ -62,7 +60,7 @@ function App() {
       .catch(() => {
         setIsLoggedIn(false);
         localStorage.setItem('logged', '');
-        setErrMessage([...errMessage, 'Неправильный токен приложения']);
+        setErrMessage([...errMessage, 'Неправильный токен приложения, необходимо авторизоваться']);
       });             
     }
   };
@@ -72,7 +70,7 @@ function App() {
     const token = localStorage.getItem('stravaToken');
     if(token) {
       stravaTokenCheck()
-        .then((res) => {
+        .then((res: {accessToken: string}) => {
           if(res.accessToken !== token) {
             localStorage.setItem('stravaToken', res.accessToken);
           }
@@ -107,19 +105,19 @@ function App() {
     }
   }
 
-  function setActualStrTokenToLocalStorage() {
-    getStravaToken()
-      .then((res) => {
-        console.log(res);
-        if(res.message) {
-          throw new Error(res.message);
-        }  
-        localStorage.setItem('stravaToken', res.strToken)
-      })
-      .catch((err) => {
-        setErrMessage([...errMessage, `Ошибка: ${err.message}`])
-      });
-  }
+  // function setActualStrTokenToLocalStorage() {
+  //   getStravaToken()
+  //     .then((res) => {
+  //       console.log(res);
+  //       if(res.message) {
+  //         throw new Error(res.message);
+  //       }  
+  //       localStorage.setItem('stravaToken', res.strToken)
+  //     })
+  //     .catch((err) => {
+  //       setErrMessage([...errMessage, `Ошибка: ${err.message}`])
+  //     });
+  // }
 
   
   function handleRegistration(login: string, password: string) {
@@ -140,13 +138,12 @@ function App() {
 
   function handleLogin(login: string, password: string) {
     appApi.login(login, password)
-    .then((data) => {
-      if (data.token) {
-        setActualStrTokenToLocalStorage();
+    .then(async (data) => {
+      if (data.token) {     
         localStorage.setItem('jwt', data.token);
         setIsLoggedIn(true);
-        localStorage.setItem('logged', 'true')      
-        setActualStrTokenToLocalStorage();        
+        localStorage.setItem('logged', 'true')
+        setErrMessage([]);      
       };
     })
     .catch((err: string) => {
@@ -198,7 +195,7 @@ function App() {
   console.log(allActivities);
 
 
-  function getCurrentUserInfo() {    
+  function getCurrentUserInfo() {
     getCurrentAthlete()
       .then((res) => {
         if(!res.id) {
@@ -240,6 +237,8 @@ function App() {
 console.log(userBikes);
 
 
+
+
   function logout() {
     localStorage.clear();
     setIsLoggedIn(false);
@@ -252,7 +251,6 @@ console.log(userBikes);
     checkStravaToken();
     updateBikeDistance();    
   }, []);
-
 
 
   useEffect(() => {
@@ -281,7 +279,9 @@ console.log(userBikes);
   
 
  
-  const navigate = useNavigate();
+  
+
+  
 
   
  
