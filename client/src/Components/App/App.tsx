@@ -105,19 +105,24 @@ function App() {
     }
   }
 
-  // function setActualStrTokenToLocalStorage() {
-  //   getStravaToken()
-  //     .then((res) => {
-  //       console.log(res);
-  //       if(res.message) {
-  //         throw new Error(res.message);
-  //       }  
-  //       localStorage.setItem('stravaToken', res.strToken)
-  //     })
-  //     .catch((err) => {
-  //       setErrMessage([...errMessage, `Ошибка: ${err.message}`])
-  //     });
-  // }
+  async function setActualStrTokenToLocalStorage() {
+    await getStravaToken()
+      .then((res) => {
+        console.log(res);
+        if(res.message) {
+          throw new Error(res.message);
+        }  
+        localStorage.setItem('stravaToken', res.strToken)
+      })
+      .catch((err) => {
+        setErrMessage([...errMessage, `Ошибка: ${err.message}`])
+      });
+      
+  }
+
+  const actualStravaToken = (): string | null => {
+    return localStorage.getItem('stravaToken');
+  };
 
   
   function handleRegistration(login: string, password: string) {
@@ -185,7 +190,7 @@ function App() {
           });
         page++;
 
-      } while(response !== 0 );
+      } while(response !== 0);
 
       setAllActivities(activities);      
     }
@@ -195,7 +200,8 @@ function App() {
   console.log(allActivities);
 
 
-  function getCurrentUserInfo() {
+  async function getCurrentUserInfo() {
+    await setActualStrTokenToLocalStorage();    
     getCurrentAthlete()
       .then((res) => {
         if(!res.id) {
@@ -235,8 +241,6 @@ function App() {
   
   
 console.log(userBikes);
-
-
 
 
   function logout() {
