@@ -26,7 +26,7 @@ export default function RegPage({handleRegistration}: RegPageProps) {
   async function registrationHandler(e: React.SyntheticEvent) {
     e.preventDefault();    
     handleRegistration(loginValue, passwordValue);    
-    navigate('/access');    
+    //navigate('/access');    
   }
   
 

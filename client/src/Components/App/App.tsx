@@ -38,6 +38,8 @@ function App() {
   const [allYTDRidesTotals, setAllYTDRidesTotals] = useState<AthleteStats>({} as AthleteStats);
   const [errMessage, setErrMessage] = useState<string[]>([]);
 
+  const navigate = useNavigate();
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const yearOfRegistrationAtStrava: number = new Date(currentUser.created_at).getFullYear();
@@ -66,10 +68,10 @@ function App() {
   };
 
 
-  function checkStravaToken() {
+  async function checkStravaToken() {
     const token = localStorage.getItem('stravaToken');
     if(token) {
-      stravaTokenCheck()
+      await stravaTokenCheck()
         .then((res: {accessToken: string}) => {
           if(res.accessToken !== token) {
             localStorage.setItem('stravaToken', res.accessToken);
@@ -78,6 +80,7 @@ function App() {
         .catch((err) => console.log(err));
     }  
   }; 
+
 
   function checkTrainer(bikeId: string): boolean | undefined {
     const bike = allActivities.find((activity) => {
@@ -105,7 +108,7 @@ function App() {
     }
   }
 
-  async function setActualStrTokenToLocalStorage() {
+  async function setStrTokenToLocalStorage() {
     await getStravaToken()
       .then((res) => {
         console.log(res);
@@ -120,9 +123,7 @@ function App() {
       
   }
 
-  const actualStravaToken = (): string | null => {
-    return localStorage.getItem('stravaToken');
-  };
+  
 
   
   function handleRegistration(login: string, password: string) {
@@ -133,6 +134,7 @@ function App() {
           throw new Error(res.message);
         } else {
           handleLogin(login, password);
+          navigate('/access');
         }
       })
       .catch((err) => {
@@ -146,14 +148,16 @@ function App() {
     .then(async (data) => {
       if (data.token) {     
         localStorage.setItem('jwt', data.token);
+        await setStrTokenToLocalStorage();
         setIsLoggedIn(true);
         localStorage.setItem('logged', 'true')
         setErrMessage([]);      
       };
+      return;
     })
-    .catch((err: string) => {
-      console.log(err);
-    });
+    .catch((err) => {
+      setErrMessage([...errMessage, `Ошибка при входе: ${err.message}`])        
+    })
   };
 
 
@@ -201,7 +205,8 @@ function App() {
 
 
   async function getCurrentUserInfo() {
-    await setActualStrTokenToLocalStorage();    
+    await checkStravaToken();    
+    // await setActualStrTokenToLocalStorage();    
     getCurrentAthlete()
       .then((res) => {
         if(!res.id) {

@@ -1,11 +1,10 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import AccessButton from '../AccessButton/AccessButton';
 import FeaturesList from '../FeaturesList/FeaturesList';
-import { redirect, useNavigate } from 'react-router-dom';
 
 
 
-export default function AccessPage({}) {
+export default function AccessPage() {
 
   return (
     <section className='access-page'>

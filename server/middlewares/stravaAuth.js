@@ -9,12 +9,10 @@ module.exports.checkStravaToken = async(req, res, next) => {
   await StravaToken.findOne({userID})
     .orFail(new NotFoundError('Не найден StravaToken для текущего пользователя'))
     .then((tokenData) => {
-      //if(tokenData) {
-        const isStrTokenExpired = tokenData.expires_at - Date.now();
-        if(isStrTokenExpired < 0) {
-          refreshToken = tokenData.refresh_token;
-        };
-      //};
+      const isStrTokenExpired = tokenData.expires_at - Date.now();
+      if(isStrTokenExpired < 0) {
+        refreshToken = tokenData.refresh_token;
+      };
     })
     .catch(next);
 

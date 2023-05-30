@@ -4,7 +4,8 @@
 .err-popup {
     display: inline-block;
     text-align: center;
-    min-width: 300px;    
+    min-width: 200px;  
+    max-width: 400px;  
     position: fixed;
     top: 80vh;
     right: -900px;

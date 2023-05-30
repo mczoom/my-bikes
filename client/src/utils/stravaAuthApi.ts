@@ -15,8 +15,6 @@ const handleResponse = (res:any) => {
 
 
 
-
-
 export function exchangeToken() {
   const params: any = new Proxy(new URLSearchParams(window.location.search), {
     get: (searchParams, prop:string) => searchParams.get(prop),
