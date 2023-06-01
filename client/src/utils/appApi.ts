@@ -33,7 +33,8 @@ const handleResponse = (res:any) => {
       },
       body: JSON.stringify({login, password})
     })
-    .then((res) => handleResponse(res));
+    .then((res) => res.json())
+    .catch(err => console.log(err))
   };
 
 

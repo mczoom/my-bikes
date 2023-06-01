@@ -66,6 +66,7 @@ module.exports.refreshStrToken = (req, res, next) => {
 
 module.exports.getStrToken = (req, res, next) => {  
   const userID = req.user._id;
+  console.log(userID);
 
   StravaToken.findOne({userID})
     .orFail(() => {new NotFoundError('Strava-токен не найден')})

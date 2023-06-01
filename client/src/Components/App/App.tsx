@@ -145,17 +145,19 @@ function App() {
 
   function handleLogin(login: string, password: string) {
     appApi.login(login, password)
-    .then(async (data) => {
-      if (data.token) {     
-        localStorage.setItem('jwt', data.token);
+    .then(async (res) => {
+      if (res.token) {     
+        localStorage.setItem('jwt', res.token);
         await setStrTokenToLocalStorage();
         setIsLoggedIn(true);
         localStorage.setItem('logged', 'true')
         setErrMessage([]);      
-      };
+      } else if (res.message) {
+        throw new Error(res.message);
+      }
       return;
     })
-    .catch((err) => {
+    .catch((err) => {      
       setErrMessage([...errMessage, `Ошибка при входе: ${err.message}`])        
     })
   };
