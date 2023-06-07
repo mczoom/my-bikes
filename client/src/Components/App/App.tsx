@@ -46,7 +46,16 @@ function App() {
 
   const isLogged = localStorage.getItem('logged');
 
-  
+  interface StravaResponseWithError {
+    message: string
+    errors: [
+        {
+            resource: string
+            field: string
+            code: string
+        }
+    ]
+  }
   
 
   function checkAppToken() {
@@ -128,8 +137,7 @@ function App() {
   
   function handleRegistration(login: string, password: string) {
     appApi.register(login, password)
-      .then((res) => {
-        console.log(res);        
+      .then((res) => {       
         if(res.message) {
           throw new Error(res.message);
         } else {
@@ -177,6 +185,7 @@ function App() {
 
   async function getAllActivities(user: Profile) {
     setHasAllActivitiesLoaded(false);
+    await checkStravaToken();
     const dateOfRegAtStrava: string = user.created_at;
     const fromDate: number = Date.parse(dateOfRegAtStrava) / 1000;
     const tillDate: number = Math.round(Date.now() / 1000);
