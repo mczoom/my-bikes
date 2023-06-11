@@ -1,20 +1,49 @@
 $text-color: black;
 
-.section-card {
-  color: black;
+.section-card {  
+  color: black;  
+  
+}
+.section-card::after {  
+  border-bottom: 2px solid whitesmoke;
+}
 
+.section-card__container {
+  min-height: 300px;
+}
+.section-card__content {
+  margin: 0;
+}
+
+.section-card__cover {
+  height: 300px;
+  width: 100%;
+  object-fit: cover;
 }
 
 .section-card__wrapper {
   display: flex;
+  align-items: center;
+  gap: 40px;
+  margin-bottom: 20px;
 }
 
 .section-card__header {
   color: $text-color;
+  margin: 0;
 }
 
-.section-card__text {
+.section-card__description {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.description__header {
   margin: 0;
-  margin-left: 25px;
-  align-self: center;
+}
+
+.description__text {
+  margin: 0;
 }

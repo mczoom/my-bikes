@@ -1,9 +1,11 @@
-import React, {useState} from 'react'
+import SectionCard from '../SectionCard/SectionCard';
+import {Card} from '../../models/Card';
 import garage from '../../images/garage.png';
 import stats from '../../images/stats.png';
 import maintenance from '../../images/maintenance.png';
-import SectionCard from '../SectionCard/SectionCard';
-import {Card} from '../../models/Card';
+import workshop from '../../images/workshop.jpeg';
+import bikes from '../../images/bikes.jpg';
+import rides from '../../images/rides.jpg';
 
 
 
@@ -11,21 +13,28 @@ export default function SectionCardsList() {
 
   const cardsContent: Card[] = [
     {
-      title: 'Мои тренировки',
-      picture: stats,
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas fringilla fringilla dapibus. Aliquam bibendum, metus non faucibus auctor, sapien ligula vulputate elit, ut mollis nulla eros quis eros. Mauris ut risus at nisl gravida viverra. Donec id neque leo. Donec in orci cursus, congue augue nec, feugiat velit. Praesent porttitor sapien quis quam ornare, eget posuere massa posuere. Donec ornare erat vitae urna facilisis molestie.',
+      title: 'Заезды',
+      cover: rides,
+      icon: stats,
+      header: 'Здесь собраны все заезды и их статистика',
+      text: `Хочешь узнать какой у тебя пробег за всё время пользования Стравой? Или посмотреть пробег, время, количество тренировок и другую статистику с разбивкой по годам? 
+             Или интересно увидеть наглядно на календаре свои прошлые поездки? Всё это и прочая любопытная статистика собраны в этом разделе`,
       path: '/stats'
     },
     {
       title: 'Мои велосипеды',
-      picture: garage,
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas fringilla fringilla dapibus. Aliquam bibendum, metus non faucibus auctor, sapien ligula vulputate elit, ut mollis nulla eros quis eros. Mauris ut risus at nisl gravida viverra. Donec id neque leo. Donec in orci cursus, congue augue nec, feugiat velit. Praesent porttitor sapien quis quam ornare, eget posuere massa posuere. Donec ornare erat vitae urna facilisis molestie.',
+      cover: bikes,
+      icon: garage,
+      header: 'Это твой велогараж',
+      text: 'Там хранятся все твои велосипеды с отдельной статистикой пробега по каждому из них. А ещё там есть фотки.',
       path: '/garage'
     },
     {
       title: 'Техобслуживание',
-      picture: maintenance,
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas fringilla fringilla dapibus. Aliquam bibendum, metus non faucibus auctor, sapien ligula vulputate elit, ut mollis nulla eros quis eros. Mauris ut risus at nisl gravida viverra. Donec id neque leo. Donec in orci cursus, congue augue nec, feugiat velit. Praesent porttitor sapien quis quam ornare, eget posuere massa posuere. Donec ornare erat vitae urna facilisis molestie.',
+      cover: workshop,
+      icon: maintenance,
+      header: 'В этом разделе отображается пробег различных компонентов твоих велосипедов',
+      text: 'Не забывай заглядывать сюда, чтобы не пропустить замену очередного расходника или сделать отметку о проведённом ТО',
       path: '/maintenance'
     }
   ]

@@ -1,6 +1,8 @@
 export interface Card {
   title: string
-  picture: string
+  cover: string
+  icon: string
+  header: string
   text: string
   path: string
 }
