@@ -15,11 +15,12 @@ interface StatsProps {
   allRidesTotals: AthleteStats
   allYTDRidesTotals: AthleteStats
   isLoading: boolean
+  hasActivitiesLoaded: boolean
   allActivities: Activity[]
 }
 
 
-export default function Stats({registrationYear, yearsAtStrava, allRidesTotals, allYTDRidesTotals, isLoading, allActivities}: StatsProps) {
+export default function Stats({registrationYear, yearsAtStrava, allRidesTotals, allYTDRidesTotals, isLoading, hasActivitiesLoaded, allActivities}: StatsProps) {
 
   const isYearMatch = (y: number, activity: Activity) => {
     return new Date(activity.start_date).getFullYear() === y;
@@ -90,6 +91,8 @@ export default function Stats({registrationYear, yearsAtStrava, allRidesTotals, 
         <ActivitiesCalendar allActivities={allActivities} />
       </div>
       <StatsYearsList
+        isLoading={isLoading}
+        hasActivitiesLoaded={hasActivitiesLoaded}
         registrationYear={registrationYear}
         yearsAtStrava={yearsAtStrava}
         allActivities={allActivities}

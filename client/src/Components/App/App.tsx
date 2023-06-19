@@ -32,7 +32,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<Profile>({} as Profile);
   const [allActivities, setAllActivities] = useState<Activity[]>([]);
-  const [hasAllActivitiesLoaded, setHasAllActivitiesLoaded] = useState<Boolean>(false)
+  const [hasAllActivitiesLoaded, setHasAllActivitiesLoaded] = useState<boolean>(false)
   const [userBikes, setUserBikes] = useState<Bike[]>([]);
   const [allRidesTotals, setAllRidesTotals] = useState<AthleteStats>({} as AthleteStats);
   const [allYTDRidesTotals, setAllYTDRidesTotals] = useState<AthleteStats>({} as AthleteStats);
@@ -329,7 +329,8 @@ console.log(userBikes);
                   yearsAtStrava={yearsAtStrava} 
                   allRidesTotals={allRidesTotals} 
                   allYTDRidesTotals={allYTDRidesTotals} 
-                  isLoading={isLoading} 
+                  isLoading={isLoading}
+                  hasActivitiesLoaded = {hasAllActivitiesLoaded} 
                   allActivities={allActivities} 
                 />}
               />          

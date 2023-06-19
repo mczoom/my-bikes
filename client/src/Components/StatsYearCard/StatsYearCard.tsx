@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { Activity } from '../../models/Activity';
+import { Preloader } from '../Preloader/Preloader';
+import { log } from 'console';
 
 
 interface StatsYearCardProps {
+  isLoading: boolean
+  hasActivitiesLoaded: boolean
   year: number
   allActivities: Activity[]
   totalDistance: (y: number) => number
@@ -13,9 +17,8 @@ interface StatsYearCardProps {
 }
 
 
-export default function StatsYearCard({year, allActivities, totalDistance, totalTime, totalTrainings, yearLongestDistance, totalOverHundredRides}: StatsYearCardProps) {
+export default function StatsYearCard({isLoading, hasActivitiesLoaded, year, allActivities, totalDistance, totalTime, totalTrainings, yearLongestDistance, totalOverHundredRides}: StatsYearCardProps) {
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isStatsShown, setIsStatsShown] = useState<boolean>(false);
 
   const dashboardClassName = `stats_dashboard ${isStatsShown ? 'stats_dashboard_on' : ''}`;
@@ -28,7 +31,9 @@ export default function StatsYearCard({year, allActivities, totalDistance, total
   function toggleYearStatsDisplay() {
     setIsStatsShown(v => !v);
   }
-
+  
+  console.log(hasActivitiesLoaded);
+  
 
   return (
     <div className='year-card'>
@@ -39,7 +44,7 @@ export default function StatsYearCard({year, allActivities, totalDistance, total
           <p className='stats__opener-text'>{yearStatsButtonText}</p>
           <div className={openerIconClassName}></div>
         </div>
-        {totalTrainings(year) > 0 ? (
+        {(totalTrainings(year) > 0) && hasActivitiesLoaded ? (
           <ul className={dashboardClassName}>
             <li className='stats__text'>Общая дистанция
             <div className='stats__text__wrapper'>
@@ -68,11 +73,12 @@ export default function StatsYearCard({year, allActivities, totalDistance, total
             </li>
           </ul>
         ) : (
+          hasActivitiesLoaded ? (
           <div className={emptyDashboardClassName}>
             <p className='stats__text'>Тренировки не найдены</p>
           </div>
-        )
-        }
+        ) : <Preloader isLoading={!hasActivitiesLoaded} />
+        )}
       </div>
     </div>
   )
