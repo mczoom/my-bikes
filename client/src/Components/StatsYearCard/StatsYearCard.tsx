@@ -37,8 +37,15 @@ export default function StatsYearCard({isLoading, hasActivitiesLoaded, year, all
 
   return (
     <div className='year-card'>
-      {/* <Preloader isLoading={isLoading} /> */}
       <h2 className='year-card__header'>{year} год</h2>
+      {!hasActivitiesLoaded ? (
+        <div className='year_card__stats'>
+          <div className='stats__wrapper'>
+            <p className='stats__opener-text'>Загрузка...</p>   
+            <div className='preloader_small'><Preloader isLoading={!hasActivitiesLoaded} /></div>         
+          </div>          
+        </div>
+      ) : ( 
       <div className='year_card__stats'>
         <div className='stats__wrapper' onClick={toggleYearStatsDisplay}>
           <p className='stats__opener-text'>{yearStatsButtonText}</p>
@@ -72,14 +79,14 @@ export default function StatsYearCard({isLoading, hasActivitiesLoaded, year, all
             </div>
             </li>
           </ul>
-        ) : (
-          hasActivitiesLoaded ? (
+        ) : (          
           <div className={emptyDashboardClassName}>
             <p className='stats__text'>Тренировки не найдены</p>
           </div>
-        ) : <Preloader isLoading={!hasActivitiesLoaded} />
         )}
+        
       </div>
+      )}
     </div>
   )
 }

@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Preloader } from '../Preloader/Preloader';
 import StatsYearsList from '../StatsYearsList/StatsYearsList';
 import CommonStats from '../CommonStats/CommonStats';
 import { AthleteStats } from '../../models/AthleteStats';
@@ -85,7 +84,6 @@ export default function Stats({registrationYear, yearsAtStrava, allRidesTotals, 
 
   return (
     <section className='stats'>
-      <Preloader isLoading={isLoading} />
       <div className='stats__common-stats-wrapper'>
         <CommonStats allRidesTotals={allRidesTotals} allYTDRidesTotals={allYTDRidesTotals} />
         <ActivitiesCalendar allActivities={allActivities} />
