@@ -1,7 +1,7 @@
 /* eslint-disable no-loop-func */
 import React, {useState, useEffect} from 'react';
 import {CurrentUserContext} from '../../contexts/CurrentUserContext';
-import {Route, useNavigate, Navigate, useNavigation, redirect, useLocation, Routes } from 'react-router-dom';
+import {Route, useNavigate, Navigate, Routes } from 'react-router-dom';
 import * as appApi from '../../utils/appApi';
 import Main from '../Main/Main';
 import Stats from '../Stats/Stats';
@@ -10,7 +10,6 @@ import {getCurrentAthlete, getActivities, getAthlete} from '../../utils/stravaAp
 import {Profile} from '../../models/Profile';
 import AccessPage from '../AccessPage/AccessPage';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
-import About from '../About/About';
 import Garage from '../Garage/Garage';
 import { Activity } from '../../models/Activity';
 import Page404 from '../Page404/Page404';
@@ -20,6 +19,7 @@ import RegPage from '../RegPage/RegPage';
 import LoginPage from '../LoginPage/LoginPage';
 import { Bike } from '../../models/Bike';
 import AppLayout from '../AppLayout/AppLayout';
+import { ActivitiesLoadingState } from '../../contexts/ActivitiesLoadingState';
 
 
 
@@ -292,36 +292,26 @@ console.log(userBikes);
     if(hasAllActivitiesLoaded) {      
       addAllUserBikes();
     }
-  }, [hasAllActivitiesLoaded]);
-  
-
-
-  
-
- 
-  
-
-  
+  }, [hasAllActivitiesLoaded]);  
 
   
  
   
   
     return (
-      <CurrentUserContext.Provider value={currentUser}>             
+      <CurrentUserContext.Provider value={currentUser}> 
+      <ActivitiesLoadingState.Provider value={hasAllActivitiesLoaded}>            
         <Routes>
           <Route element={<AppLayout isLoggedIn={isLoggedIn} onLogout={logout} errMessage={errMessage}/>}>
             
             <Route path='/registration' element={!isLoggedIn ? <RegPage handleRegistration={handleRegistration} /> : <Navigate to='/' replace={true} />} />
             <Route path='/login' element={!isLoggedIn ? <LoginPage handleLogin={handleLogin} /> : <Navigate to='/' replace={true} />} />        
             
-            <Route path='/about' element={<About />} />
-    
             <Route element={<ProtectedRoute hasAccess={!accessToStrava} />}>
               <Route path='/access' element={<AccessPage />} />
-            </Route>  
+            </Route> 
+       
             <Route element={<ProtectedRoute hasAccess={isLogged} />}>
-              
               <Route path='/' element={<Main />}  />
               <Route path='/stats' 
                 element={<Stats               
@@ -329,8 +319,7 @@ console.log(userBikes);
                   yearsAtStrava={yearsAtStrava} 
                   allRidesTotals={allRidesTotals} 
                   allYTDRidesTotals={allYTDRidesTotals} 
-                  isLoading={isLoading}
-                  hasActivitiesLoaded = {hasAllActivitiesLoaded} 
+                  isLoading={isLoading} 
                   allActivities={allActivities} 
                 />}
               />          
@@ -346,7 +335,8 @@ console.log(userBikes);
             </Route>
             <Route path='/*' element={<Page404 />} />
           </Route>        
-      </Routes>      
+        </Routes>      
+      </ActivitiesLoadingState.Provider>
       </CurrentUserContext.Provider>
     );
   }

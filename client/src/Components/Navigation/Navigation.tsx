@@ -13,11 +13,7 @@ const navLinks: navLink[] = [
   {
     title: 'Главная страница',
     link: '/'
-  },
-  {
-    title: 'О проекте',
-    link: '/about'
-  },
+  },  
   {
     title: 'Мои тренировки',
     link: '/stats'

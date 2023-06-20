@@ -7,7 +7,6 @@ import StatsYearCard from '../StatsYearCard/StatsYearCard';
 
 interface StatsYearsListProps {
   isLoading: boolean
-  hasActivitiesLoaded: boolean
   registrationYear: number
   yearsAtStrava: (p: number) => number[]
   allActivities: Activity[]
@@ -18,14 +17,13 @@ interface StatsYearsListProps {
   totalOverHundredRides: (y: number) => number
 }
 
-export default function StatsYearsList({isLoading, hasActivitiesLoaded, yearsAtStrava, allActivities, totalDistance, totalTime, totalTrainings, yearLongestDistance, totalOverHundredRides}: StatsYearsListProps) {
+export default function StatsYearsList({isLoading, yearsAtStrava, allActivities, totalDistance, totalTime, totalTrainings, yearLongestDistance, totalOverHundredRides}: StatsYearsListProps) {
   return (
     <ul className='years-list'>
       {yearsAtStrava(currentYear).reverse().map((year: number, i: number) => (
           <li key={i}>
             <StatsYearCard
               isLoading={isLoading}
-              hasActivitiesLoaded={hasActivitiesLoaded}
               year={year}
               allActivities={allActivities}
               totalDistance={totalDistance}

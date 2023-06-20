@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { Activity } from '../../models/Activity';
 import { Preloader } from '../Preloader/Preloader';
-import { log } from 'console';
+import { ActivitiesLoadingState } from '../../contexts/ActivitiesLoadingState';
 
 
 interface StatsYearCardProps {
   isLoading: boolean
-  hasActivitiesLoaded: boolean
   year: number
   allActivities: Activity[]
   totalDistance: (y: number) => number
@@ -17,13 +16,14 @@ interface StatsYearCardProps {
 }
 
 
-export default function StatsYearCard({isLoading, hasActivitiesLoaded, year, allActivities, totalDistance, totalTime, totalTrainings, yearLongestDistance, totalOverHundredRides}: StatsYearCardProps) {
+export default function StatsYearCard({isLoading, year, allActivities, totalDistance, totalTime, totalTrainings, yearLongestDistance, totalOverHundredRides}: StatsYearCardProps) {
+
+const hasActivitiesLoaded = React.useContext(ActivitiesLoadingState);
 
   const [isStatsShown, setIsStatsShown] = useState<boolean>(false);
 
   const dashboardClassName = `stats_dashboard ${isStatsShown ? 'stats_dashboard_on' : ''}`;
   const emptyDashboardClassName = `stats_dashboard stats_dashboard_empty ${isStatsShown ? 'stats_dashboard_on' : ''}`;
-
   const openerIconClassName = isStatsShown ? 'stats__opener-icon_hide' : 'stats__opener-icon_show';
   const yearStatsButtonText = isStatsShown ? 'скрыть' : 'показать статистику';
 
@@ -32,7 +32,6 @@ export default function StatsYearCard({isLoading, hasActivitiesLoaded, year, all
     setIsStatsShown(v => !v);
   }
   
-  console.log(hasActivitiesLoaded);
   
 
   return (
@@ -42,7 +41,9 @@ export default function StatsYearCard({isLoading, hasActivitiesLoaded, year, all
         <div className='year_card__stats'>
           <div className='stats__wrapper'>
             <p className='stats__opener-text'>Загрузка...</p>   
-            <div className='preloader_small'><Preloader isLoading={!hasActivitiesLoaded} /></div>         
+            <div className='preloader_small'>
+              <Preloader isLoading={!hasActivitiesLoaded} />
+            </div>         
           </div>          
         </div>
       ) : ( 
@@ -83,8 +84,7 @@ export default function StatsYearCard({isLoading, hasActivitiesLoaded, year, all
           <div className={emptyDashboardClassName}>
             <p className='stats__text'>Тренировки не найдены</p>
           </div>
-        )}
-        
+        )}        
       </div>
       )}
     </div>
