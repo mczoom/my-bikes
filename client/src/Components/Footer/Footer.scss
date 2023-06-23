@@ -1,0 +1,22 @@
+.footer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.footer__text {
+    margin: 0;
+}
+
+.footer__strava {
+    display: flex;
+    flex-direction: column;
+    align-items: end;    
+}
+
+.strava__text {
+    margin: 0;
+}
+
+.strava__logo {    
+    width: 200px;    
+}

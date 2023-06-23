@@ -2,6 +2,7 @@ import { Outlet, useLocation, useNavigation } from "react-router-dom";
 import Header from "../Header/Header";
 import ErrorMessagePopup from "../ErrorMessagePopup/ErrorMessagePopup";
 import { useEffect } from "react";
+import Footer from "../Footer/Footer";
 
 interface AppLayoutProps {
     isLoggedIn: boolean
@@ -19,6 +20,7 @@ export default function AppLayout({isLoggedIn, onLogout, errMessage}: AppLayoutP
         <main>
           <Outlet />
         </main>  
+        <Footer />
         <ErrorMessagePopup errMsg={errMessage}/>
       </div>
     )
