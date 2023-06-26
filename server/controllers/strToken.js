@@ -78,14 +78,4 @@ module.exports.getStrToken = (req, res, next) => {
 
 
 
-// module.exports.tokenCheck = (req, res, next) => {  
-//   const userID = req.user._id;
-   
-//   StravaToken.findOne({userID})
-//     .then((tokenData) => {        
-//       res.send({expTime: tokenData.expires_at})      
-//     })      
-//     .catch(next);  
-// };
-
 

@@ -1,4 +1,5 @@
 $page-background: #4d6d9a; // синий
+
 // $page-background: #363636;  // серый
 $text: red;
 // $page-background: #d37172;  //кирпичный
@@ -18,8 +19,10 @@ body {
   background-color: $page-background;
 }
 
-main {
-  padding: 0 80px;
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 #root {
@@ -30,17 +33,13 @@ main {
 
 .page {
   position: relative;
-}
-
-ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+  min-height: 100vh;
 }
 
 .link {
   text-decoration: none;
 }
+
 p, h2 {
   color: black;
 }

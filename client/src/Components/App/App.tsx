@@ -20,6 +20,7 @@ import LoginPage from '../LoginPage/LoginPage';
 import { Bike } from '../../models/Bike';
 import AppLayout from '../AppLayout/AppLayout';
 import { ActivitiesLoadingState } from '../../contexts/ActivitiesLoadingState';
+import About from '../About/About';
 
 
 
@@ -231,6 +232,7 @@ function App() {
         setUserBikes(currentUser.bikes)       
       })
       .catch((err) => {
+        setErrMessage([...errMessage, `Не удалось получить данные пользователя: ${err.message}`])
         console.log(`Не удалось получить данные пользователя: ${err.message}`);        
       });    
   }
@@ -310,6 +312,8 @@ console.log(userBikes);
             <Route element={<ProtectedRoute hasAccess={!accessToStrava} />}>
               <Route path='/access' element={<AccessPage />} />
             </Route> 
+
+            <Route path='/about' element={<About />} />
        
             <Route element={<ProtectedRoute hasAccess={isLogged} />}>
               <Route path='/' element={<Main />}  />

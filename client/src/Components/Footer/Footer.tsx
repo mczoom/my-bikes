@@ -11,7 +11,7 @@ export default function Footer() {
 
   return (
     <footer className='footer'>
-      <p className='footer__text'>My-Bikes {yearsInService}</p>
+      <p className='footer__text'>My-Bikes. {yearsInService}</p>
       <div className='footer__strava'>
         <p className='strava__text'>Сайт использует данные сервиса Strava</p>
         <img src={poweredByStravaLogo} className='strava__logo'></img>

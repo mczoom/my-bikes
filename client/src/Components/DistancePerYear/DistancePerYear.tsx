@@ -18,7 +18,7 @@ export default function DistancePerYear({year, distancePerYear}: DistancePerYear
   return (
     <>
       {distanceInKM(year) > 0 &&
-        ( <p className='distance-card__text'>{year}: <span className='distance-card__year'>{distanceInKM(year)}</span> км</p> )
+        ( <p className='distance-card__year'>{year}: <span className='distance-card__dist'>{distanceInKM(year)}</span> км</p> )
       }
     </>
   )
