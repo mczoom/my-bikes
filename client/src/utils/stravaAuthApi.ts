@@ -20,7 +20,6 @@ export function exchangeToken() {
     get: (searchParams, prop:string) => searchParams.get(prop),
   });
   const accessToken: string = params.code;  // Get the value of "some_key" in eg "https://example.com/?some_key=some_value"
-  console.log(accessToken);
   
 
   return fetch(`${BASE_URL}/strtokenexchange`, {
@@ -32,9 +31,9 @@ export function exchangeToken() {
     body: JSON.stringify({token: accessToken}),
   })
   .then(res => res.json())
-  .then((token: stravaToken) => {    
-    localStorage.setItem('stravaToken', token.strToken);
-  })
+  // .then((token: stravaToken) => {    
+  //   localStorage.setItem('stravaToken', token.strToken);
+  // })
   .catch((err) => console.log(`${err} 'Ошибка получения Strava токена'`))
 };
 

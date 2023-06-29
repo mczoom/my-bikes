@@ -157,7 +157,7 @@ function App() {
     .then(async (res) => {
       if (res.token) {     
         localStorage.setItem('jwt', res.token);
-        await setStrTokenToLocalStorage();
+        //await setStrTokenToLocalStorage();
         setIsLoggedIn(true);
         localStorage.setItem('logged', 'true')
         setErrMessage([]);      
@@ -218,7 +218,7 @@ function App() {
 
   async function getCurrentUserInfo() {
     await checkStravaToken();    
-    // await setActualStrTokenToLocalStorage();    
+    // await setStrTokenToLocalStorage();    
     getCurrentAthlete()
       .then((res) => {
         if(!res.id) {
@@ -276,10 +276,11 @@ console.log(userBikes);
 
 
   useEffect(() => {
-    if(isLoggedIn) {
+    const token = localStorage.getItem('stravaToken');
+    if(token) {
       getCurrentUserInfo()
     }  
-  }, [isLoggedIn]);
+  }, []);
   console.log(currentUser);
 
 
