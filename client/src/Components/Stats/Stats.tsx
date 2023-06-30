@@ -3,7 +3,7 @@ import StatsYearsList from '../StatsYearsList/StatsYearsList';
 import CommonStats from '../CommonStats/CommonStats';
 import { AthleteStats } from '../../models/AthleteStats';
 import { Activity } from '../../models/Activity';
-import ActivitiesCalendar from '../About/ActivitiesCalendar/ActivitiesCalendar';
+import ActivitiesCalendar from '../ActivitiesCalendar/ActivitiesCalendar';
 
 
 

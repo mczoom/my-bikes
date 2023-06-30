@@ -8,7 +8,7 @@ import Stats from '../Stats/Stats';
 import { getStravaToken, stravaTokenCheck } from '../../utils/stravaAuthApi';
 import {getCurrentAthlete, getActivities, getAthlete} from '../../utils/stravaApi';
 import {Profile} from '../../models/Profile';
-import AccessPage from '../AccessPage/AccessPage';
+import StravaAccessPage from '../StravaAccessPage/StravaAccessPage';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import Garage from '../Garage/Garage';
 import { Activity } from '../../models/Activity';
@@ -20,7 +20,7 @@ import LoginPage from '../LoginPage/LoginPage';
 import { Bike } from '../../models/Bike';
 import AppLayout from '../AppLayout/AppLayout';
 import { ActivitiesLoadingState } from '../../contexts/ActivitiesLoadingState';
-import About from '../About/About';
+import StravaAccessResult from '../About/StravaAccessResult';
 
 
 
@@ -310,10 +310,10 @@ console.log(userBikes);
             <Route path='/login' element={!isLoggedIn ? <LoginPage handleLogin={handleLogin} /> : <Navigate to='/' replace={true} />} />        
             
             <Route element={<ProtectedRoute hasAccess={!accessToStrava} />}>
-              <Route path='/access' element={<AccessPage />} />
+              <Route path='/access' element={<StravaAccessPage />} />
             </Route> 
 
-            <Route path='/about' element={<About getCurrentUserInfo={getCurrentUserInfo} />} />
+            <Route path='/access-result' element={<StravaAccessResult getCurrentUserInfo={getCurrentUserInfo} />} />
        
             <Route element={<ProtectedRoute hasAccess={isLogged} />}>
               <Route path='/' element={<Main />}  />
