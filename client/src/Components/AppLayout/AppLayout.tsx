@@ -14,14 +14,14 @@ export default function AppLayout({isLoggedIn, onLogout, errMessage}: AppLayoutP
 
       
   
-    return (
-      <div className="page">
-        <Header isLoggedIn={isLoggedIn} onLogout={onLogout} />
-        <main>
-          <Outlet />
-        </main>  
-        <Footer />
-        <ErrorMessagePopup errMsg={errMessage}/>
-      </div>
-    )
-  }
+  return (
+    <div className="page">
+      <Header isLoggedIn={isLoggedIn} onLogout={onLogout} />
+      <main>
+        <Outlet />
+      </main>  
+      <Footer />
+      <ErrorMessagePopup errMsg={errMessage}/>
+    </div>
+  )
+}

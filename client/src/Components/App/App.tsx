@@ -106,7 +106,7 @@ function App() {
         const isTrainer = checkTrainer(bike.id)
         return {...bike, trainer: isTrainer};
       });
-    appApi.addAllBikes(userBikes);    
+      appApi.addAllBikes(userBikes);    
     }
   }
 
@@ -118,20 +118,20 @@ function App() {
     }
   }
 
-  async function setStrTokenToLocalStorage() {
-    await getStravaToken()
-      .then((res) => {
-        console.log(res);
-        if(res.message) {
-          throw new Error(res.message);
-        }  
-        localStorage.setItem('stravaToken', res.strToken)
-      })
-      .catch((err) => {
-        setErrMessage([...errMessage, `Ошибка: ${err.message}`])
-      });
+  // async function setStrTokenToLocalStorage() {
+  //   await getStravaToken()
+  //     .then((res) => {
+  //       console.log(res);
+  //       if(res.message) {
+  //         throw new Error(res.message);
+  //       }  
+  //       localStorage.setItem('stravaToken', res.strToken)
+  //     })
+  //     .catch((err) => {
+  //       setErrMessage([...errMessage, `Ошибка: ${err.message}`])
+  //     });
       
-  }
+  // }
 
   
 
@@ -154,10 +154,9 @@ function App() {
 
   function handleLogin(login: string, password: string) {
     appApi.login(login, password)
-    .then(async (res) => {
+    .then((res) => {
       if (res.token) {     
         localStorage.setItem('jwt', res.token);
-        //await setStrTokenToLocalStorage();
         setIsLoggedIn(true);
         localStorage.setItem('logged', 'true')
         setErrMessage([]);      
@@ -172,7 +171,7 @@ function App() {
   };
 
 
-  function getUserStats(user: Profile) {
+  function getUserRideStats(user: Profile) {
     setIsLoading(true);
     getAthlete(user.id)
       .then((res) => {
@@ -220,12 +219,12 @@ function App() {
     await checkStravaToken();    
     // await setStrTokenToLocalStorage();    
     getCurrentAthlete()
-      .then((res) => {
-        if(!res.id) {
-         throw new Error(res.message)         
+      .then((user) => {
+        if(!user.id) {
+         throw new Error(user.message)         
         }
-        setCurrentUser(res); 
-        return res;       
+        setCurrentUser(user); 
+        return user;       
       })      
       .then((currentUser) => {      
         getAllActivities(currentUser); 
@@ -286,7 +285,7 @@ console.log(userBikes);
 
   useEffect(() => {
     if(currentUser.id) {
-      getUserStats(currentUser);
+      getUserRideStats(currentUser);
     }
   }, [currentUser]);
 
@@ -305,7 +304,7 @@ console.log(userBikes);
       <CurrentUserContext.Provider value={currentUser}> 
       <ActivitiesLoadingState.Provider value={hasAllActivitiesLoaded}>            
         <Routes>
-          <Route element={<AppLayout isLoggedIn={isLoggedIn} onLogout={logout} errMessage={errMessage}/>}>
+          <Route path='/' element={<AppLayout isLoggedIn={isLoggedIn} onLogout={logout} errMessage={errMessage}/>}>
             
             <Route path='/registration' element={!isLoggedIn ? <RegPage handleRegistration={handleRegistration} /> : <Navigate to='/' replace={true} />} />
             <Route path='/login' element={!isLoggedIn ? <LoginPage handleLogin={handleLogin} /> : <Navigate to='/' replace={true} />} />        
@@ -314,7 +313,7 @@ console.log(userBikes);
               <Route path='/access' element={<AccessPage />} />
             </Route> 
 
-            <Route path='/about' element={<About />} />
+            <Route path='/about' element={<About getCurrentUserInfo={getCurrentUserInfo} />} />
        
             <Route element={<ProtectedRoute hasAccess={isLogged} />}>
               <Route path='/' element={<Main />}  />

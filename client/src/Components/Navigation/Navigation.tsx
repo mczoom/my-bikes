@@ -11,15 +11,11 @@ export default function Navigation() {
 
 const navLinks: navLink[] = [
   {
-    title: 'Главная страница',
-    link: '/'
-  },  
-  {
-    title: 'Мои тренировки',
+    title: 'Тренировки',
     link: '/stats'
   },
   {
-    title: 'Мои велосипеды',
+    title: 'Велосипеды',
     link: '/garage'
   },
   {

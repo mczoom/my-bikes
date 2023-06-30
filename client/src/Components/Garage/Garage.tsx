@@ -37,8 +37,8 @@ export default function Garage({userBikesStrava, yearsAtStrava, activities, bike
   const [curentBikeId, setCurentBikeId] = useState<string>('');
 
   
-  function checkForNewBikesInStrava(strBikes: Bike[], savedBikes: Bike[]): Bike[] {    
-    const newBike = strBikes.filter((b) => savedBikes.every((bike) => !bike.id.includes(b.id)));
+  function checkForNewBikesInStrava(stravaBikes: Bike[], savedBikes: Bike[]): Bike[] {    
+    const newBike = stravaBikes.filter((b) => savedBikes.every((bike) => !bike.id.includes(b.id)));
     return newBike;        
   }
     
@@ -51,8 +51,7 @@ export default function Garage({userBikesStrava, yearsAtStrava, activities, bike
             appApi.addBike(newBikes);
           }          
           setUserBikes(bikes); 
-          setBikesToRender(bikes);
-       
+          setBikesToRender(bikes);       
       })
       .catch(err => console.log(err));
   };

@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import SectionCardsList from '../SectionCardsList/SectionCardsList';
-import AccessButton from '../AccessButton/AccessButton';
 
 
 
 export default function Main() {
+
+  
   return (
     <section className='main'>
       <SectionCardsList />
