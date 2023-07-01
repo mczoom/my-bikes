@@ -92,18 +92,31 @@ function App() {
   }; 
 
 
-  function checkTrainer(bikeId: string): boolean | undefined {
-    const bike = allActivities.find((activity) => {
-      return activity.gear_id === bikeId;
+  // function checkTrainer(bikeId: string): boolean | undefined {
+  //   const bike = allActivities.find((activity) => {
+  //     return activity.gear_id === bikeId;
+  //   });
+  //     return bike?.trainer;
+  // };
+
+
+  function checkIfTrainer(bikeId: string): boolean {
+    const trainings = allActivities.filter((activity: Activity) => {
+      return activity.gear_id === bikeId
     });
-      return bike?.trainer;
+
+    const isTrainer = trainings.every((ride) => {
+      return ride.trainer === true;
+    })
+        
+    return isTrainer;
   };
 
   
   function addAllUserBikes() {
     if(currentUser.id && currentUser.bikes.length !== 0) {
       const userBikes: Bike[] = currentUser.bikes.map((bike) => {  
-        const isTrainer = checkTrainer(bike.id)
+        const isTrainer = checkIfTrainer(bike.id)
         return {...bike, trainer: isTrainer};
       });
       appApi.addAllBikes(userBikes);    
