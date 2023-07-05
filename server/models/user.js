@@ -17,7 +17,28 @@ const userSchema = new mongoose.Schema({
     minlength: 6,
     select: false,
   },
+  accessToStrava: {
+    type: Boolean,
+    default: false,
+  },
+  read: {
+    type: Boolean,
+    default: false,
+  },
+  read_all: {
+    type: Boolean,
+    default: false,
+  },
+  activity_read_all: {
+    type: Boolean,
+    default: false,
+  },
+  profile_read_all: {
+    type: Boolean,
+    default: false,
+  }
 });
+
 
 userSchema.statics.findUserByCredentials = function (login, password) {
   return this.findOne({ login }).select('+password')

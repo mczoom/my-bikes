@@ -80,3 +80,17 @@ export function stravaTokenCheck() {
   .then((res) => res.json())
   .catch(() => console.log('Ошибка'))
 };
+
+
+export function addStravaPermissions(scope: string[] | undefined) {
+  return fetch(`${BASE_URL}/strava-permissions`, {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem('jwt')}`
+    },
+    body: JSON.stringify({scope}),
+  })
+  .then(res => res.json())  
+  .catch((err) => console.log(`Ошибка добавления Strava доступов`))
+};
