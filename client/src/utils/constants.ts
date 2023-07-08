@@ -8,6 +8,8 @@ export const clientId = 98790;
 export const stravaAuthUrl: string = 'https://www.strava.com/oauth/token';
 export const stravaApiUrl: string = 'https://www.strava.com/api/v3';
 
+export const mandatoryStravaPermissions = ['read', 'activity:read_all', 'profile:read_all', 'read_all'];
+
 export const currentYear: number = new Date().getFullYear();
 
 export const fromYear = (y: number): number => {

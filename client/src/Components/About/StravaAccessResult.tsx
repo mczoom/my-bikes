@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react'
 import { addStravaPermissions, exchangeToken } from '../../utils/stravaAuthApi'
 import { useNavigate } from 'react-router-dom';
+import { mandatoryStravaPermissions } from '../../utils/constants';
 
-interface AboutProps {
+interface StravaAccessResultProps {
   getCurrentUserInfo: () => void
+  onError: (errMsg: string) => void
 }
 
 
@@ -12,10 +14,10 @@ interface stravaToken {
 }
 
 
-export default function StravaAccessResult ({getCurrentUserInfo}: AboutProps) {
+export default function StravaAccessResult ({getCurrentUserInfo, onError}: StravaAccessResultProps) {
 
   const navigate = useNavigate();
-  const mandatoryStravaPermissions = ['read', 'activity:read_all', 'profile:read_all', 'read_all'];
+  
   const stravaPermissions = getStravaPermissionsScope();
 
   function getStravaPermissionsScope(): string[] | undefined {
@@ -25,42 +27,51 @@ export default function StravaAccessResult ({getCurrentUserInfo}: AboutProps) {
     const scope: string = params.scope;    
     const scopeArr = scope?.split(',');
 
-    if(!scope || scopeArr.length !== mandatoryStravaPermissions.length) {      
-      navigate('/access');
+    if(!scope || scopeArr.length !== mandatoryStravaPermissions.length) {       
       return;
     } else {      
       return scopeArr;       
     };  
-  };
-
-  console.log(stravaPermissions);
-  
+  };  
     
 
   function setStrTokenToLocalStorageAfterRegistration() {    
     exchangeToken()
       .then((token: stravaToken) => {          
         localStorage.setItem('stravaToken', token.strToken);
-        getCurrentUserInfo();
-        navigate('/');
+        getCurrentUserInfo();        
       })      
       .catch((err) => console.log(err));      
   };
 
-  async function setStravaTokenAndPermissionsAfterRegistration() {
-    if (stravaPermissions) {
-      await addStravaPermissions(stravaPermissions);
-      setStrTokenToLocalStorageAfterRegistration();
+
+  function setStravaTokenAndPermissionsAfterRegistration(permissions: string[] | undefined) {    
+    addStravaPermissions(permissions)
+      .then(() => {
+        setStrTokenToLocalStorageAfterRegistration();
+        navigate('/');
+      })
+      .catch((err) => {
+        onError(err)
+        console.log(err);
+        navigate('/access');
+      });    
+  }
+
+  
+  function manageStravaTokenAndPermissionsAfterRegistration(permits: string[] | undefined) {
+    if (permits) {
+      setStravaTokenAndPermissionsAfterRegistration(permits);      
     } else {
-      return;
+      navigate('/access');
+      console.log('Необходимо разрешить приложению доступ к аккаунту Strava');   
+      onError('Необходимо разрешить приложению доступ к аккаунту Strava');     
     }
   };
   
 
   useEffect(() => {
-    console.log(stravaPermissions);
-    
-    setStravaTokenAndPermissionsAfterRegistration();        
+    manageStravaTokenAndPermissionsAfterRegistration(stravaPermissions);
   }, []);
   
   

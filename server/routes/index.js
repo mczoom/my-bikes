@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { login, createUser, getUser, addStravaPermissions } = require('../controllers/users');
+const { login, createUser, getUser, addStravaPermissions, checkStravaPermissions } = require('../controllers/users');
 const { addAllBikes, getAllBikes, updateBikeInfo, updateOdo, addBike } = require('../controllers/bikes');
 const { auth } = require('../middlewares/auth');
 const { exchangeStrToken, refreshStrToken, getStrToken } = require('../controllers/strToken');
@@ -14,6 +14,7 @@ router.post('/signup', createUser);
 router.post('/signin', login);
 
 router.post('/strava-permissions', auth, addStravaPermissions);
+router.get('/strava-permissions', auth, checkStravaPermissions);
 
 router.get('/strtoken', auth, getStrToken);
 router.post('/strtokenexchange', auth, exchangeStrToken);
