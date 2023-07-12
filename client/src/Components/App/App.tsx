@@ -131,20 +131,20 @@ function App() {
     }
   }
 
-  // async function setStrTokenToLocalStorage() {
-  //   await getStravaToken()
-  //     .then((res) => {
-  //       console.log(res);
-  //       if(res.message) {
-  //         throw new Error(res.message);
-  //       }  
-  //       localStorage.setItem('stravaToken', res.strToken)
-  //     })
-  //     .catch((err) => {
-  //       setErrMessage([...errMessage, `Ошибка: ${err.message}`])
-  //     });
+  async function setStrTokenToLocalStorage() {
+    await getStravaToken()
+      .then((res) => {
+        console.log(res);
+        if(res.message) {
+          throw new Error(res.message);
+        }  
+        localStorage.setItem('stravaToken', res.strToken)
+      })
+      .catch((err) => {
+        setErrMessage([...errMessage, `Ошибка: ${err.message}`])
+      });
       
-  // }
+  }
 
   
 
@@ -276,12 +276,18 @@ console.log(userBikes);
   function logout() {
     localStorage.clear();
     setIsLoggedIn(false);
+    setCurrentUser({} as Profile);
   };
+
+  function handleErrors(errMsg: string) {
+    setErrMessage([...errMessage, errMsg])
+  }
 
 
   useEffect(() => {
     setErrMessage([]);
     checkAppToken();
+    setStrTokenToLocalStorage();
     checkStravaToken();
     updateBikeDistance();    
   }, []);
@@ -326,7 +332,7 @@ console.log(userBikes);
               <Route path='/access' element={<StravaAccessPage />} />
             </Route> 
 
-            <Route path='/access-result' element={<StravaAccessResult getCurrentUserInfo={getCurrentUserInfo} />} />
+            <Route path='/access-result' element={<StravaAccessResult getCurrentUserInfo={getCurrentUserInfo} onError={handleErrors} />} />
        
             <Route element={<ProtectedRoute hasAccess={isLogged} />}>
               <Route path='/' element={<Main />}  />

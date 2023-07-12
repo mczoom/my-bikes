@@ -6,11 +6,11 @@ interface stravaToken {
 }
 
 
-const handleResponse = (res:any) => {
+const handleResponse = (res:any, errMsg:string) => {
   if (res.ok) {
     return res.json();
-  }
-  return Promise.reject(`Ошибка: ${res.status}`);
+  };  
+  return Promise.reject(errMsg);
 }
 
 
@@ -79,4 +79,34 @@ export function stravaTokenCheck() {
   })
   .then((res) => res.json())
   .catch(() => console.log('Ошибка'))
+};
+
+
+export function addStravaPermissions(scope: string[] | undefined) {
+  return fetch(`${BASE_URL}/strava-permissions`, {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem('jwt')}`
+    },
+    body: JSON.stringify({scope}),
+  })
+  .then(res => handleResponse(res, 'Необходимо разрешить приложению доступ к аккаунту Strava'))  
+  .catch((err) => console.log(err));
+};
+
+
+export function checkStravaPermissions() {
+  return fetch(`${BASE_URL}/strava-permissions`, {    
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem('jwt')}`
+    },
+  })
+  .then(res => res.json())
+  // .then((res) => {
+  //   localStorage.setItem('isStravaConnected', res);
+  //   return res;
+  // })
+  .catch((err) => console.log(err));
 };
