@@ -1,5 +1,4 @@
 import { stravaApiUrl } from './constants';
-//import { getStravaToken } from './stravaAuthApi';
 
 
 
@@ -51,5 +50,11 @@ export const getActivities = ({fromDate, tillDate, page = 1, perPage = 200}: Act
     }
   })
   .then((res) => res.json())
-  .catch((err) => console.log(err))
+  .then((res) => {
+    if(res.errors) {
+      throw new Error('Что-то пошло не так...')
+    }
+    return res;
+  })
+  .catch((err) => console.log(`${err} Ошибка получения списка тренировок`))
 };

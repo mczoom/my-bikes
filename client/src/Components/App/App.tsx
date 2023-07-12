@@ -5,7 +5,7 @@ import {Route, useNavigate, Navigate, Routes } from 'react-router-dom';
 import * as appApi from '../../utils/appApi';
 import Main from '../Main/Main';
 import Stats from '../Stats/Stats';
-import { getStravaToken, stravaTokenCheck } from '../../utils/stravaAuthApi';
+import { checkStravaPermissions, getStravaToken, stravaTokenCheck } from '../../utils/stravaAuthApi';
 import {getCurrentAthlete, getActivities, getAthlete} from '../../utils/stravaApi';
 import {Profile} from '../../models/Profile';
 import StravaAccessPage from '../StravaAccessPage/StravaAccessPage';
@@ -30,6 +30,7 @@ function App() {
 
   const accessToStrava: string | null = localStorage.getItem('accessToStrava');
 
+  const [isStravaConnected, setIsStravaConnected] = useState(() => JSON.stringify(localStorage.getItem('isStravaConnected')));
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<Profile>({} as Profile);
   const [allActivities, setAllActivities] = useState<Activity[]>([]);
@@ -38,7 +39,7 @@ function App() {
   const [allRidesTotals, setAllRidesTotals] = useState<AthleteStats>({} as AthleteStats);
   const [allYTDRidesTotals, setAllYTDRidesTotals] = useState<AthleteStats>({} as AthleteStats);
   const [errMessage, setErrMessage] = useState<string[]>([]);
-
+  
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -56,7 +57,12 @@ function App() {
             code: string
         }
     ]
-  }
+  };
+
+
+  function checkIsAppConnectedToStrava() {
+    checkStravaPermissions();
+  };
   
 
   function checkAppToken() {
@@ -171,7 +177,8 @@ function App() {
       if (res.token) {     
         localStorage.setItem('jwt', res.token);
         setIsLoggedIn(true);
-        localStorage.setItem('logged', 'true')
+        localStorage.setItem('logged', 'true');
+        //checkIsAppConnectedToStrava();
         setErrMessage([]);      
       } else if (res.message) {
         throw new Error(res.message);
@@ -247,6 +254,10 @@ function App() {
         setErrMessage([...errMessage, `Не удалось получить данные пользователя: ${err.message}`])
         console.log(`Не удалось получить данные пользователя: ${err.message}`);        
       });    
+  };
+
+  function handleErrorMessage(errMsg: string) {
+    setErrMessage([...errMessage, errMsg])
   }
 
 
@@ -287,12 +298,17 @@ console.log(userBikes);
   useEffect(() => {
     setErrMessage([]);
     checkAppToken();
-    setStrTokenToLocalStorage();
     checkStravaToken();
     updateBikeDistance();    
   }, []);
 
+  useEffect(() => {
+    
+    checkIsAppConnectedToStrava();
+      
+  }, [isStravaConnected]);
 
+  
   useEffect(() => {
     const token = localStorage.getItem('stravaToken');
     if(token) {
@@ -315,6 +331,8 @@ console.log(userBikes);
     }
   }, [hasAllActivitiesLoaded]);  
 
+  console.log(isLoggedIn);
+  console.log(isStravaConnected);
   
  
   
@@ -328,13 +346,15 @@ console.log(userBikes);
             <Route path='/registration' element={!isLoggedIn ? <RegPage handleRegistration={handleRegistration} /> : <Navigate to='/' replace={true} />} />
             <Route path='/login' element={!isLoggedIn ? <LoginPage handleLogin={handleLogin} /> : <Navigate to='/' replace={true} />} />        
             
-            <Route element={<ProtectedRoute hasAccess={!accessToStrava} />}>
+            <Route path='/access' element={<StravaAccessPage />} />
+            
+            {/* <Route element={<ProtectedRoute hasAccess={!isStravaConnected} />}>
               <Route path='/access' element={<StravaAccessPage />} />
-            </Route> 
+            </Route>  */}
 
-            <Route path='/access-result' element={<StravaAccessResult getCurrentUserInfo={getCurrentUserInfo} onError={handleErrors} />} />
+            <Route path='/access-result' element={<StravaAccessResult getCurrentUserInfo={getCurrentUserInfo} onError={handleErrors}/>} />
        
-            <Route element={<ProtectedRoute hasAccess={isLogged} />}>
+            <Route element={<ProtectedRoute hasAccess={isStravaConnected} />}>
               <Route path='/' element={<Main />}  />
               <Route path='/stats' 
                 element={<Stats               
