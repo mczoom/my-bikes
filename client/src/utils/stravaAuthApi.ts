@@ -66,6 +66,13 @@ export const getStravaToken = () => {
     },    
   })
   .then((res) => res.json())
+  .then((res) => {
+    if(res.message) {
+      throw new Error(res.message);
+    }  
+    localStorage.setItem('stravaToken', res.strToken);
+    return res.strToken;
+  })
   .catch(err => console.log(err));
 };
 

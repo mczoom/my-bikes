@@ -1,6 +1,6 @@
 const StravaToken = require("../models/stravaToken");
 
-module.exports.createStravaToken = async (tokenInfo, userId) => {    
+module.exports.createStravaToken = (tokenInfo, userId) => {    
     StravaToken.create({
       access_token: tokenInfo.access_token, 
       refresh_token: tokenInfo.refresh_token, 

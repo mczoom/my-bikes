@@ -10,7 +10,7 @@ export default function ProtectedRoute({hasAccess}: ProtectedRouteProps) {
   
   return (
     <div>
-      {hasAccess ? <Outlet /> : <Navigate to="/access" />}
+      {hasAccess ? <Outlet /> : <Navigate to="/login" />}
     </div>
   )
 }
