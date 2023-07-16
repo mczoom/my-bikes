@@ -78,14 +78,13 @@ function App() {
       .catch(() => {
         setIsLoggedIn(false);
         localStorage.setItem('logged', '');
-        setErrMessage([...errMessage, 'Неправильный токен приложения, необходимо авторизоваться']);
+        setErrMessage([...errMessage, 'Необходимо авторизоваться в приложении']);
       });             
     }
   };
 
 
-  async function checkStravaToken() {
-    const token = localStorage.getItem('stravaToken');
+  async function checkStravaToken(token: string) {
     if(token) {
       await stravaTokenCheck()
         .then((res: {accessToken: string}) => {
@@ -111,23 +110,22 @@ function App() {
   };
 
   
-  function addAllUserBikes(currentUser: any) {
+  async function addAllUserBikes(currentUser: any) {
     if(currentUser.bikes.length !== 0) {
       const userBikesFromStrava: Bike[] = currentUser.bikes.map((bike: Bike) => {  
         const isTrainer = checkIfTrainer(bike.id)
         return {...bike, trainer: isTrainer};
       });
-      appApi.addAllBikes(userBikesFromStrava);    
+      await appApi.addAllBikes(userBikesFromStrava);    
     }
   };
 
 
-  function updateBikeDistance() {
-    if(currentUser.id) {
-      const currentUserBikes: Bike[] = currentUser.bikes;
-      appApi.updateBikeOdo(currentUserBikes);
-    }
+  function updateBikeDistance(currentUser: Profile) {    
+    const currentUserBikes: Bike[] = currentUser.bikes;
+    appApi.updateBikeOdo(currentUserBikes);
   };
+  
 
   function setStrTokenToLocalStorage() {
     getStravaToken()
@@ -145,10 +143,15 @@ function App() {
 
 
   function onAppLoad() {
+    //checkAppToken();
     getStravaToken()
-      .then((stravaToken) => {
-        getCurrentUserInfo();
+      .then((stravaToken: string) => {
+        if(!stravaToken) {
+          throw new Error('StravaToken не найден')
+        };  
+        return checkStravaToken(stravaToken);
       })
+      .then((res) => getCurrentUserInfo())
       .catch((err) => {
         setErrMessage([...errMessage, `Ошибка: ${err.message}`])
       });      
@@ -205,10 +208,8 @@ function App() {
   };
 
 
-  async function getAllActivities(user: Profile) {    
-        
-    if(hasAllActivitiesLoaded) {
-      
+  async function getAllActivities(user: Profile) {        
+    if(hasAllActivitiesLoaded) {      
       return allActivities;
     };
     setHasAllActivitiesLoaded(false);
@@ -253,13 +254,15 @@ function App() {
         setCurrentUser(user); 
         return user;       
       })      
-      .then(async(currentUser) => {      
+      .then(async(currentUser) => { 
+        getUserRideStats(currentUser);     
         await getAllActivities(currentUser);
         return currentUser;       
       })
-      .then((currentUser) => {
+      .then(async(currentUser) => {
         setUserBikes(currentUser.bikes);
-        addAllUserBikes(currentUser);
+        await addAllUserBikes(currentUser);
+        updateBikeDistance(currentUser);
       })
       .catch((err) => {
         setErrMessage([...errMessage, `Не удалось получить данные пользователя: ${err.message}`])
@@ -309,8 +312,7 @@ console.log(userBikes);
   useEffect(() => {
     setErrMessage([]);
     checkAppToken();
-    checkStravaToken();
-    updateBikeDistance();    
+    //updateBikeDistance();    
   }, []);
 
 
@@ -325,20 +327,15 @@ console.log(userBikes);
   }, [isStravaConnected]);
 
   
-  // useEffect(() => {
-  //   const token = localStorage.getItem('stravaToken');
-  //   if(token) {
-  //     getCurrentUserInfo()
-  //   }  
-  // }, []);
+  
   console.log(currentUser);
 
 
-  useEffect(() => {
-    if(currentUser.id) {
-      getUserRideStats(currentUser);
-    }
-  }, [currentUser]);
+  // useEffect(() => {
+  //   if(currentUser.id) {
+  //     getUserRideStats(currentUser);
+  //   }
+  // }, [currentUser]);
 
 
   // useEffect(() => {
