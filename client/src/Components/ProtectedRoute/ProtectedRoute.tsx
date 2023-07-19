@@ -3,14 +3,14 @@ import { Route, Navigate, Outlet } from 'react-router-dom';
 
 interface ProtectedRouteProps {
   
-  hasAccess: boolean | string | null
+  hasAccess: () => string | null
 }
 
 export default function ProtectedRoute({hasAccess}: ProtectedRouteProps) {
   
   return (
     <div>
-      {hasAccess ? <Outlet /> : <Navigate to="/login" />}
+      {hasAccess() ? <Outlet /> : <Navigate to="/login" />}
     </div>
   )
 }

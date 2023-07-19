@@ -46,7 +46,7 @@ function App() {
 
   const yearOfRegistrationAtStrava: number = new Date(currentUser.created_at).getFullYear();
 
-  const isLogged = () => localStorage.getItem('logged');
+  
 
   interface StravaResponseWithError {
     message: string
@@ -143,7 +143,7 @@ function App() {
 
 
   function onAppLoad() {
-    //checkAppToken();
+    setErrMessage([]);
     getStravaToken()
       .then((stravaToken: string) => {
         if(!stravaToken) {
@@ -151,7 +151,7 @@ function App() {
         };  
         return checkStravaToken(stravaToken);
       })
-      .then((res) => getCurrentUserInfo())
+      .then((res) => getCurrentUserData())
       .catch((err) => {
         setErrMessage([...errMessage, `Ошибка: ${err.message}`])
       });      
@@ -213,7 +213,6 @@ function App() {
       return allActivities;
     };
     setHasAllActivitiesLoaded(false);
-    //await checkStravaToken();
     const dateOfRegAtStrava: string = user.created_at;
     const fromDate: number = Date.parse(dateOfRegAtStrava) / 1000;
     const tillDate: number = Math.round(Date.now() / 1000);
@@ -243,9 +242,7 @@ function App() {
   console.log(allActivities);
 
 
-  async function getCurrentUserInfo() {
-    //await checkStravaToken();    
-    // await setStrTokenToLocalStorage();    
+  async function getCurrentUserData() { 
     getCurrentAthlete()
       .then((user) => {
         if(!user.id) {
@@ -308,11 +305,16 @@ console.log(userBikes);
     setErrMessage([...errMessage, errMsg])
   };
 
+  const isLogged = function () {
+    return localStorage.getItem('logged')
+  };
+
+    
+
 
   useEffect(() => {
-    setErrMessage([]);
-    checkAppToken();
-    //updateBikeDistance();    
+    //setErrMessage([]);
+    checkAppToken();   
   }, []);
 
 
@@ -331,21 +333,6 @@ console.log(userBikes);
   console.log(currentUser);
 
 
-  // useEffect(() => {
-  //   if(currentUser.id) {
-  //     getUserRideStats(currentUser);
-  //   }
-  // }, [currentUser]);
-
-
-  // useEffect(() => {
-  //   if(hasAllActivitiesLoaded) {      
-  //     addAllUserBikes();
-  //   }
-  // }, [hasAllActivitiesLoaded]);  
-
-    
- 
   
   
     return (
@@ -363,9 +350,9 @@ console.log(userBikes);
               <Route path='/access' element={<StravaAccessPage />} />
             </Route>  */}
 
-            <Route path='/access-result' element={<StravaAccessResult getCurrentUserInfo={getCurrentUserInfo} onError={handleErrors}/>} />
+            <Route path='/access-result' element={<StravaAccessResult getCurrentUserData={getCurrentUserData} onError={handleErrors}/>} />
        
-            <Route element={<ProtectedRoute hasAccess={isLoggedIn} />}>
+            <Route element={<ProtectedRoute hasAccess={isLogged} />}>
               <Route path='/' element={<Main />}  />
               <Route path='/stats' 
                 element={<Stats               

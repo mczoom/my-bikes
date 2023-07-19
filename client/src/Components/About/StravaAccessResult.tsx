@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { mandatoryStravaPermissions } from '../../utils/constants';
 
 interface StravaAccessResultProps {
-  getCurrentUserInfo: () => void
+  getCurrentUserData: () => void
   onError: (errMsg: string) => void
 }
 
@@ -14,7 +14,7 @@ interface stravaToken {
 }
 
 
-export default function StravaAccessResult ({getCurrentUserInfo, onError}: StravaAccessResultProps) {
+export default function StravaAccessResult ({getCurrentUserData, onError}: StravaAccessResultProps) {
 
   const navigate = useNavigate();
   
@@ -39,7 +39,7 @@ export default function StravaAccessResult ({getCurrentUserInfo, onError}: Strav
     exchangeToken()
       .then((token: stravaToken) => {          
         localStorage.setItem('stravaToken', token.strToken);
-        getCurrentUserInfo();        
+        getCurrentUserData();        
       })      
       .catch((err) => console.log(err));      
   };

@@ -7,13 +7,12 @@
     min-width: 200px;  
     max-width: 400px;  
     position: fixed;
-    top: 80vh;
+    top: 0;
     right: -900px;
     border-radius: $radius;
 }
 
-.err-popup_on {    
-    transform: translateX(500);
+.err-popup_on {   
     right: 0;    
 }
 
