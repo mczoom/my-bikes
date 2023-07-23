@@ -111,9 +111,13 @@ export function checkStravaPermissions() {
     },
   })
   .then(res => res.json())
-  // .then((res) => {
-  //   localStorage.setItem('isStravaConnected', res);
-  //   return res;
-  // })
+  .then((res) => {
+    if(res === true) {
+    localStorage.setItem('isStravaConnected', res);
+    return res;
+    } else {
+      return;
+    }
+  })
   .catch((err) => console.log(err));
 };

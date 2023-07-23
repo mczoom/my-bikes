@@ -20,7 +20,7 @@ import LoginPage from '../LoginPage/LoginPage';
 import { Bike } from '../../models/Bike';
 import AppLayout from '../AppLayout/AppLayout';
 import { ActivitiesLoadingState } from '../../contexts/ActivitiesLoadingState';
-import StravaAccessResult from '../About/StravaAccessResult';
+import StravaAccessResult from '../StravaAccessResult/StravaAccessResult';
 
 
 
@@ -30,7 +30,9 @@ function App() {
 
   const accessToStrava: string | null = localStorage.getItem('accessToStrava');
 
-  const [isStravaConnected, setIsStravaConnected] = useState(() => JSON.stringify(localStorage.getItem('isStravaConnected')));
+  //const isStravaConnected = () => localStorage.getItem('isStravaConnected');
+  const [isStravaConnected, setIsStravaConnected] = useState<any>(() => getLocalStorage('isStravaConnected'));
+
   const [isLoggedIn, setIsLoggedIn] = useState<any>(false);
   const [currentUser, setCurrentUser] = useState<Profile>({} as Profile);
   const [allActivities, setAllActivities] = useState<Activity[]>([]);
@@ -46,7 +48,14 @@ function App() {
 
   const yearOfRegistrationAtStrava: number = new Date(currentUser.created_at).getFullYear();
 
-  
+  function setLocalStorage(key: string, value: any) {
+    localStorage.setItem(key, JSON.stringify(value));
+  };
+
+  function getLocalStorage(key: string) {
+    const value = localStorage.getItem(key);
+    return value ? JSON.parse(value) : null;
+  }
 
   interface StravaResponseWithError {
     message: string
@@ -60,9 +69,12 @@ function App() {
   };
 
 
-  function checkIsAppConnectedToStrava() {
+  function checkIsAppConnectedToStrava() {    
     checkStravaPermissions();
   };
+
+  
+  
   
 
   function checkAppToken() {
@@ -183,7 +195,7 @@ function App() {
         setIsLoggedIn(true);
         localStorage.setItem('logged', 'true');
         //setStrTokenToLocalStorage();
-        //checkIsAppConnectedToStrava();
+        checkIsAppConnectedToStrava();
         setErrMessage([]);      
       } else if (res.message) {
         throw new Error(res.message);
@@ -328,9 +340,15 @@ console.log(userBikes);
     checkIsAppConnectedToStrava();      
   }, [isStravaConnected]);
 
+
+  useEffect(() => {    
+    setLocalStorage('isStravaConnected', isStravaConnected);      
+  }, [isStravaConnected]);
+
   
   
   console.log(currentUser);
+  console.log(Boolean(isStravaConnected));
 
 
   
@@ -344,7 +362,7 @@ console.log(userBikes);
             <Route path='/registration' element={!isLoggedIn ? <RegPage handleRegistration={handleRegistration} /> : <Navigate to='/' replace={true} />} />
             <Route path='/login' element={!isLoggedIn ? <LoginPage handleLogin={handleLogin} /> : <Navigate to='/' replace={true} />} />        
             
-            <Route path='/access' element={<StravaAccessPage />} />
+            <Route path='/access' element={!isStravaConnected ? <StravaAccessPage /> : <Navigate to='/' replace={true} />} />
             
             {/* <Route element={<ProtectedRoute hasAccess={!isStravaConnected} />}>
               <Route path='/access' element={<StravaAccessPage />} />
@@ -352,8 +370,8 @@ console.log(userBikes);
 
             <Route path='/access-result' element={<StravaAccessResult getCurrentUserData={getCurrentUserData} onError={handleErrors}/>} />
        
-            <Route element={<ProtectedRoute hasAccess={isLogged} />}>
-              <Route path='/' element={<Main />}  />
+            <Route path='/' element={<ProtectedRoute hasAccess={isStravaConnected} />}>
+              <Route index element={<Main />}  />
               <Route path='/stats' 
                 element={<Stats               
                   registrationYear={yearOfRegistrationAtStrava} 
