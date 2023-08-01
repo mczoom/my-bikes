@@ -1,4 +1,5 @@
 import {BASE_URL} from './constants';
+import { setLocalStorage } from './service';
 
 
 interface stravaToken {
@@ -66,13 +67,13 @@ export const getStravaToken = () => {
     },    
   })
   .then((res) => res.json())
-  .then((res) => {
-    if(res.message) {
-      throw new Error(res.message);
-    }  
-    localStorage.setItem('stravaToken', res.strToken);
-    return res.strToken;
-  })
+  // .then((res) => {
+  //   if(res.message) {
+  //     throw new Error(res.message);
+  //   }  
+  //   localStorage.setItem('stravaToken', res.strToken);
+  //   return res.strToken;
+  // })
   .catch(err => console.log(err));
 };
 
@@ -103,7 +104,7 @@ export function addStravaPermissions(scope: string[] | undefined) {
 };
 
 
-export function checkStravaPermissions() {
+export function checkStravaPermissions() {  
   return fetch(`${BASE_URL}/strava-permissions`, {    
     headers: {
       "Content-Type": "application/json",
@@ -112,12 +113,12 @@ export function checkStravaPermissions() {
   })
   .then(res => res.json())
   .then((res) => {
-    if(res === true) {
-    localStorage.setItem('isStravaConnected', res);
+    if(res && !res.message) {
+    //setLocalStorage('isStravaConnected', res);
     return res;
     } else {
-      return;
+      throw new Error(res.message);
     }
   })
-  .catch((err) => console.log(err));
+  .catch((err) => console.log(err.message));
 };

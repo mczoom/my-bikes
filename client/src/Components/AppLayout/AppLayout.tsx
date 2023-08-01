@@ -5,18 +5,16 @@ import { useEffect } from "react";
 import Footer from "../Footer/Footer";
 
 interface AppLayoutProps {
-    isLoggedIn: boolean
-    onLogout: () => void
     errMessage: string[]
   }
 
-export default function AppLayout({isLoggedIn, onLogout, errMessage}: AppLayoutProps) {
+export default function AppLayout({errMessage}: AppLayoutProps) {
 
       
   
   return (
     <div className="page">
-      <Header isLoggedIn={isLoggedIn} onLogout={onLogout} />
+      <Header />
       <main>
         <Outlet />
       </main>  

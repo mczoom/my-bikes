@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { addStravaPermissions, exchangeToken } from '../../utils/stravaAuthApi'
 import { useNavigate } from 'react-router-dom';
 import { mandatoryStravaPermissions } from '../../utils/constants';
+import useAuth from '../../hooks/useAuth';
 
 interface StravaAccessResultProps {
   getCurrentUserData: () => void
@@ -17,6 +18,7 @@ interface stravaToken {
 export default function StravaAccessResult ({getCurrentUserData, onError}: StravaAccessResultProps) {
 
   const navigate = useNavigate();
+  const auth = useAuth();
   
   const stravaPermissions = getStravaPermissionsScope();
 
@@ -33,7 +35,7 @@ export default function StravaAccessResult ({getCurrentUserData, onError}: Strav
       return scopeArr;       
     };  
   };  
-    
+
 
   function setStrTokenToLocalStorageAfterRegistration() {    
     exchangeToken()
@@ -49,6 +51,7 @@ export default function StravaAccessResult ({getCurrentUserData, onError}: Strav
     addStravaPermissions(permissions)
       .then(() => {
         setStrTokenToLocalStorageAfterRegistration();
+        auth.checkPermissions();
         navigate('/');
       })
       .catch((err) => {
