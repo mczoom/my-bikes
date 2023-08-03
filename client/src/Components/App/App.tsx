@@ -29,8 +29,6 @@ import useAuth from '../../hooks/useAuth';
 
 function App() {
 
-  //const [isStravaConnected, setIsStravaConnected] = useState<any>(() => getLocalStorage('isStravaConnected'));
-  //const [isLoggedIn, setIsLoggedIn] = useState<any>(false);
   const [currentUser, setCurrentUser] = useState<Profile>({} as Profile);
   const [allActivities, setAllActivities] = useState<Activity[]>([]);
   const [hasAllActivitiesLoaded, setHasAllActivitiesLoaded] = useState<boolean>(false)
@@ -126,19 +124,19 @@ function App() {
   };
   
 
-  function setStrTokenToLocalStorage() {
-    getStravaToken()
-      .then((res) => {
-        if(res.message) {
-          throw new Error(res.message);
-        }  
-        localStorage.setItem('stravaToken', res.strToken);
-        return res.strToken;
-      })
-      .catch((err) => {
-        setErrMessage([...errMessage, `Ошибка: ${err.message}`])
-      });      
-  };
+  // function setStrTokenToLocalStorage() {
+  //   getStravaToken()
+  //     .then((res) => {
+  //       if(res.message) {
+  //         throw new Error(res.message);
+  //       }  
+  //       localStorage.setItem('stravaToken', res.strToken);
+  //       return res.strToken;
+  //     })
+  //     .catch((err) => {
+  //       setErrMessage([...errMessage, `Ошибка: ${err.message}`])
+  //     });      
+  // };
 
 
   function onAppLoad() {
