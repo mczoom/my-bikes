@@ -20,18 +20,15 @@ import LoginPage from '../LoginPage/LoginPage';
 import { Bike } from '../../models/Bike';
 import AppLayout from '../AppLayout/AppLayout';
 import { ActivitiesLoadingState } from '../../contexts/ActivitiesLoadingState';
-import StravaAccessResult from '../About/StravaAccessResult';
+import StravaAccessResult from '../StravaAccessResult/StravaAccessResult';
+import { getLocalStorage, setLocalStorage } from '../../utils/service';
+import { AuthProvider } from '../../contexts/AuthProvider';
+import useAuth from '../../hooks/useAuth';
 
 
 
 function App() {
 
-  
-
-  const accessToStrava: string | null = localStorage.getItem('accessToStrava');
-
-  const [isStravaConnected, setIsStravaConnected] = useState(() => JSON.stringify(localStorage.getItem('isStravaConnected')));
-  const [isLoggedIn, setIsLoggedIn] = useState<any>(false);
   const [currentUser, setCurrentUser] = useState<Profile>({} as Profile);
   const [allActivities, setAllActivities] = useState<Activity[]>([]);
   const [hasAllActivitiesLoaded, setHasAllActivitiesLoaded] = useState<boolean>(false)
@@ -40,7 +37,12 @@ function App() {
   const [allYTDRidesTotals, setAllYTDRidesTotals] = useState<AthleteStats>({} as AthleteStats);
   const [errMessage, setErrMessage] = useState<string[]>([]);
   
+  
   const navigate = useNavigate();
+  const auth = useAuth();
+  const isLoggedIn = auth.isLoggedIn;
+  const isStravaConnected = auth.isConnectedToStrava;
+  const setIsLoggedIn = auth.setIsLoggedIn;
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -59,11 +61,6 @@ function App() {
     ]
   };
 
-
-  function checkIsAppConnectedToStrava() {
-    checkStravaPermissions();
-  };
-  
 
   function checkAppToken() {
     const jwt = localStorage.getItem('jwt');
@@ -127,19 +124,19 @@ function App() {
   };
   
 
-  function setStrTokenToLocalStorage() {
-    getStravaToken()
-      .then((res) => {
-        if(res.message) {
-          throw new Error(res.message);
-        }  
-        localStorage.setItem('stravaToken', res.strToken);
-        return res.strToken;
-      })
-      .catch((err) => {
-        setErrMessage([...errMessage, `Ошибка: ${err.message}`])
-      });      
-  };
+  // function setStrTokenToLocalStorage() {
+  //   getStravaToken()
+  //     .then((res) => {
+  //       if(res.message) {
+  //         throw new Error(res.message);
+  //       }  
+  //       localStorage.setItem('stravaToken', res.strToken);
+  //       return res.strToken;
+  //     })
+  //     .catch((err) => {
+  //       setErrMessage([...errMessage, `Ошибка: ${err.message}`])
+  //     });      
+  // };
 
 
   function onAppLoad() {
@@ -154,7 +151,7 @@ function App() {
       .then((res) => getCurrentUserData())
       .catch((err) => {
         setErrMessage([...errMessage, `Ошибка: ${err.message}`])
-      });      
+      });    
   };
   
 
@@ -183,7 +180,7 @@ function App() {
         setIsLoggedIn(true);
         localStorage.setItem('logged', 'true');
         //setStrTokenToLocalStorage();
-        //checkIsAppConnectedToStrava();
+        auth.checkPermissions();
         setErrMessage([]);      
       } else if (res.message) {
         throw new Error(res.message);
@@ -193,6 +190,13 @@ function App() {
     .catch((err) => {      
       setErrMessage([...errMessage, `Ошибка при входе: ${err.message}`])        
     })
+  };
+
+
+  function logout() {
+    localStorage.clear();
+    setIsLoggedIn(false);
+    setCurrentUser({} as Profile);
   };
 
 
@@ -295,11 +299,7 @@ function App() {
 console.log(userBikes);
 
 
-  function logout() {
-    localStorage.clear();
-    setIsLoggedIn(false);
-    setCurrentUser({} as Profile);
-  };
+  
 
   function handleErrors(errMsg: string) {
     setErrMessage([...errMessage, errMsg])
@@ -310,75 +310,74 @@ console.log(userBikes);
   };
 
     
-//test
+
 
   useEffect(() => {
     //setErrMessage([]);
     checkAppToken();   
   }, []);
 
+ 
+  const strToken = localStorage.getItem('stravaToken');
 
   useEffect(() => {
-    if(isLoggedIn) {
+    
+    if(isLoggedIn && strToken) {
       onAppLoad();   
     }
-  }, [isLoggedIn]);
-
-  useEffect(() => {    
-    checkIsAppConnectedToStrava();      
-  }, [isStravaConnected]);
-
+  }, [isLoggedIn, strToken]);
   
   
   console.log(currentUser);
-
-
+  
   
   
     return (
-      <CurrentUserContext.Provider value={currentUser}> 
-      <ActivitiesLoadingState.Provider value={hasAllActivitiesLoaded}>            
-        <Routes>
-          <Route path='/' element={<AppLayout isLoggedIn={isLoggedIn} onLogout={logout} errMessage={errMessage}/>}>
-            
-            <Route path='/registration' element={!isLoggedIn ? <RegPage handleRegistration={handleRegistration} /> : <Navigate to='/' replace={true} />} />
-            <Route path='/login' element={!isLoggedIn ? <LoginPage handleLogin={handleLogin} /> : <Navigate to='/' replace={true} />} />        
-            
-            <Route path='/access' element={<StravaAccessPage />} />
-            
-            {/* <Route element={<ProtectedRoute hasAccess={!isStravaConnected} />}>
-              <Route path='/access' element={<StravaAccessPage />} />
-            </Route>  */}
+      
+        <CurrentUserContext.Provider value={currentUser}> 
+        <ActivitiesLoadingState.Provider value={hasAllActivitiesLoaded}>            
+          <Routes>
+            <Route path='/' element={<AppLayout errMessage={errMessage}/>}>
+              
+              <Route path='/registration' element={!isLoggedIn ? <RegPage handleRegistration={handleRegistration} /> : <Navigate to='/' replace={true} />} />
+              <Route path='/login' element={!isLoggedIn ? <LoginPage handleLogin={handleLogin} /> : <Navigate to='/' replace={true} />} />        
+              
+              <Route path='/access' element={!isStravaConnected ? <StravaAccessPage /> : <Navigate to='/' replace={true} />} />
+              
+              {/* <Route element={<ProtectedRoute />}>
+                <Route path='/access' element={<StravaAccessPage />} />
+              </Route>  */}
 
-            <Route path='/access-result' element={<StravaAccessResult getCurrentUserData={getCurrentUserData} onError={handleErrors}/>} />
-       
-            <Route element={<ProtectedRoute hasAccess={isLogged} />}>
-              <Route path='/' element={<Main />}  />
-              <Route path='/stats' 
-                element={<Stats               
-                  registrationYear={yearOfRegistrationAtStrava} 
-                  yearsAtStrava={yearsAtStrava} 
-                  allRidesTotals={allRidesTotals} 
-                  allYTDRidesTotals={allYTDRidesTotals} 
-                  isLoading={isLoading} 
-                  allActivities={allActivities} 
-                />}
-              />          
-              <Route path='/garage' 
-                element={<Garage             
-                  userBikesStrava={userBikes} 
-                  yearsAtStrava={yearsAtStrava} 
-                  activities={allActivities} 
-                  bikeTotalDistance={getBikeTotalDistance} 
-                />} 
-              />
-              <Route path='/maintenance' element={<Maintenance />} />
-            </Route>
-            <Route path='/*' element={<Page404 />} />
-          </Route>        
-        </Routes>      
-      </ActivitiesLoadingState.Provider>
-      </CurrentUserContext.Provider>
+              <Route path='/access-result' element={<StravaAccessResult getCurrentUserData={getCurrentUserData} onError={handleErrors}/>} />
+        
+              <Route path='/' element={<ProtectedRoute />}>
+                <Route index element={<Main />}  />                
+                <Route path='/stats' 
+                  element={<Stats               
+                    registrationYear={yearOfRegistrationAtStrava} 
+                    yearsAtStrava={yearsAtStrava} 
+                    allRidesTotals={allRidesTotals} 
+                    allYTDRidesTotals={allYTDRidesTotals} 
+                    isLoading={isLoading} 
+                    allActivities={allActivities} 
+                  />}
+                />          
+                <Route path='/garage' 
+                  element={<Garage             
+                    userBikesStrava={userBikes} 
+                    yearsAtStrava={yearsAtStrava} 
+                    activities={allActivities} 
+                    bikeTotalDistance={getBikeTotalDistance} 
+                  />} 
+                />
+                <Route path='/maintenance' element={<Maintenance />} />
+              </Route>
+              <Route path='/*' element={<Page404 />} />
+            </Route>        
+          </Routes>      
+        </ActivitiesLoadingState.Provider>
+        </CurrentUserContext.Provider>
+      
     );
   }
 

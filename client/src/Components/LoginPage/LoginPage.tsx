@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Input from '../Input/Input'
 import PageWithForm from '../PageWithForm/PageWithForm'
+import useAuth from '../../hooks/useAuth';
 
 
 interface LoginPageProps {
@@ -10,6 +11,7 @@ interface LoginPageProps {
 
 export default function LoginPage({handleLogin}: LoginPageProps) {
 
+  const auth = useAuth();
   const navigate = useNavigate();
 
 
@@ -26,7 +28,8 @@ export default function LoginPage({handleLogin}: LoginPageProps) {
 
   function login(e: React.SyntheticEvent) {
     e.preventDefault();
-    handleLogin(loginValue, passwordValue);
+    auth.signIn(loginValue, passwordValue)
+    //handleLogin(loginValue, passwordValue);
     navigate('/');
   }
 

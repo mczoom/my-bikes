@@ -1,16 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Route, Navigate, Outlet } from 'react-router-dom';
+import useAuth from '../../hooks/useAuth';
 
-interface ProtectedRouteProps {
-  
-  hasAccess: () => string | null
-}
 
-export default function ProtectedRoute({hasAccess}: ProtectedRouteProps) {
+
+export default function ProtectedRoute() {
+
+  const auth = useAuth();
   
+  //const isConnected = () => localStorage.getItem('isStravaConnected');  
+  //const isLogged = () => localStorage.getItem('logged');
+  const isConnected = auth.isConnectedToStrava;
+  const isLogged = auth.isLoggedIn; 
+ 
+     
   return (
     <div>
-      {hasAccess() ? <Outlet /> : <Navigate to="/login" />}
+      {isConnected 
+        ? <Outlet /> 
+        : isLogged 
+          ? <Navigate to="/access" /> 
+          : <Navigate to="/login" />}
     </div>
   )
 }

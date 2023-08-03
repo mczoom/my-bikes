@@ -10,11 +10,10 @@ module.exports.auth = (req, res, next) => {
   }
   const token = authorization.replace('Bearer ', '');
   let payload;
-
   try {
     payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'super-secret-key');
-  } catch (err) {
-    throw new Error('Необходима авторизация');
+  } catch (err) {    
+    throw new Error('Неправильный токен приложения');
   }
   req.user = payload;
   next();

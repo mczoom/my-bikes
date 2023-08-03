@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Input from '../Input/Input'
 import PageWithForm from '../PageWithForm/PageWithForm'
 import { useNavigate } from 'react-router-dom';
+import useAuth from '../../hooks/useAuth';
 
 
 interface RegPageProps {
@@ -9,6 +10,8 @@ interface RegPageProps {
 }
 
 export default function RegPage({handleRegistration}: RegPageProps) {
+
+  const auth = useAuth();
 
   const [loginValue, setLoginValue] = useState<string>('');
   const [passwordValue, setPasswordValue] = useState<string>('');
@@ -25,7 +28,7 @@ export default function RegPage({handleRegistration}: RegPageProps) {
 
   async function registrationHandler(e: React.SyntheticEvent) {
     e.preventDefault();    
-    handleRegistration(loginValue, passwordValue);    
+    auth.signUp(loginValue, passwordValue);    
     //navigate('/access');    
   }
   

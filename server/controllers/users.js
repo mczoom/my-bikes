@@ -62,7 +62,7 @@ module.exports.login = (req, res, next) => {
 
 
 module.exports.checkStravaPermissions = async (req, res, next) => {
-  const userID = req.user._id;  
+  const userID = req.user._id;
   User.findOne({_id: userID})
     .orFail(() => new NotFoundError('Пользователь не найден'))
     .then((user) => {

@@ -5,16 +5,13 @@ import logo from '../../images/logo.png'
 import AuthButton from '../AuthButton/AuthButton';
 import HeaderAuthLinks from '../HeaderAuthLinks/HeaderAuthLinks';
 import { Link } from 'react-router-dom';
+import useAuth from '../../hooks/useAuth';
 
 
 
-interface HeaderProps {
-  isLoggedIn: boolean
-  onLogout: () => void
-}
+export default function Header() {
 
-export default function Header({isLoggedIn, onLogout}: HeaderProps) {
-
+  const auth = useAuth();
 
   return (
     <header className='header'>
@@ -24,11 +21,11 @@ export default function Header({isLoggedIn, onLogout}: HeaderProps) {
         </Link>  
         <Profile />       
       </div> 
-      {isLoggedIn ? (     
+      {auth.isLoggedIn && auth.isConnectedToStrava ? (     
       <div className='header__nav-wrapper'>        
         <Navigation />     
         <div className='header__auth-buttons'>          
-          <AuthButton text={'Выйти'} onClick={onLogout}/>
+          <AuthButton text={'Выйти'} onClick={auth.logout}/>
         </div>
       </div>
       ) : (
