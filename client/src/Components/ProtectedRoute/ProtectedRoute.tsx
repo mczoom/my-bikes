@@ -7,9 +7,6 @@ import useAuth from '../../hooks/useAuth';
 export default function ProtectedRoute() {
 
   const auth = useAuth();
-  
-  //const isConnected = () => localStorage.getItem('isStravaConnected');  
-  //const isLogged = () => localStorage.getItem('logged');
   const isConnected = auth.isConnectedToStrava;
   const isLogged = auth.isLoggedIn; 
  

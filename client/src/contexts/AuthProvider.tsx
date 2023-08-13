@@ -87,12 +87,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setIsConnectedToStrava(false);
       
     };
-    console.log(isLoggedIn);
-    console.log(isConnectedToStrava);
-    
-  
+      
     const authData = { isLoggedIn, setIsLoggedIn, isConnectedToStrava, setIsConnectedToStrava, signUp, signIn, logout, checkPermissions };
-
     
     useEffect(() => {
       setLocalStorage("logged", isLoggedIn);

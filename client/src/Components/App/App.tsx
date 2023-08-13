@@ -102,6 +102,7 @@ function App() {
     const isTrainer = trainings.every((ride) => {
       return ride.trainer === true;
     });
+console.log(isTrainer);
 
     return isTrainer;
   };
@@ -113,14 +114,32 @@ function App() {
         const isTrainer = checkIfTrainer(bike.id)
         return {...bike, trainer: isTrainer};
       });
+      console.log(userBikesFromStrava);
+      
       await appApi.addAllBikes(userBikesFromStrava);    
     }
+  };
+
+  function addAllBikes(user: any) {
+    appApi.getAllBikes()
+      .then((res) => {
+        if(res.message) {
+          addAllUserBikes(user);
+        } else {
+          return;
+        }
+      })
+      .catch(err => console.log(err));
   };
 
 
   function updateBikeDistance(currentUser: Profile) {    
     const currentUserBikes: Bike[] = currentUser.bikes;
-    appApi.updateBikeOdo(currentUserBikes);
+    if(currentUserBikes.length > 0) {
+      appApi.updateBikeOdo(currentUserBikes);
+    } else {
+      console.log('Байки пользователя не найдены');      
+    }
   };
   
 
@@ -193,12 +212,6 @@ function App() {
   };
 
 
-  function logout() {
-    localStorage.clear();
-    setIsLoggedIn(false);
-    setCurrentUser({} as Profile);
-  };
-
 
   function getUserRideStats(user: Profile) {
     setIsLoading(true);
@@ -260,9 +273,9 @@ function App() {
         await getAllActivities(currentUser);
         return currentUser;       
       })
-      .then(async(currentUser) => {
+      .then(async (currentUser) => {
+        addAllBikes(currentUser);
         setUserBikes(currentUser.bikes);
-        await addAllUserBikes(currentUser);
         updateBikeDistance(currentUser);
       })
       .catch((err) => {
@@ -297,20 +310,13 @@ function App() {
   
   
 console.log(userBikes);
-
-
   
 
   function handleErrors(errMsg: string) {
     setErrMessage([...errMessage, errMsg])
   };
 
-  const isLogged = function () {
-    return localStorage.getItem('logged')
-  };
-
-    
-
+  
 
   useEffect(() => {
     //setErrMessage([]);
@@ -320,8 +326,7 @@ console.log(userBikes);
  
   const strToken = localStorage.getItem('stravaToken');
 
-  useEffect(() => {
-    
+  useEffect(() => {    
     if(isLoggedIn && strToken) {
       onAppLoad();   
     }
@@ -329,6 +334,8 @@ console.log(userBikes);
   
   
   console.log(currentUser);
+
+  appApi.getAllBikes().then(res => console.log(res))
   
   
   
@@ -348,7 +355,7 @@ console.log(userBikes);
                 <Route path='/access' element={<StravaAccessPage />} />
               </Route>  */}
 
-              <Route path='/access-result' element={<StravaAccessResult getCurrentUserData={getCurrentUserData} onError={handleErrors}/>} />
+              <Route path='/access-result' element={<StravaAccessResult getCurrentUserData={getCurrentUserData} addAllBikes={addAllUserBikes} onError={handleErrors}/>} />
         
               <Route path='/' element={<ProtectedRoute />}>
                 <Route index element={<Main />}  />                

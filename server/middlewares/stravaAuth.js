@@ -7,7 +7,7 @@ module.exports.checkStravaToken = async(req, res, next) => {
   let refreshToken;
   
   await StravaToken.findOne({userID})
-    .orFail(new NotFoundError('Не найден StravaToken для текущего пользователя'))
+    .orFail(() => new NotFoundError('Не найден StravaToken для текущего пользователя'))
     .then((tokenData) => {
       const isStrTokenExpired = tokenData.expires_at - Date.now();
       if(isStrTokenExpired < 0) {

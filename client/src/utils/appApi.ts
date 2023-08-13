@@ -50,9 +50,6 @@ const handleResponse = (res:any) => {
   };
 
 
-  
-
-
   export const addAllBikes = (bikes: any) => {
     return fetch(`${BASE_URL}/bikes`, {
       method: 'POST',
@@ -113,5 +110,6 @@ const handleResponse = (res:any) => {
         "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
       }
     })
-    .then((res) => handleResponse(res));
+    .then(res => res.json())
+    .catch(err => console.log(err))
   };

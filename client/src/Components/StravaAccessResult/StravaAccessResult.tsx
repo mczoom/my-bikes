@@ -3,9 +3,11 @@ import { addStravaPermissions, exchangeToken } from '../../utils/stravaAuthApi'
 import { useNavigate } from 'react-router-dom';
 import { mandatoryStravaPermissions } from '../../utils/constants';
 import useAuth from '../../hooks/useAuth';
+import { getCurrentAthlete } from '../../utils/stravaApi';
 
 interface StravaAccessResultProps {
   getCurrentUserData: () => void
+  addAllBikes: (user: any) => void
   onError: (errMsg: string) => void
 }
 
@@ -15,7 +17,7 @@ interface stravaToken {
 }
 
 
-export default function StravaAccessResult ({getCurrentUserData, onError}: StravaAccessResultProps) {
+export default function StravaAccessResult ({getCurrentUserData, addAllBikes, onError}: StravaAccessResultProps) {
 
   const navigate = useNavigate();
   const auth = useAuth();
@@ -35,13 +37,12 @@ export default function StravaAccessResult ({getCurrentUserData, onError}: Strav
       return scopeArr;       
     };  
   };  
+  
 
-
-  function setStrTokenToLocalStorageAfterRegistration() {    
+  async function setStrTokenToLocalStorageAfterRegistration() {    
     exchangeToken()
       .then((token: stravaToken) => {          
         localStorage.setItem('stravaToken', token.strToken);
-        getCurrentUserData();        
       })      
       .catch((err) => console.log(err));      
   };
@@ -49,10 +50,9 @@ export default function StravaAccessResult ({getCurrentUserData, onError}: Strav
 
   function setStravaTokenAndPermissionsAfterRegistration(permissions: string[] | undefined) {    
     addStravaPermissions(permissions)
-      .then(() => {
-        setStrTokenToLocalStorageAfterRegistration();
+      .then(async () => {
+        await setStrTokenToLocalStorageAfterRegistration();
         auth.checkPermissions();
-        navigate('/');
       })
       .catch((err) => {
         onError(err)
@@ -71,10 +71,27 @@ export default function StravaAccessResult ({getCurrentUserData, onError}: Strav
       onError('Необходимо разрешить приложению доступ к аккаунту Strava');     
     }
   };
+
+  async function setDataAfterRegistration() {
+    await addStravaPermissions(stravaPermissions)
+      .then(() => {
+        manageStravaTokenAndPermissionsAfterRegistration(stravaPermissions);        
+      })
+      .catch((err) => {
+        onError(err)
+        console.log(err);
+        navigate('/access');
+      });    
+    
+    navigate('/');
+    
+  }
   
 
   useEffect(() => {
-    manageStravaTokenAndPermissionsAfterRegistration(stravaPermissions);
+    
+    setDataAfterRegistration();
+    
   }, []);
   
   
@@ -83,3 +100,5 @@ export default function StravaAccessResult ({getCurrentUserData, onError}: Strav
     <div>About</div>
   )
 }
+
+

@@ -15,7 +15,7 @@ export function getLocalStorage(key: string) {
 
 export function checkPermissions() {
   checkStravaPermissions()
-    .then((permits) => {        
+    .then((permits: boolean) => {        
       if(!permits) {
         throw new Error('Приложение не привязано к аккаунту в Strava')
       }

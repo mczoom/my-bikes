@@ -9,6 +9,7 @@ module.exports.addAllBikes = async(req, res, next) => {
   const userID = req.user._id;
   const storedBikes = await Bike.findOne({userID});
   
+  try{
   if(!storedBikes) {
   return Bike.create({bikes: actualBikesInfo, userID})
     .then((garage) => {
@@ -18,6 +19,9 @@ module.exports.addAllBikes = async(req, res, next) => {
   };
   updateBikesOdo(storedBikes, actualBikesInfo);
   storedBikes.save();
+} catch (err) {
+    console.log('Велосипеды пользователя не найдены');
+}
 };
 
 
@@ -34,9 +38,14 @@ module.exports.updateOdo = async(req, res, next) => {
   const actualBikesInfo = req.body.bikes;
   const userID = req.user._id;
   const storedBikes = await Bike.findOne({userID});
+
+  Bike.findOne({userID})
+  .orFail(() => new NotFoundError('Велосипеды пользователя не найдены'))
+  .then((savedBikes) => updateBikesOdo(savedBikes, actualBikesInfo))
+  .then(() => storedBikes.save())
+  .catch((err) => console.log(err));
   
-  updateBikesOdo(storedBikes, actualBikesInfo);
-  storedBikes.save();
+  
 };
 
 
@@ -44,7 +53,7 @@ module.exports.getAllBikes = (req, res, next) => {
   const userID = req.user._id;
   
   Bike.findOne({userID})
-    .orFail(() => {new NotFoundError('Велосипеды пользователя не найдены')})
+    .orFail(() => new NotFoundError('Велосипеды пользователя не найдены'))
     .then((garage) => {
       if(garage) {
       res.send(garage.bikes);
