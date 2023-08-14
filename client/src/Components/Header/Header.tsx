@@ -6,12 +6,21 @@ import AuthButton from '../AuthButton/AuthButton';
 import HeaderAuthLinks from '../HeaderAuthLinks/HeaderAuthLinks';
 import { Link } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
+import { Profile as ProfileType } from '../../models/Profile';
 
 
+interface HeaderProps {
+  setUser: React.Dispatch<React.SetStateAction<ProfileType>>
+}
 
-export default function Header() {
+export default function Header({setUser}: HeaderProps) {
 
   const auth = useAuth();
+
+  function logout() {
+    auth.logout();
+    setUser({} as ProfileType);
+  }
 
   return (
     <header className='header'>
@@ -25,7 +34,7 @@ export default function Header() {
       <div className='header__nav-wrapper'>        
         <Navigation />     
         <div className='header__auth-buttons'>          
-          <AuthButton text={'Выйти'} onClick={auth.logout}/>
+          <AuthButton text={'Выйти'} onClick={logout}/>
         </div>
       </div>
       ) : (

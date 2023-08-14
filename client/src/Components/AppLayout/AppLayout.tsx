@@ -3,18 +3,20 @@ import Header from "../Header/Header";
 import ErrorMessagePopup from "../ErrorMessagePopup/ErrorMessagePopup";
 import { useEffect } from "react";
 import Footer from "../Footer/Footer";
+import { Profile } from "../../models/Profile";
 
 interface AppLayoutProps {
-    errMessage: string[]
-  }
+  setUser: React.Dispatch<React.SetStateAction<Profile>>
+  errMessage: string[]
+}
 
-export default function AppLayout({errMessage}: AppLayoutProps) {
+export default function AppLayout({setUser, errMessage}: AppLayoutProps) {
 
       
   
   return (
     <div className="page">
-      <Header />
+      <Header setUser={setUser} />
       <main>
         <Outlet />
       </main>  

@@ -333,58 +333,53 @@ console.log(userBikes);
   }, [isLoggedIn, strToken]);
   
   
-  console.log(currentUser);
+  console.log(currentUser);   
+  
+  
+    return (      
+      <CurrentUserContext.Provider value={currentUser}> 
+      <ActivitiesLoadingState.Provider value={hasAllActivitiesLoaded}>            
+        <Routes>
+          <Route path='/' element={<AppLayout setUser={setCurrentUser} errMessage={errMessage}/>}>
+            
+            <Route path='/registration' element={!isLoggedIn ? <RegPage handleRegistration={handleRegistration} /> : <Navigate to='/' replace={true} />} />
+            <Route path='/login' element={!isLoggedIn ? <LoginPage handleLogin={handleLogin} /> : <Navigate to='/' replace={true} />} />        
+            
+            <Route path='/access' element={!isStravaConnected ? <StravaAccessPage /> : <Navigate to='/' replace={true} />} />
+            
+            {/* <Route element={<ProtectedRoute />}>
+              <Route path='/access' element={<StravaAccessPage />} />
+            </Route>  */}
 
-  appApi.getAllBikes().then(res => console.log(res))
-  
-  
-  
-    return (
+            <Route path='/access-result' element={<StravaAccessResult getCurrentUserData={getCurrentUserData} addAllBikes={addAllUserBikes} onError={handleErrors}/>} />
       
-        <CurrentUserContext.Provider value={currentUser}> 
-        <ActivitiesLoadingState.Provider value={hasAllActivitiesLoaded}>            
-          <Routes>
-            <Route path='/' element={<AppLayout errMessage={errMessage}/>}>
-              
-              <Route path='/registration' element={!isLoggedIn ? <RegPage handleRegistration={handleRegistration} /> : <Navigate to='/' replace={true} />} />
-              <Route path='/login' element={!isLoggedIn ? <LoginPage handleLogin={handleLogin} /> : <Navigate to='/' replace={true} />} />        
-              
-              <Route path='/access' element={!isStravaConnected ? <StravaAccessPage /> : <Navigate to='/' replace={true} />} />
-              
-              {/* <Route element={<ProtectedRoute />}>
-                <Route path='/access' element={<StravaAccessPage />} />
-              </Route>  */}
-
-              <Route path='/access-result' element={<StravaAccessResult getCurrentUserData={getCurrentUserData} addAllBikes={addAllUserBikes} onError={handleErrors}/>} />
-        
-              <Route path='/' element={<ProtectedRoute />}>
-                <Route index element={<Main />}  />                
-                <Route path='/stats' 
-                  element={<Stats               
-                    registrationYear={yearOfRegistrationAtStrava} 
-                    yearsAtStrava={yearsAtStrava} 
-                    allRidesTotals={allRidesTotals} 
-                    allYTDRidesTotals={allYTDRidesTotals} 
-                    isLoading={isLoading} 
-                    allActivities={allActivities} 
-                  />}
-                />          
-                <Route path='/garage' 
-                  element={<Garage             
-                    userBikesStrava={userBikes} 
-                    yearsAtStrava={yearsAtStrava} 
-                    activities={allActivities} 
-                    bikeTotalDistance={getBikeTotalDistance} 
-                  />} 
-                />
-                <Route path='/maintenance' element={<Maintenance />} />
-              </Route>
-              <Route path='/*' element={<Page404 />} />
-            </Route>        
-          </Routes>      
-        </ActivitiesLoadingState.Provider>
-        </CurrentUserContext.Provider>
-      
+            <Route path='/' element={<ProtectedRoute />}>
+              <Route index element={<Main />}  />                
+              <Route path='/stats' 
+                element={<Stats               
+                  registrationYear={yearOfRegistrationAtStrava} 
+                  yearsAtStrava={yearsAtStrava} 
+                  allRidesTotals={allRidesTotals} 
+                  allYTDRidesTotals={allYTDRidesTotals} 
+                  isLoading={isLoading} 
+                  allActivities={allActivities} 
+                />}
+              />          
+              <Route path='/garage' 
+                element={<Garage             
+                  userBikesStrava={userBikes} 
+                  yearsAtStrava={yearsAtStrava} 
+                  activities={allActivities} 
+                  bikeTotalDistance={getBikeTotalDistance} 
+                />} 
+              />
+              <Route path='/maintenance' element={<Maintenance />} />
+            </Route>
+            <Route path='/*' element={<Page404 />} />
+          </Route>        
+        </Routes>      
+      </ActivitiesLoadingState.Provider>
+      </CurrentUserContext.Provider>      
     );
   }
 

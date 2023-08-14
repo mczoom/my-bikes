@@ -53,6 +53,7 @@ export default function StravaAccessResult ({getCurrentUserData, addAllBikes, on
       .then(async () => {
         await setStrTokenToLocalStorageAfterRegistration();
         auth.checkPermissions();
+        navigate('/');
       })
       .catch((err) => {
         onError(err)
@@ -62,36 +63,34 @@ export default function StravaAccessResult ({getCurrentUserData, addAllBikes, on
   }
 
   
-  function manageStravaTokenAndPermissionsAfterRegistration(permits: string[] | undefined) {
-    if (permits) {
-      setStravaTokenAndPermissionsAfterRegistration(permits);      
-    } else {
-      navigate('/access');
-      console.log('Необходимо разрешить приложению доступ к аккаунту Strava');   
-      onError('Необходимо разрешить приложению доступ к аккаунту Strava');     
-    }
-  };
+  // function manageStravaTokenAndPermissionsAfterRegistration(permits: string[] | undefined) {
+  //   if (permits) {
+  //     setStravaTokenAndPermissionsAfterRegistration(permits);      
+  //   } else {
+  //     navigate('/access');
+  //     console.log('Необходимо разрешить приложению доступ к аккаунту Strava');   
+  //     onError('Необходимо разрешить приложению доступ к аккаунту Strava');     
+  //   }
+  // };
 
-  async function setDataAfterRegistration() {
-    await addStravaPermissions(stravaPermissions)
-      .then(() => {
-        manageStravaTokenAndPermissionsAfterRegistration(stravaPermissions);        
-      })
-      .catch((err) => {
-        onError(err)
-        console.log(err);
-        navigate('/access');
-      });    
+  // async function setDataAfterRegistration() {
+  //   await addStravaPermissions(stravaPermissions)
+  //     .then(() => {
+  //       manageStravaTokenAndPermissionsAfterRegistration(stravaPermissions);        
+  //     })
+  //     .catch((err) => {
+  //       onError(err)
+  //       console.log(err);
+  //       navigate('/access');
+  //     });    
     
-    navigate('/');
+  //   //navigate('/');
     
-  }
+  // }
   
 
-  useEffect(() => {
-    
-    setDataAfterRegistration();
-    
+  useEffect(() => {    
+    setStravaTokenAndPermissionsAfterRegistration(stravaPermissions);
   }, []);
   
   
