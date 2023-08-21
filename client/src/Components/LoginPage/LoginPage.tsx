@@ -5,11 +5,7 @@ import PageWithForm from '../PageWithForm/PageWithForm'
 import useAuth from '../../hooks/useAuth';
 
 
-interface LoginPageProps {
-  handleLogin: (login: string, password: string) => void
-}
-
-export default function LoginPage({handleLogin}: LoginPageProps) {
+export default function LoginPage() {
 
   const auth = useAuth();
   const navigate = useNavigate();
@@ -29,7 +25,6 @@ export default function LoginPage({handleLogin}: LoginPageProps) {
   function login(e: React.SyntheticEvent) {
     e.preventDefault();
     auth.signIn(loginValue, passwordValue)
-    //handleLogin(loginValue, passwordValue);
     navigate('/');
   }
 

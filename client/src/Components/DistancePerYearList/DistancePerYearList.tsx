@@ -6,14 +6,15 @@ import DistancePerYear from '../DistancePerYear/DistancePerYear';
 
 
 interface DistancePerYearListProps {
-  yearsAtStrava: (currentYear: number) => number[]
+  yearsAtStrava: (currentYear: number, regYear: number) => number[]
+  registrationYear: number
   distancePerYear: (y: number) => number
 }
 
-export default function DistancePerYearList({yearsAtStrava, distancePerYear}: DistancePerYearListProps) {
+export default function DistancePerYearList({yearsAtStrava, registrationYear, distancePerYear}: DistancePerYearListProps) {
   return (
     <ul className='year-dist-cardslist'>
-      {yearsAtStrava(currentYear).reverse().map((year: number, i: number) => (
+      {yearsAtStrava(currentYear, registrationYear).reverse().map((year: number, i: number) => (
         <li className='year-dist-card' key={i}><DistancePerYear year={year} distancePerYear={distancePerYear} /></li>
       ))}
     </ul>

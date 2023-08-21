@@ -4,16 +4,18 @@ import { UserBike } from '../../models/UserBike';
 import EditButton from '../EditButton/EditButton';
 import { ActivitiesLoadingState } from '../../contexts/ActivitiesLoadingState';
 import { Preloader } from '../Preloader/Preloader';
+import { Activity } from '../../models/Activity';
 
 
 interface BikeSpecsProps {
   bike: UserBike
-  bikeTotalDistance: (bikeId: string) => number
+  activities: Activity[]
+  bikeTotalDistance: (bikeId: string, activities: Activity[]) => number
   openEditInfoPopup: () => void
   getBikeId: (id: string) => void
 }
 
-export default function BikeSpecs({bike, bikeTotalDistance, openEditInfoPopup, getBikeId}: BikeSpecsProps) {
+export default function BikeSpecs({bike, activities, bikeTotalDistance, openEditInfoPopup, getBikeId}: BikeSpecsProps) {
 
   const hasAllActivitiesLoaded = React.useContext(ActivitiesLoadingState);
 
@@ -39,7 +41,7 @@ export default function BikeSpecs({bike, bikeTotalDistance, openEditInfoPopup, g
         <li className='bike-specs__spec'>
           {hasAllActivitiesLoaded ? (
             <p className='spec'>Пробег:
-              <span className='bold'> {Math.round(bikeTotalDistance(bike.id) / 1000)} км</span>
+              <span className='bold'> {Math.round(bikeTotalDistance(bike.id, activities) / 1000)} км</span>
             </p> 
           ) : (
             <div className='spec__preloader-container'>

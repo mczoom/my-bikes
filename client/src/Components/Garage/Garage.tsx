@@ -12,9 +12,9 @@ import EditBikeInfoPopup from '../EditBikeInfoPopup/EditBikeInfoPopup';
 
 interface GarageProps {
   userBikesStrava: Bike[]
-  yearsAtStrava: (currentYear: number) => number[]
+  yearsAtStrava?: (currentYear: number, regYear: number) => number[]
+  registrationYear: number
   activities: Activity[]
-  bikeTotalDistance: (bikeId: string) => number  
 }
 
 interface BikeCardInfo {
@@ -26,7 +26,7 @@ interface BikeCardInfo {
   weight: string | number
 }
 
-export default function Garage({userBikesStrava, yearsAtStrava, activities, bikeTotalDistance}: GarageProps) {
+export default function Garage({userBikesStrava, yearsAtStrava, registrationYear, activities}: GarageProps) {
 
   const [userBikes, setUserBikes] = useState<UserBike[]>([]);
   const [isBikesFilterChecked, setIsBikesFilterChecked] = useState<boolean>(false);
@@ -58,6 +58,17 @@ export default function Garage({userBikesStrava, yearsAtStrava, activities, bike
   console.log(userBikes);
 
 console.log(userBikesStrava);
+
+
+function getBikeTotalDistance(bikeId: string, activities: Activity[]): number {
+  let dist = 0;
+  activities.forEach((act: Activity) => {
+    if(act.gear_id === bikeId) {
+      dist += act.distance;
+    }
+  });
+  return dist;
+};
 
 
 
@@ -121,8 +132,9 @@ useEffect(() => {
         openBikePhotoPopup={openBikePhotoPopup}
         openEditInfoPopup={openEditBikeInfoPopup}
         yearsAtStrava={yearsAtStrava}
+        registrationYear={registrationYear}
         activities={activities}
-        bikeTotalDistance={bikeTotalDistance}
+        bikeTotalDistance={getBikeTotalDistance}
         getBikeId={getBikeId}
       />
       <BikeCardPopup isPopupOpen={isBikePhotoPopupOpen} bikePopupData={bikePopupData} closePopup={closeBikePhotoPopup} />

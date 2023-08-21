@@ -102,11 +102,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     useEffect(() => {
       checkStravaPermissions();
     }, []);
-
     
 
-    return <AuthContext.Provider value={authData}>{children}</AuthContext.Provider>;  
-    
-  }
+    return <AuthContext.Provider value={authData}>{children}</AuthContext.Provider>;    
+  };
 
   

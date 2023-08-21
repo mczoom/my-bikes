@@ -11,14 +11,15 @@ interface BikeCardProps {
   bike: UserBike
   openBikePhotoPopup: (bikeData: UserBike | undefined) => void
   openEditInfoPopup: () => void
-  yearsAtStrava: (currentYear: number) => number[]
+  yearsAtStrava: (currentYear: number, regYear: number) => number[]
+  registrationYear: number
   activities: Activity[]
-  bikeTotalDistance: (bikeId: string) => number
+  bikeTotalDistance: (bikeId: string, activities: Activity[]) => number
   getBikeId: (id: string) => void
 }
 
 
-export default function GarageBikeCard({bike, openBikePhotoPopup, openEditInfoPopup, yearsAtStrava, activities, bikeTotalDistance, getBikeId}: BikeCardProps) {
+export default function GarageBikeCard({bike, openBikePhotoPopup, openEditInfoPopup, yearsAtStrava, registrationYear, activities, bikeTotalDistance, getBikeId}: BikeCardProps) {
 
   function openPhotoPopup() {
     openBikePhotoPopup(bike);
@@ -42,8 +43,8 @@ export default function GarageBikeCard({bike, openBikePhotoPopup, openEditInfoPo
         <div className='bike-card__image-wrap'>        
           <img src={bike?.photo} className='bike-card__image' onClick={openPhotoPopup}></img>
         </div>  
-        <BikeSpecs bike={bike} getBikeId={getBikeId} bikeTotalDistance={bikeTotalDistance} openEditInfoPopup={openEditInfoPopup} />
-        <DistancePerYearList yearsAtStrava={yearsAtStrava} distancePerYear={getDistancePerYear} />
+        <BikeSpecs bike={bike} activities={activities} getBikeId={getBikeId} bikeTotalDistance={bikeTotalDistance} openEditInfoPopup={openEditInfoPopup} />
+        <DistancePerYearList yearsAtStrava={yearsAtStrava} registrationYear={registrationYear} distancePerYear={getDistancePerYear} />
       </div>
     </div>
   )

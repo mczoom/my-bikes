@@ -5,19 +5,13 @@ import { mandatoryStravaPermissions } from '../../utils/constants';
 import useAuth from '../../hooks/useAuth';
 import { getCurrentAthlete } from '../../utils/stravaApi';
 
-interface StravaAccessResultProps {
-  getCurrentUserData: () => void
-  addAllBikes: (user: any) => void
-  onError: (errMsg: string) => void
-}
-
 
 interface stravaToken {
   strToken: string  
 }
 
 
-export default function StravaAccessResult ({getCurrentUserData, addAllBikes, onError}: StravaAccessResultProps) {
+export default function StravaAccessResult () {
 
   const navigate = useNavigate();
   const auth = useAuth();
@@ -56,7 +50,6 @@ export default function StravaAccessResult ({getCurrentUserData, addAllBikes, on
         navigate('/');
       })
       .catch((err) => {
-        onError(err)
         console.log(err);
         navigate('/access');
       });    

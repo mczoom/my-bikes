@@ -21,18 +21,13 @@ module.exports.updateStravaToken = async (tokenInfo, id) => {
 };
 
 
-// module.exports.getActualBikeOdo = async(id, bikesInfo) => {
-//   const actualBikeInfo = await bikesInfo.find(bike => bike.id === id);
-  
-//   return bikesInfo.converted_distance;
-// };
-
-
 module.exports.updateBikesOdo = async(storedBikeData, actualData) => {
   storedBikeData.bikes.forEach(async (bike) => {    
     const actualDist = await actualData?.find(bicycle => bicycle.id === bike.id);
     if(actualDist?.converted_distance !== bike.converted_distance) {
       bike.converted_distance = actualDist?.converted_distance;
+    } else {
+      return;
     }
   });  
 };

@@ -10,7 +10,7 @@ import ActivitiesCalendar from '../ActivitiesCalendar/ActivitiesCalendar';
 
 interface StatsProps {
   registrationYear: number
-  yearsAtStrava: (p: number) => number[]
+  yearsAtStrava?: (currentYear: number, regYear: number) => number[]
   allRidesTotals: AthleteStats
   allYTDRidesTotals: AthleteStats
   isLoading: boolean

@@ -20,7 +20,7 @@ export default function Header({setUser}: HeaderProps) {
   function logout() {
     auth.logout();
     setUser({} as ProfileType);
-  }
+  };
 
   return (
     <header className='header'>

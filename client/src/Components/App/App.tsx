@@ -25,6 +25,8 @@ import { getLocalStorage, setLocalStorage } from '../../utils/service';
 import { AuthProvider } from '../../contexts/AuthProvider';
 import useAuth from '../../hooks/useAuth';
 
+import EntryPage from '../EntryPage/EntryPage';
+
 
 
 function App() {
@@ -143,21 +145,6 @@ console.log(isTrainer);
   };
   
 
-  // function setStrTokenToLocalStorage() {
-  //   getStravaToken()
-  //     .then((res) => {
-  //       if(res.message) {
-  //         throw new Error(res.message);
-  //       }  
-  //       localStorage.setItem('stravaToken', res.strToken);
-  //       return res.strToken;
-  //     })
-  //     .catch((err) => {
-  //       setErrMessage([...errMessage, `Ошибка: ${err.message}`])
-  //     });      
-  // };
-
-
   function onAppLoad() {
     setErrMessage([]);
     getStravaToken()
@@ -175,44 +162,6 @@ console.log(isTrainer);
   
 
   
-  function handleRegistration(login: string, password: string) {
-    appApi.register(login, password)
-      .then((res) => {       
-        if(res.message) {
-          throw new Error(res.message);
-        } else {
-          handleLogin(login, password);
-          navigate('/access');
-        }
-      })
-      .catch((err) => {
-        setErrMessage([...errMessage, `Ошибка при регистрации: ${err.message}`])        
-      })
-  };
-
-
-  function handleLogin(login: string, password: string) {
-    appApi.login(login, password)
-    .then((res) => {
-      if (res.token) {     
-        localStorage.setItem('jwt', res.token);
-        setIsLoggedIn(true);
-        localStorage.setItem('logged', 'true');
-        //setStrTokenToLocalStorage();
-        auth.checkPermissions();
-        setErrMessage([]);      
-      } else if (res.message) {
-        throw new Error(res.message);
-      };
-      return;
-    })
-    .catch((err) => {      
-      setErrMessage([...errMessage, `Ошибка при входе: ${err.message}`])        
-    })
-  };
-
-
-
   function getUserRideStats(user: Profile) {
     setIsLoading(true);
     getAthlete(user.id)
@@ -289,24 +238,7 @@ console.log(isTrainer);
   };
 
 
-  function getBikeTotalDistance(bikeId: string): number {
-    let dist = 0;
-    allActivities.forEach((act: Activity) => {
-      if(act.gear_id === bikeId) {
-        dist += act.distance;
-      }
-    });
-    return dist;
-  };
-
-
-  const yearsAtStrava = (currentYear: number): number[] => {
-    let years: number[] = [];
-    for(let y = yearOfRegistrationAtStrava; y <= (currentYear); y++) {
-      years.push(y);
-    };
-    return years;
-  };
+  
   
   
 console.log(userBikes);
@@ -319,46 +251,33 @@ console.log(userBikes);
   
 
   useEffect(() => {
-    //setErrMessage([]);
     checkAppToken();   
   }, []);
 
  
-  const strToken = localStorage.getItem('stravaToken');
-
-  useEffect(() => {    
-    if(isLoggedIn && strToken) {
-      onAppLoad();   
-    }
-  }, [isLoggedIn, strToken]);
-  
-  
-  console.log(currentUser);   
+ console.log(currentUser);   
   
   
     return (      
       <CurrentUserContext.Provider value={currentUser}> 
       <ActivitiesLoadingState.Provider value={hasAllActivitiesLoaded}>            
         <Routes>
-          <Route path='/' element={<AppLayout setUser={setCurrentUser} errMessage={errMessage}/>}>
+          <Route element={<AppLayout setUser={setCurrentUser} errMessage={errMessage} />}>
             
-            <Route path='/registration' element={!isLoggedIn ? <RegPage handleRegistration={handleRegistration} /> : <Navigate to='/' replace={true} />} />
-            <Route path='/login' element={!isLoggedIn ? <LoginPage handleLogin={handleLogin} /> : <Navigate to='/' replace={true} />} />        
+            <Route path='/registration' element={!isLoggedIn ? <RegPage /> : <Navigate to='/' replace={true} />} />
+            <Route path='/login' element={!isLoggedIn ? <LoginPage /> : <Navigate to='/' replace={true} />} />        
             
             <Route path='/access' element={!isStravaConnected ? <StravaAccessPage /> : <Navigate to='/' replace={true} />} />
             
-            {/* <Route element={<ProtectedRoute />}>
-              <Route path='/access' element={<StravaAccessPage />} />
-            </Route>  */}
-
-            <Route path='/access-result' element={<StravaAccessResult getCurrentUserData={getCurrentUserData} addAllBikes={addAllUserBikes} onError={handleErrors}/>} />
+            <Route path='/access-result' element={<StravaAccessResult />} />
       
-            <Route path='/' element={<ProtectedRoute />}>
-              <Route index element={<Main />}  />                
+          <Route path='/' element={<Main onLoad={onAppLoad} registrationYear={yearOfRegistrationAtStrava} />}>
+            <Route element={<ProtectedRoute />}>
+              <Route index element={<EntryPage />}  />                
               <Route path='/stats' 
                 element={<Stats               
                   registrationYear={yearOfRegistrationAtStrava} 
-                  yearsAtStrava={yearsAtStrava} 
+                  //yearsAtStrava={yearsAtStrava} 
                   allRidesTotals={allRidesTotals} 
                   allYTDRidesTotals={allYTDRidesTotals} 
                   isLoading={isLoading} 
@@ -368,13 +287,14 @@ console.log(userBikes);
               <Route path='/garage' 
                 element={<Garage             
                   userBikesStrava={userBikes} 
-                  yearsAtStrava={yearsAtStrava} 
-                  activities={allActivities} 
-                  bikeTotalDistance={getBikeTotalDistance} 
+                  registrationYear={yearOfRegistrationAtStrava}
+                  //yearsAtStrava={yearsAtStrava} 
+                  activities={allActivities}
                 />} 
               />
               <Route path='/maintenance' element={<Maintenance />} />
             </Route>
+          </Route>  
             <Route path='/*' element={<Page404 />} />
           </Route>        
         </Routes>      
