@@ -102,28 +102,29 @@ function App() {
     const isTrainer = trainings.every((ride) => {
       return ride.trainer === true;
     });
-console.log(isTrainer);
 
     return isTrainer;
   };
 
   
-  async function addAllUserBikes(currentUser: any) {
-    if(currentUser.bikes.length !== 0) {
+
+  
+  function addAllUserBikes(currentUser: any) {
+    if(currentUser.bikes.length !== 0 && hasAllActivitiesLoaded === true) {
       const userBikesFromStrava: Bike[] = currentUser.bikes.map((bike: Bike) => {  
-        const isTrainer = checkIfTrainer(bike.id)
+        const isTrainer = checkIfTrainer(bike.id);
         return {...bike, trainer: isTrainer};
       });
       console.log(userBikesFromStrava);
       
-      await appApi.addAllBikes(userBikesFromStrava);    
+      appApi.addAllBikes(userBikesFromStrava);    
     }
   };
 
   function addAllBikes(user: any) {
     appApi.getAllBikes()
       .then((res) => {
-        if(res.message) {
+        if(res.status === 404) {
           addAllUserBikes(user);
         } else {
           return;
@@ -143,20 +144,6 @@ console.log(isTrainer);
   };
   
 
-  // function setStrTokenToLocalStorage() {
-  //   getStravaToken()
-  //     .then((res) => {
-  //       if(res.message) {
-  //         throw new Error(res.message);
-  //       }  
-  //       localStorage.setItem('stravaToken', res.strToken);
-  //       return res.strToken;
-  //     })
-  //     .catch((err) => {
-  //       setErrMessage([...errMessage, `Ошибка: ${err.message}`])
-  //     });      
-  // };
-
 
   function onAppLoad() {
     setErrMessage([]);
@@ -167,50 +154,12 @@ console.log(isTrainer);
         };  
         return checkStravaToken(stravaToken);
       })
-      .then((res) => getCurrentUserData())
+      .then(() => getCurrentUserData())
       .catch((err) => {
         setErrMessage([...errMessage, `Ошибка: ${err.message}`])
       });    
   };
   
-
-  
-  function handleRegistration(login: string, password: string) {
-    appApi.register(login, password)
-      .then((res) => {       
-        if(res.message) {
-          throw new Error(res.message);
-        } else {
-          handleLogin(login, password);
-          navigate('/access');
-        }
-      })
-      .catch((err) => {
-        setErrMessage([...errMessage, `Ошибка при регистрации: ${err.message}`])        
-      })
-  };
-
-
-  function handleLogin(login: string, password: string) {
-    appApi.login(login, password)
-    .then((res) => {
-      if (res.token) {     
-        localStorage.setItem('jwt', res.token);
-        setIsLoggedIn(true);
-        localStorage.setItem('logged', 'true');
-        //setStrTokenToLocalStorage();
-        auth.checkPermissions();
-        setErrMessage([]);      
-      } else if (res.message) {
-        throw new Error(res.message);
-      };
-      return;
-    })
-    .catch((err) => {      
-      setErrMessage([...errMessage, `Ошибка при входе: ${err.message}`])        
-    })
-  };
-
 
 
   function getUserRideStats(user: Profile) {
@@ -273,7 +222,7 @@ console.log(isTrainer);
         await getAllActivities(currentUser);
         return currentUser;       
       })
-      .then(async (currentUser) => {
+      .then((currentUser) => {
         addAllBikes(currentUser);
         setUserBikes(currentUser.bikes);
         updateBikeDistance(currentUser);
@@ -342,8 +291,8 @@ console.log(userBikes);
         <Routes>
           <Route path='/' element={<AppLayout setUser={setCurrentUser} errMessage={errMessage}/>}>
             
-            <Route path='/registration' element={!isLoggedIn ? <RegPage handleRegistration={handleRegistration} /> : <Navigate to='/' replace={true} />} />
-            <Route path='/login' element={!isLoggedIn ? <LoginPage handleLogin={handleLogin} /> : <Navigate to='/' replace={true} />} />        
+            <Route path='/registration' element={!isLoggedIn ? <RegPage /> : <Navigate to='/' replace={true} />} />
+            <Route path='/login' element={!isLoggedIn ? <LoginPage /> : <Navigate to='/' replace={true} />} />        
             
             <Route path='/access' element={!isStravaConnected ? <StravaAccessPage /> : <Navigate to='/' replace={true} />} />
             
@@ -351,7 +300,7 @@ console.log(userBikes);
               <Route path='/access' element={<StravaAccessPage />} />
             </Route>  */}
 
-            <Route path='/access-result' element={<StravaAccessResult getCurrentUserData={getCurrentUserData} addAllBikes={addAllUserBikes} onError={handleErrors}/>} />
+            <Route path='/access-result' element={<StravaAccessResult onError={handleErrors}/>} />
       
             <Route path='/' element={<ProtectedRoute />}>
               <Route index element={<Main />}  />                

@@ -5,11 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 
 
-interface RegPageProps {
-  handleRegistration: (login: string, password: string) => void
-}
 
-export default function RegPage({handleRegistration}: RegPageProps) {
+
+export default function RegPage() {
 
   const auth = useAuth();
 
