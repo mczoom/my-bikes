@@ -124,7 +124,7 @@ function App() {
   function addAllBikes(user: any) {
     appApi.getAllBikes()
       .then((res) => {
-        if(res.status === 404) {
+        if(res.message) {
           addAllUserBikes(user);
         } else {
           return;
