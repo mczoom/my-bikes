@@ -90,19 +90,17 @@ function App() {
   };  
 
   
-  function addAllUserBikes(currentUser: any) {
+  function addAllUserBikes(currentUser: Profile) {
     if(currentUser.bikes.length !== 0 && hasAllActivitiesLoaded === true) {
       const userBikesFromStrava: Bike[] = currentUser.bikes.map((bike: Bike) => {  
         const isTrainer = checkIfTrainer(bike.id);
         return {...bike, trainer: isTrainer};
-      });
-      console.log(userBikesFromStrava);
-      
+      });      
       appApi.addAllBikes(userBikesFromStrava);    
     }
   };
 
-  function addAllBikes(user: any) {
+  function addAllBikes(user: Profile) {
     appApi.getAllBikes()
       .then((res) => {
         if(res.message) {
