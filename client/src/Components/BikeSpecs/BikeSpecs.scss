@@ -3,7 +3,6 @@
 .bike-specs {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-items: flex-start;  
   width: 180px;  
   margin: 0;
@@ -14,6 +13,7 @@
 }
 
 .bike-specs__specs-list {  
+  margin-bottom: 10px;
   text-align: start;
   width: 100%;
   overflow: hidden;
@@ -26,8 +26,6 @@
   padding-bottom: 3px;
   border-bottom: 3px dotted black;
   color: black;
-  overflow: hidden;
-  white-space: nowrap;
 }
 
 .bike-specs__spec {

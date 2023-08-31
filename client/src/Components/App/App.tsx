@@ -1,11 +1,11 @@
 /* eslint-disable no-loop-func */
-import React, {useState, useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import {CurrentUserContext} from '../../contexts/CurrentUserContext';
-import {Route, useNavigate, Navigate, Routes } from 'react-router-dom';
+import {Route, Navigate, Routes } from 'react-router-dom';
 import * as appApi from '../../utils/appApi';
 import Main from '../Main/Main';
 import Stats from '../Stats/Stats';
-import { checkStravaPermissions, getStravaToken, stravaTokenCheck } from '../../utils/stravaAuthApi';
+import { getStravaToken, stravaTokenCheck } from '../../utils/stravaAuthApi';
 import {getCurrentAthlete, getActivities, getAthlete} from '../../utils/stravaApi';
 import {Profile} from '../../models/Profile';
 import StravaAccessPage from '../StravaAccessPage/StravaAccessPage';
@@ -21,8 +21,6 @@ import { Bike } from '../../models/Bike';
 import AppLayout from '../AppLayout/AppLayout';
 import { ActivitiesLoadingState } from '../../contexts/ActivitiesLoadingState';
 import StravaAccessResult from '../StravaAccessResult/StravaAccessResult';
-import { getLocalStorage, setLocalStorage } from '../../utils/service';
-import { AuthProvider } from '../../contexts/AuthProvider';
 import useAuth from '../../hooks/useAuth';
 
 
@@ -36,32 +34,17 @@ function App() {
   const [allRidesTotals, setAllRidesTotals] = useState<AthleteStats>({} as AthleteStats);
   const [allYTDRidesTotals, setAllYTDRidesTotals] = useState<AthleteStats>({} as AthleteStats);
   const [errMessage, setErrMessage] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   
-  
-  const navigate = useNavigate();
   const auth = useAuth();
   const isLoggedIn = auth.isLoggedIn;
   const isStravaConnected = auth.isConnectedToStrava;
   const setIsLoggedIn = auth.setIsLoggedIn;
-
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  
+  const strToken = localStorage.getItem('stravaToken');
   const yearOfRegistrationAtStrava: number = new Date(currentUser.created_at).getFullYear();
 
   
-
-  interface StravaResponseWithError {
-    message: string
-    errors: [
-        {
-            resource: string
-            field: string
-            code: string
-        }
-    ]
-  };
-
-
   function checkAppToken() {
     const jwt = localStorage.getItem('jwt');
     if(jwt) {
@@ -104,9 +87,7 @@ function App() {
     });
 
     return isTrainer;
-  };
-
-  
+  };  
 
   
   function addAllUserBikes(currentUser: any) {
@@ -148,11 +129,11 @@ function App() {
   function onAppLoad() {
     setErrMessage([]);
     getStravaToken()
-      .then((stravaToken: string) => {
-        if(!stravaToken) {
+      .then((strToken: string) => {
+        if(!strToken) {
           throw new Error('StravaToken не найден')
         };  
-        return checkStravaToken(stravaToken);
+        return checkStravaToken(strToken);
       })
       .then(() => getCurrentUserData())
       .catch((err) => {
@@ -255,8 +236,7 @@ function App() {
       years.push(y);
     };
     return years;
-  };
-  
+  };  
   
 console.log(userBikes);
   
@@ -264,16 +244,13 @@ console.log(userBikes);
   function handleErrors(errMsg: string) {
     setErrMessage([...errMessage, errMsg])
   };
-
   
 
   useEffect(() => {
     //setErrMessage([]);
     checkAppToken();   
-  }, []);
-
- 
-  const strToken = localStorage.getItem('stravaToken');
+  }, []); 
+  
 
   useEffect(() => {    
     if(isLoggedIn && strToken) {
@@ -295,11 +272,6 @@ console.log(userBikes);
             <Route path='/login' element={!isLoggedIn ? <LoginPage /> : <Navigate to='/' replace={true} />} />        
             
             <Route path='/access' element={!isStravaConnected ? <StravaAccessPage /> : <Navigate to='/' replace={true} />} />
-            
-            {/* <Route element={<ProtectedRoute />}>
-              <Route path='/access' element={<StravaAccessPage />} />
-            </Route>  */}
-
             <Route path='/access-result' element={<StravaAccessResult onError={handleErrors}/>} />
       
             <Route path='/' element={<ProtectedRoute />}>

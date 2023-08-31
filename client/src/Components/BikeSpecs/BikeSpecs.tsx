@@ -51,7 +51,7 @@ export default function BikeSpecs({bike, bikeTotalDistance, openEditInfoPopup, g
           )}         
         </li>
       </ul>
-      <EditButton bike={bike} getBikeId={getBikeId} text={'Редактировать'} openPopup={openEditInfoPopup}/>
+      <EditButton bike={bike} getBikeId={getBikeId} text={'...'} openPopup={openEditInfoPopup}/>
     </div>
   )
 }

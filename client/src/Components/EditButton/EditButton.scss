@@ -1,11 +1,16 @@
 .edit-btn {
-    opacity: 0.5;   
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    color: rgb(76, 78, 78);
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  font-size: 28px;
+  text-align: end;
+  opacity: 0.5;   
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: rgb(76, 78, 78);
   }
   
-  .edit-btn:hover {
-    opacity: 1;
-  }
+.edit-btn:hover {
+  opacity: 1;
+}
