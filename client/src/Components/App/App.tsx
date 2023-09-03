@@ -14,7 +14,7 @@ import Garage from '../Garage/Garage';
 import { Activity } from '../../models/Activity';
 import Page404 from '../Page404/Page404';
 import Maintenance from '../Maintenance/Maintenance';
-import { AthleteStats } from '../../models/AthleteStats';
+import { AthleteStats, RidesTotals } from '../../models/AthleteStats';
 import RegPage from '../RegPage/RegPage';
 import LoginPage from '../LoginPage/LoginPage';
 import { Bike } from '../../models/Bike';
@@ -31,8 +31,8 @@ function App() {
   const [allActivities, setAllActivities] = useState<Activity[]>([]);
   const [hasAllActivitiesLoaded, setHasAllActivitiesLoaded] = useState<boolean>(false)
   const [userBikes, setUserBikes] = useState<Bike[]>([]);
-  const [allRidesTotals, setAllRidesTotals] = useState<AthleteStats>({} as AthleteStats);
-  const [allYTDRidesTotals, setAllYTDRidesTotals] = useState<AthleteStats>({} as AthleteStats);
+  const [allRidesTotals, setAllRidesTotals] = useState<RidesTotals>({} as RidesTotals);
+  const [allYTDRidesTotals, setAllYTDRidesTotals] = useState<RidesTotals>({} as RidesTotals);
   const [errMessage, setErrMessage] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   
@@ -120,8 +120,7 @@ function App() {
     } else {
       console.log('Байки пользователя не найдены');      
     }
-  };
-  
+  };  
 
 
   function onAppLoad() {
@@ -144,7 +143,7 @@ function App() {
   function getUserRideStats(user: Profile) {
     setIsLoading(true);
     getAthlete(user.id)
-      .then((res) => {
+      .then((res: AthleteStats) => {
         setAllRidesTotals((res.all_ride_totals));
         setAllYTDRidesTotals(res.ytd_ride_totals);
       })
@@ -185,13 +184,12 @@ function App() {
   };
 
   console.log(allActivities);
-
-
+  
   async function getCurrentUserData() { 
     getCurrentAthlete()
       .then((user) => {
         if(!user.id) {
-         throw new Error(user.message)         
+         throw new Error(JSON.stringify(user))         
         }
         setCurrentUser(user); 
         return user;       
@@ -245,7 +243,6 @@ console.log(userBikes);
   
 
   useEffect(() => {
-    //setErrMessage([]);
     checkAppToken();   
   }, []); 
   
@@ -303,3 +300,7 @@ console.log(userBikes);
   }
 
 export default App;
+function ErrorAPI(this: any, key: string, value: any) {
+  throw new Error('Function not implemented.');
+}
+

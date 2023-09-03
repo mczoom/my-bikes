@@ -1,11 +1,11 @@
 import React from 'react';
-import { AthleteStats } from '../../models/AthleteStats';
+import { AthleteStats, RidesTotals } from '../../models/AthleteStats';
 import { currentYear } from '../../utils/constants';
 
 
 interface CommonStatsProps {
-  allRidesTotals: AthleteStats
-  allYTDRidesTotals: AthleteStats
+  allRidesTotals: RidesTotals
+  allYTDRidesTotals: RidesTotals
 }
 
 export default function CommonStats({allRidesTotals, allYTDRidesTotals}: CommonStatsProps) {

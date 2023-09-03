@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import StatsYearsList from '../StatsYearsList/StatsYearsList';
 import CommonStats from '../CommonStats/CommonStats';
-import { AthleteStats } from '../../models/AthleteStats';
+import { AthleteStats, RidesTotals } from '../../models/AthleteStats';
 import { Activity } from '../../models/Activity';
 import ActivitiesCalendar from '../ActivitiesCalendar/ActivitiesCalendar';
 
@@ -11,8 +11,8 @@ import ActivitiesCalendar from '../ActivitiesCalendar/ActivitiesCalendar';
 interface StatsProps {
   registrationYear: number
   yearsAtStrava: (p: number) => number[]
-  allRidesTotals: AthleteStats
-  allYTDRidesTotals: AthleteStats
+  allRidesTotals: RidesTotals
+  allYTDRidesTotals: RidesTotals
   isLoading: boolean
   allActivities: Activity[]
 }

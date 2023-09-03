@@ -1,15 +1,13 @@
-import React from 'react';
 import { UserBike } from '../../models/UserBike';
 
 interface EditButtonProps {
-    text: string
     openPopup: () => void
     bike: UserBike
     getBikeId: (id: string) => void
 }
 
 
-export default function EditButton({text, openPopup, bike, getBikeId}: EditButtonProps) {
+export default function EditButton({openPopup, bike, getBikeId}: EditButtonProps) {
 
   function handleClick() {
     openPopup();
@@ -17,7 +15,7 @@ export default function EditButton({text, openPopup, bike, getBikeId}: EditButto
   }
 
   return (
-    <button className='edit-btn' onClick={handleClick}>{text}</button>
+    <button className='edit-btn' onClick={handleClick}></button>
   )
 }
 
