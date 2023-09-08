@@ -1,7 +1,6 @@
 import { Outlet, useLocation, useNavigation } from "react-router-dom";
 import Header from "../Header/Header";
 import ErrorMessagePopup from "../ErrorMessagePopup/ErrorMessagePopup";
-import { useEffect } from "react";
 import Footer from "../Footer/Footer";
 import { Profile } from "../../models/Profile";
 

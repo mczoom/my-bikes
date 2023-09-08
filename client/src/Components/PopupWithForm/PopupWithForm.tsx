@@ -1,4 +1,3 @@
-import React from 'react';
 import FormButton from '../FormButton/FormButton';
 
 
@@ -11,7 +10,6 @@ interface PopupWithFormProps {
 }
 
 export default function PageWithForm({name, children, title, btnText, submitHandler}: PopupWithFormProps) {
-
   
   return (
     <div className='popup-with-form'>      

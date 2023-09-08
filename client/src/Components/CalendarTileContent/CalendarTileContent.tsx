@@ -1,4 +1,3 @@
-import React from 'react';
 import { Activity } from '../../models/Activity';
 
 interface CalendarTileContentProps {

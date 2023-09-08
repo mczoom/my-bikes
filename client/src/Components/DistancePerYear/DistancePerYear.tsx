@@ -1,6 +1,3 @@
-import React, { useEffect } from 'react';
-
-
 interface DistancePerYear {
   year: number
   distancePerYear: (y: number) => number
@@ -9,10 +6,9 @@ interface DistancePerYear {
 
 export default function DistancePerYear({year, distancePerYear}: DistancePerYear) {
 
-
   const distanceInKM = (y: number) => {
     return Math.round(distancePerYear(y) / 1000);
-  }
+  };
 
 
   return (

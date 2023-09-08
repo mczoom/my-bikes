@@ -1,4 +1,3 @@
-import React from 'react'
 import Feature from '../Feature/Feature'
 
 export default function FeaturesList() {

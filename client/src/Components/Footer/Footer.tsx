@@ -1,4 +1,3 @@
-import React from 'react'
 import poweredByStravaLogo from '../../images/pwrd_by_strava_horiz.png';
 
 export default function Footer() {

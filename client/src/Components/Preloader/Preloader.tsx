@@ -1,4 +1,3 @@
-import React from 'react';
 import spinner from '../../images/spinner-wheel.png'
 
 interface PreloaderProps {
@@ -11,8 +10,8 @@ export const Preloader = ({isLoading}: PreloaderProps) => {
     const preloaderClassName = `preloader ${isLoading ? '' : 'preloader_off'}`;
 
     return (
-        <div className={preloaderClassName}>
-            <img src={spinner} className="preloader__spinner" />
-        </div>
+      <div className={preloaderClassName}>
+        <img src={spinner} className="preloader__spinner" />
+      </div>
     )
 };

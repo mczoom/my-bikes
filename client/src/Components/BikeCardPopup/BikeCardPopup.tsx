@@ -1,5 +1,4 @@
 import React from 'react';
-import { MyBike } from '../../models/MyBike';
 import { UserBike } from '../../models/UserBike';
 
 

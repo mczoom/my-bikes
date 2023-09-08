@@ -1,5 +1,3 @@
-import React from 'react';
-import Input from '../Input/Input';
 import FormButton from '../FormButton/FormButton';
 import AuthLink from '../AuthLink/AuthLink';
 import { useLocation } from 'react-router-dom';

@@ -1,12 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState, useContext} from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 
 export default function Profile() {
 
-  const currentUser = React.useContext(CurrentUserContext);
-  const [avatar, setAvatar] = useState<string>('')
-  const [name, setName] = useState<string>('')
+  const currentUser = useContext(CurrentUserContext);
+  const [avatar, setAvatar] = useState<string>('');
+  const [name, setName] = useState<string>('');
 
 
   useEffect(() => {

@@ -1,12 +1,8 @@
-import React from 'react'
-
 interface BikesTypeFilter {
   toggleBikesFilter: () => void
 }
 
 export default function BikesTypeFilter({toggleBikesFilter}: BikesTypeFilter) {
-
-
 
   return (
     <div className='type-filter'>

@@ -5,7 +5,7 @@ interface InputProps {
   name: string
   label: string
   inputType: string
-  placeholder: string
+  placeholder?: string
   getInputValue?: (e: React.ChangeEvent<HTMLInputElement>) => void
   getLoginInputValue?: (e: React.ChangeEvent<HTMLInputElement>) => void
   getPasswordInputValue?: (e: React.ChangeEvent<HTMLInputElement>) => void

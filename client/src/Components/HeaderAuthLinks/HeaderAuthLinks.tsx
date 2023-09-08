@@ -2,7 +2,6 @@ import { useLocation } from 'react-router-dom';
 import AuthLink from '../AuthLink/AuthLink';
 
 
-
 export default function HeaderAuthLinks() { 
 
   const location = useLocation();    

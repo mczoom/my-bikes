@@ -1,6 +1,3 @@
-import React from 'react';
-import { Bike } from '../../models/Bike';
-import { MyBike } from '../../models/MyBike';
 import { currentYear } from '../../utils/constants';
 import DistancePerYear from '../DistancePerYear/DistancePerYear';
 

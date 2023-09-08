@@ -1,9 +1,7 @@
-import React from 'react';
-import {MyBike} from '../../models/MyBike';
+
 import BikeSpecs from '../BikeSpecs/BikeSpecs';
 import DistancePerYearList from '../DistancePerYearList/DistancePerYearList';
 import { Activity } from '../../models/Activity';
-import { Bike } from '../../models/Bike';
 import { UserBike } from '../../models/UserBike';
 
 
@@ -22,7 +20,7 @@ export default function GarageBikeCard({bike, openBikePhotoPopup, openEditInfoPo
 
   function openPhotoPopup() {
     openBikePhotoPopup(bike);
-  }
+  };
 
   function getDistancePerYear (y: number): number {
     let distance = 0;
@@ -32,8 +30,7 @@ export default function GarageBikeCard({bike, openBikePhotoPopup, openEditInfoPo
       }
     })
     return distance;
-  }
-
+  };
 
 
   return (

@@ -1,8 +1,4 @@
-import React, {useState} from 'react';
-import { CurrentUserContext } from '../../contexts/CurrentUserContext';
-import { Profile } from '../../models/Profile';
 import GarageBikeCard from '../GarageBikeCard/GarageBikeCard';
-import { MyBike } from '../../models/MyBike';
 import { Activity } from '../../models/Activity';
 import { Bike } from '../../models/Bike';
 import { UserBike } from '../../models/UserBike';
@@ -20,10 +16,7 @@ interface GarageBikesListProps {
 
 
 export default function GarageBikesList({bikesToRender, openBikePhotoPopup, openEditInfoPopup, yearsAtStrava, activities, bikeTotalDistance, getBikeId}: GarageBikesListProps) {
-
-  const currentUser = React.useContext<Profile>(CurrentUserContext);
-
-
+  
   return (
     <ul className='bike-cards-list'>
       {bikesToRender.map((bike) => (

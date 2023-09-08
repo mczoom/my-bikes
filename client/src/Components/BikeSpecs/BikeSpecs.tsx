@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { Bike } from '../../models/Bike';
+import { useContext } from 'react';
 import { UserBike } from '../../models/UserBike';
 import EditButton from '../EditButton/EditButton';
 import { ActivitiesLoadingState } from '../../contexts/ActivitiesLoadingState';
@@ -15,7 +14,7 @@ interface BikeSpecsProps {
 
 export default function BikeSpecs({bike, bikeTotalDistance, openEditInfoPopup, getBikeId}: BikeSpecsProps) {
 
-  const hasAllActivitiesLoaded = React.useContext(ActivitiesLoadingState);
+  const hasAllActivitiesLoaded = useContext(ActivitiesLoadingState);
 
 
   return (

@@ -1,4 +1,3 @@
-import React from 'react';
 import { AthleteStats, RidesTotals } from '../../models/AthleteStats';
 import { currentYear } from '../../utils/constants';
 

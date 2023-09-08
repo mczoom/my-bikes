@@ -8,10 +8,9 @@ interface AuthButtonProps {
 
 export default function AuthButton({text, onClick}: AuthButtonProps) {
 
-
   return(
     <Link to={'/'}>
-    <button className="logout-btn" type="button" onClick={onClick}>{text}</button>
+      <button className="logout-btn" type="button" onClick={onClick}>{text}</button>
     </Link>
   )
 }

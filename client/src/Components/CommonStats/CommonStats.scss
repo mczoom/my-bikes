@@ -1,6 +1,5 @@
 @import '../../styles/index';
 
-
 .common-stats__list {
   margin: 60px 0;
   margin-bottom: 90px;
@@ -13,7 +12,6 @@
   grid-template-columns: 250px max-content;
   align-items: center;
   padding: 10px 0;
-
 }
 
 .item__description {
@@ -21,7 +19,6 @@
   font-size: 18px;
   line-height: 121%;
   font-weight: 500;
-  //background-color: #fff;
   padding: 10px 0;
   padding-left: 8px;
   color: black;

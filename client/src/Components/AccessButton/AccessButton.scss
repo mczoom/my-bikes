@@ -1,17 +1,13 @@
-@import '../../styles/_index';
-
 .access-button {
   height: 40px;
   width: 180px;
   margin-top: 50px;
-  // background-color: $button-color;
   border: none;
   border-radius: 10px;
   cursor: pointer;
   background-image: url('../../images/btn_strava_connect.png');
   background-repeat: no-repeat;
   background-position: center;
-
 }
 
 .access-button:hover {

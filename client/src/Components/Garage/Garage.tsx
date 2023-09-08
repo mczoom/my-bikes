@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import { Activity } from '../../models/Activity';
-import { MyBike } from '../../models/MyBike';
 import BikeCardPopup from '../BikeCardPopup/BikeCardPopup';
 import BikesTypeFilter from '../BikesTypeFilter/BikesTypeFilter';
 import GarageBikesList from '../GarageBikesList/GarageBikesList';
@@ -40,7 +39,7 @@ export default function Garage({userBikesStrava, yearsAtStrava, activities, bike
   function checkForNewBikesInStrava(stravaBikes: Bike[], savedBikes: Bike[]): Bike[] {    
     const newBike = stravaBikes.filter((b) => savedBikes.every((bike) => !bike.id.includes(b.id)));
     return newBike;        
-  }
+  };
     
 
   function getUserBikes() {
@@ -55,63 +54,60 @@ export default function Garage({userBikesStrava, yearsAtStrava, activities, bike
       })
       .catch(err => console.log(err));
   };
-  console.log(userBikes);
 
+
+  function toggleBikesFilter() {
+    setIsBikesFilterChecked(v => !v);
+  };
+
+  function filterBikeCardsToRender() {
+    if(isBikesFilterChecked) {
+      const trainerBikesToRender = userBikes.filter((bike) => {
+        return bike.trainer === true;
+    });
+    setBikesToRender(trainerBikesToRender);
+    } else {
+      setBikesToRender(userBikes);
+    }
+  };
+
+  function openBikePhotoPopup(bikeData: UserBike | undefined) {
+    setBikePhotoPopupOpen(true);
+    setBikePopupData(bikeData);
+  };
+
+  function closeBikePhotoPopup() {
+    setBikePhotoPopupOpen(false);
+  };
+
+  function openEditBikeInfoPopup() {
+    setEditPopupOpen(true);  
+  };
+
+  function closeEditBikeInfoPopup() {
+    setEditPopupOpen(false);
+  };
+
+  function getBikeId(id: string) {
+    setCurentBikeId(id)
+  };
+
+  function updateBikeCardInfo(id: string, specs: BikeCardInfo) {
+    appApi.updateBikeInfo(id, specs)
+      .then(updatedInfo => setBikesToRender(updatedInfo))
+      .catch(() => console.log('Ошибка обновления данных байка'));    
+  };
+
+  useEffect(() => {
+    filterBikeCardsToRender();
+  }, [isBikesFilterChecked]);
+
+  useEffect(() => {
+    getUserBikes();
+  }, [])
+
+console.log(userBikes);
 console.log(userBikesStrava);
-
-
-
-function toggleBikesFilter() {
-  setIsBikesFilterChecked(v => !v);
-}
-
-function filterBikeCardsToRender() {
-  if(isBikesFilterChecked) {
-    const trainerBikesToRender = userBikes.filter((bike) => {
-      return bike.trainer === true;
-  });
-  setBikesToRender(trainerBikesToRender);
-  } else {
-    setBikesToRender(userBikes);
-  }
-}
-
-function openBikePhotoPopup(bikeData: UserBike | undefined) {
-  setBikePhotoPopupOpen(true);
-  setBikePopupData(bikeData);
-};
-
-function closeBikePhotoPopup() {
-  setBikePhotoPopupOpen(false);
-}
-
-function openEditBikeInfoPopup() {
-  setEditPopupOpen(true);  
-}
-
-function closeEditBikeInfoPopup() {
-  setEditPopupOpen(false);
-}
-
-function getBikeId(id: string) {
-  setCurentBikeId(id)
-}
-
-function updateBikeCardInfo(id: string, specs: BikeCardInfo) {
-  appApi.updateBikeInfo(id, specs)
-    .then(updatedInfo => setBikesToRender(updatedInfo))
-    .catch((err) => console.log('Ошибка обновления данных байка'));    
-};
-
-useEffect(() => {
-  filterBikeCardsToRender();
-}, [isBikesFilterChecked]);
-
-useEffect(() => {
-  getUserBikes();
-}, [])
-
-
 
   return (
     <section className='garage'>

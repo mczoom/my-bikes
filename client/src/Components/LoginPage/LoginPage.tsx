@@ -11,7 +11,6 @@ export default function LoginPage() {
   const auth = useAuth();
   const navigate = useNavigate();
 
-
   const [loginValue, setLoginValue] = useState<string>('');
   const [passwordValue, setPasswordValue] = useState<string>('');
 
@@ -25,10 +24,9 @@ export default function LoginPage() {
 
   function login(e: React.SyntheticEvent) {
     e.preventDefault();
-    auth.signIn(loginValue, passwordValue)
-    //handleLogin(loginValue, passwordValue);
+    auth.signIn(loginValue, passwordValue);
     navigate('/');
-  }
+  };
 
 
   return (

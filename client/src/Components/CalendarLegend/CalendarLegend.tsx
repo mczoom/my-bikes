@@ -1,6 +1,3 @@
-import React from 'react'
-import CalendarTileContent from '../CalendarTileContent/CalendarTileContent'
-
 export default function CalendarLegend() {
 
   return (
