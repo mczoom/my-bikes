@@ -1,7 +1,5 @@
-import React from 'react';
 import AccessButton from '../AccessButton/AccessButton';
 import FeaturesList from '../FeaturesList/FeaturesList';
-
 
 
 export default function StravaAccessPage() {

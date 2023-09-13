@@ -1,14 +1,13 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { addStravaPermissions, exchangeToken } from '../../utils/stravaAuthApi'
 import { useNavigate } from 'react-router-dom';
 import { mandatoryStravaPermissions } from '../../utils/constants';
 import useAuth from '../../hooks/useAuth';
-import { getCurrentAthlete } from '../../utils/stravaApi';
+
 
 interface StravaAccessResultProps {
   onError: (errMsg: string) => void
 }
-
 
 interface stravaToken {
   strToken: string  
@@ -58,14 +57,12 @@ export default function StravaAccessResult ({onError}: StravaAccessResultProps) 
         console.log(err);
         navigate('/access');
       });    
-  }
-
+  };
    
 
   useEffect(() => {    
     setStravaTokenAndPermissionsAfterRegistration(stravaPermissions);
-  }, []);
-  
+  }, []);  
   
 
   return (

@@ -1,11 +1,8 @@
-import React, { useEffect } from 'react';
 import StatsYearsList from '../StatsYearsList/StatsYearsList';
 import CommonStats from '../CommonStats/CommonStats';
-import { AthleteStats, RidesTotals } from '../../models/AthleteStats';
+import { RidesTotals } from '../../models/AthleteStats';
 import { Activity } from '../../models/Activity';
 import ActivitiesCalendar from '../ActivitiesCalendar/ActivitiesCalendar';
-
-
 
 
 interface StatsProps {
@@ -13,16 +10,15 @@ interface StatsProps {
   yearsAtStrava: (p: number) => number[]
   allRidesTotals: RidesTotals
   allYTDRidesTotals: RidesTotals
-  isLoading: boolean
   allActivities: Activity[]
 }
 
 
-export default function Stats({registrationYear, yearsAtStrava, allRidesTotals, allYTDRidesTotals, isLoading, allActivities}: StatsProps) {
+export default function Stats({registrationYear, yearsAtStrava, allRidesTotals, allYTDRidesTotals, allActivities}: StatsProps) {
 
   const isYearMatch = (y: number, activity: Activity) => {
     return new Date(activity.start_date).getFullYear() === y;
-  }
+  };
 
 
   function sumTotalRideDistance(y: number): number {
@@ -33,7 +29,7 @@ export default function Stats({registrationYear, yearsAtStrava, allRidesTotals, 
       }
     })
     return Math.round(odo / 1000);
-  }
+  };
 
 
   function getYearLongestRide(y: number): number {
@@ -44,7 +40,7 @@ export default function Stats({registrationYear, yearsAtStrava, allRidesTotals, 
       };
     });
     return Math.round(dist / 1000);
-  }
+  };
 
 
   function totalOverHundredRides(y: number): number {
@@ -55,7 +51,7 @@ export default function Stats({registrationYear, yearsAtStrava, allRidesTotals, 
       }
     });
     return longRide;
-  }
+  };
 
 
   function sumTotalRideTime(y: number): number {
@@ -66,7 +62,7 @@ export default function Stats({registrationYear, yearsAtStrava, allRidesTotals, 
       }
     })
     return Math.round(odo / 3600);
-  }
+  };
 
 
   function countRides(y: number): number {
@@ -77,7 +73,7 @@ export default function Stats({registrationYear, yearsAtStrava, allRidesTotals, 
       }
     })
     return trainings;
-  }
+  };
 
 
 
@@ -88,10 +84,8 @@ export default function Stats({registrationYear, yearsAtStrava, allRidesTotals, 
         <ActivitiesCalendar allActivities={allActivities} />
       </div>
       <StatsYearsList
-        isLoading={isLoading}
         registrationYear={registrationYear}
         yearsAtStrava={yearsAtStrava}
-        allActivities={allActivities}
         totalDistance={sumTotalRideDistance}
         totalTime={sumTotalRideTime}
         totalTrainings={countRides}

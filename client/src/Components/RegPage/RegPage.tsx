@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Input from '../Input/Input'
 import PageWithForm from '../PageWithForm/PageWithForm'
 import { useNavigate } from 'react-router-dom';
@@ -14,8 +14,7 @@ export default function RegPage() {
   const [loginValue, setLoginValue] = useState<string>('');
   const [passwordValue, setPasswordValue] = useState<string>('');
 
-  const navigate = useNavigate();
-
+  
   function getLoginInputValue(e: React.ChangeEvent<HTMLInputElement>) {
     setLoginValue(e.target.value);
   };
@@ -24,12 +23,10 @@ export default function RegPage() {
     setPasswordValue(e.target.value);
   };
 
-  async function registrationHandler(e: React.SyntheticEvent) {
+  function registrationHandler(e: React.SyntheticEvent) {
     e.preventDefault();    
-    auth.signUp(loginValue, passwordValue);    
-    //navigate('/access');    
-  }
-  
+    auth.signUp(loginValue, passwordValue);  
+  };  
 
   
   return (

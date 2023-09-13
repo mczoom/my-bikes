@@ -10,10 +10,8 @@ export default function Profile() {
 
 
   useEffect(() => {
-    if (currentUser) {
-      setAvatar(currentUser.profile);
-      setName(currentUser.firstname);
-    }
+    setAvatar(currentUser.profile);
+    setName(currentUser.firstname);    
   }, [currentUser]);
 
   return (

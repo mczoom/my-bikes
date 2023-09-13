@@ -34,7 +34,6 @@ function App() {
   const [allRidesTotals, setAllRidesTotals] = useState<RidesTotals>({} as RidesTotals);
   const [allYTDRidesTotals, setAllYTDRidesTotals] = useState<RidesTotals>({} as RidesTotals);
   const [errMessage, setErrMessage] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   
   const auth = useAuth();
   const isLoggedIn = auth.isLoggedIn;
@@ -141,14 +140,12 @@ function App() {
 
 
   function getUserRideStats(user: Profile) {
-    setIsLoading(true);
     getAthlete(user.id)
       .then((res: AthleteStats) => {
         setAllRidesTotals((res.all_ride_totals));
         setAllYTDRidesTotals(res.ytd_ride_totals);
       })
       .catch((err) => console.log(err))
-      .finally(() => setIsLoading(false));
   };
 
 
@@ -276,8 +273,7 @@ console.log(userBikes);
                   registrationYear={yearOfRegistrationAtStrava} 
                   yearsAtStrava={yearsAtStrava} 
                   allRidesTotals={allRidesTotals} 
-                  allYTDRidesTotals={allYTDRidesTotals} 
-                  isLoading={isLoading} 
+                  allYTDRidesTotals={allYTDRidesTotals}
                   allActivities={allActivities} 
                 />}
               />          

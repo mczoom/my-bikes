@@ -6,13 +6,11 @@ $text-color: aliceblue;
   color: black;  
 }
 
-
 .section-card__header {
   color: $text-color; 
   margin: 0;
   z-index: 1;
 }
-
 
 .section-card__content {
   display: flex;
@@ -34,7 +32,6 @@ $text-color: aliceblue;
   background: linear-gradient(0deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 60%);
 }
 
-
 .section-card__cover {
   position: absolute;
   
@@ -49,8 +46,6 @@ $text-color: aliceblue;
   background-color: aliceblue;
 }
 
-
-
 .section-card__description {
   position: relative;
   display: flex;
@@ -58,7 +53,6 @@ $text-color: aliceblue;
   gap: 8px;
   margin-top: 10px;
   z-index: 1;
-  
 }
 
 .description__header {
@@ -68,6 +62,5 @@ $text-color: aliceblue;
 
 .description__text {
   margin: 0;
-  color: $text-color;
-  
+  color: $text-color;  
 }

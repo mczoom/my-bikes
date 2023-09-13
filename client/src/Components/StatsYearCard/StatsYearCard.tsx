@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Activity } from '../../models/Activity';
 import { Preloader } from '../Preloader/Preloader';
 import { ActivitiesLoadingState } from '../../contexts/ActivitiesLoadingState';
 
 
-interface StatsYearCardProps {
-  isLoading: boolean
+interface StatsYearCardProps {  
   year: number
-  allActivities: Activity[]
   totalDistance: (y: number) => number
   totalTime: (y: number) => number
   totalTrainings: (y: number) => number
@@ -16,9 +14,9 @@ interface StatsYearCardProps {
 }
 
 
-export default function StatsYearCard({isLoading, year, allActivities, totalDistance, totalTime, totalTrainings, yearLongestDistance, totalOverHundredRides}: StatsYearCardProps) {
+export default function StatsYearCard({year, totalDistance, totalTime, totalTrainings, yearLongestDistance, totalOverHundredRides}: StatsYearCardProps) {
 
-const hasActivitiesLoaded = React.useContext(ActivitiesLoadingState);
+  const hasActivitiesLoaded = useContext(ActivitiesLoadingState);
 
   const [isStatsShown, setIsStatsShown] = useState<boolean>(false);
 
@@ -30,8 +28,7 @@ const hasActivitiesLoaded = React.useContext(ActivitiesLoadingState);
 
   function toggleYearStatsDisplay() {
     setIsStatsShown(v => !v);
-  }
-  
+  };  
   
 
   return (
