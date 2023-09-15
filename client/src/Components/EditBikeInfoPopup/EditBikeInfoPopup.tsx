@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Input from '../Input/Input';
+import Input from '../UI/Input/Input';
 import PopupWithForm from '../PopupWithForm/PopupWithForm';
 
 

@@ -1,4 +1,4 @@
-import FormButton from '../FormButton/FormButton';
+import FormButton from '../UI/FormButton/FormButton';
 
 
 interface PopupWithFormProps {

@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { UserBike } from '../../models/UserBike';
 import EditButton from '../EditButton/EditButton';
 import { ActivitiesLoadingState } from '../../contexts/ActivitiesLoadingState';
-import { Preloader } from '../Preloader/Preloader';
+import { Preloader } from '../UI/Preloader/Preloader';
 
 
 interface BikeSpecsProps {

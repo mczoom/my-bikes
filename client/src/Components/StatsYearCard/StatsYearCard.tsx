@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { Activity } from '../../models/Activity';
-import { Preloader } from '../Preloader/Preloader';
+import { Preloader } from '../UI/Preloader/Preloader';
 import { ActivitiesLoadingState } from '../../contexts/ActivitiesLoadingState';
 
 

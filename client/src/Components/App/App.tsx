@@ -8,24 +8,24 @@ import Stats from '../Stats/Stats';
 import { getStravaToken, stravaTokenCheck } from '../../utils/stravaAuthApi';
 import {getCurrentAthlete, getActivities, getAthlete} from '../../utils/stravaApi';
 import {Profile} from '../../models/Profile';
-import StravaAccessPage from '../StravaAccessPage/StravaAccessPage';
+import StravaAccessPage from '../Auth/StravaAuth/StravaAccessPage';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import Garage from '../Garage/Garage';
 import { Activity } from '../../models/Activity';
 import Page404 from '../Page404/Page404';
 import Maintenance from '../Maintenance/Maintenance';
 import { AthleteStats, RidesTotals } from '../../models/AthleteStats';
-import RegPage from '../RegPage/RegPage';
-import LoginPage from '../LoginPage/LoginPage';
+import RegPage from '../Auth/RegPage/RegPage';
+import LoginPage from '../Auth/LoginPage/LoginPage';
 import { Bike } from '../../models/Bike';
 import AppLayout from '../AppLayout/AppLayout';
 import { ActivitiesLoadingState } from '../../contexts/ActivitiesLoadingState';
-import StravaAccessResult from '../StravaAccessResult/StravaAccessResult';
+import StravaAccessResult from '../Auth/StravaAuth/StravaAccessResult';
 import useAuth from '../../hooks/useAuth';
 
 
 
-function App() {
+export default function App() {
 
   const [currentUser, setCurrentUser] = useState<Profile>({} as Profile);
   const [allActivities, setAllActivities] = useState<Activity[]>([]);
@@ -294,9 +294,3 @@ console.log(userBikes);
       </CurrentUserContext.Provider>      
     );
   }
-
-export default App;
-function ErrorAPI(this: any, key: string, value: any) {
-  throw new Error('Function not implemented.');
-}
-

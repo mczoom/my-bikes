@@ -1,4 +1,4 @@
-import FormButton from '../FormButton/FormButton';
+import FormButton from '../UI/FormButton/FormButton';
 import AuthLink from '../AuthLink/AuthLink';
 import { useLocation } from 'react-router-dom';
 
