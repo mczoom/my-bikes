@@ -1,0 +1,17 @@
+.access-page__features-list {
+  margin: 0;
+  margin-top: 100px;
+  padding: 0;
+}
+
+.access-page__feature {
+  margin-bottom: 50px;
+}
+
+.access-page__feature:last-of-type {
+  margin-bottom: 0;
+}
+
+.access-page__feature_reverse {
+  color: maroon;
+}

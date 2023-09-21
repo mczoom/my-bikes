@@ -1,0 +1,15 @@
+.access-button {
+  height: 40px;
+  width: 180px;
+  margin-top: 50px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background-image: url('../../../assets/images/btn_strava_connect.png');
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.access-button:hover {
+  transform: scale(1.02);
+}

@@ -1,9 +1,9 @@
 import FullCalendar from '@fullcalendar/react' // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import multiMonthPlugin from '@fullcalendar/multimonth';
-import { Activity } from '../../models/Activity';
-import CalendarLegend from '../CalendarLegend/CalendarLegend';
-import CalendarTileContent from '../CalendarTileContent/CalendarTileContent';
+import { Activity } from 'types/Activity';
+import CalendarLegend from 'components/ActivitiesCalendar/CalendarLegend/CalendarLegend';
+import CalendarTileContent from 'components/ActivitiesCalendar/CalendarTileContent/CalendarTileContent';
 
 
 interface ActivitiesCalendarProps {

@@ -1,4 +1,4 @@
-import { UserBike } from '../../models/UserBike';
+import { UserBike } from 'types/UserBike';
 
 interface EditButtonProps {
   openPopup: () => void

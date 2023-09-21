@@ -1,4 +1,4 @@
-import SectionCardsList from '../SectionCardsList/SectionCardsList';
+import SectionCardsList from 'components/Main/MainPage/SectionCardsList/SectionCardsList';
 
 
 export default function Main() {

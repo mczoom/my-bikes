@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { stravaApiUrl } from './constants';
+import { stravaApiUrl } from 'utils/constants';
 
 
 

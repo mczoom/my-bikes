@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import * as appApi from '../utils/appApi'
+import * as appApi from 'utils/appApi'
 
-import { getLocalStorage, setLocalStorage } from "../utils/service";
-import { AuthContext } from "./AuthContext";
-import { checkStravaPermissions, getStravaToken } from "../utils/stravaAuthApi";
+import { getLocalStorage, setLocalStorage } from "utils/service";
+import { AuthContext } from "contexts/AuthContext";
+import { checkStravaPermissions, getStravaToken } from "utils/stravaAuthApi";
 import { useNavigate } from "react-router-dom";
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -43,9 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       .then((res) => {
         if (res.token) {     
           localStorage.setItem('jwt', res.token)
-          //setLocalStorage('jwt', res.token);
           setIsLoggedIn(true);
-          //setLocalStorage('logged', true);
           setStrTokenToLocalStorage();
           checkPermissions();
         } else {

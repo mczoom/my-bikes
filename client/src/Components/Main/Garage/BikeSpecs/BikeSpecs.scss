@@ -1,0 +1,55 @@
+@import '../../../../styles/index';
+
+.bike-specs {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;  
+  width: 180px;  
+  margin: 0;
+  padding: 10px 20px;
+  border-bottom-right-radius: 6px;
+  border-top-right-radius: 6px;
+  background-color: $details-bg;
+}
+
+.bike-specs__specs-list {  
+  margin-bottom: 10px;
+  text-align: start;
+  width: 100%;
+  overflow: hidden;
+}
+
+.bike-specs__bike-name {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  padding-bottom: 3px;
+  border-bottom: 3px dotted black;
+  color: black;
+}
+
+.bike-specs__spec {
+  margin: 0;
+  margin-bottom: 15px;
+  padding: 0;
+  text-overflow: ellipsis;
+}
+
+.bike-specs__spec:last-of-type {
+  margin-bottom: 0;
+}
+
+.spec {
+  margin: 0;
+  color: black;
+}
+
+.spec__preloader-container {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.bold {
+  font-weight: 500;
+}

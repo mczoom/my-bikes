@@ -1,5 +1,5 @@
-import { Bike } from '../models/Bike';
-import {BASE_URL} from './constants';
+import { Bike } from 'types/Bike';
+import {BASE_URL} from 'utils/constants';
 
 
 

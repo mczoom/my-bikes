@@ -1,8 +1,8 @@
-import { Outlet, useLocation, useNavigation } from "react-router-dom";
-import Header from "../Header/Header";
-import ErrorMessagePopup from "../ErrorMessagePopup/ErrorMessagePopup";
-import Footer from "../Footer/Footer";
-import { Profile } from "../../models/Profile";
+import { Outlet } from "react-router-dom";
+import Header from "components/Header/Header";
+import ErrorMessagePopup from "components/shared/ErrorMessagePopup/ErrorMessagePopup";
+import Footer from "components/Footer/Footer";
+import { Profile } from "types/Profile";
 
 interface AppLayoutProps {
   setUser: React.Dispatch<React.SetStateAction<Profile>>

@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import Input from '../../UI/Input/Input'
-import PageWithForm from '../../PageWithForm/PageWithForm'
-import useAuth from '../../../hooks/useAuth';
+import Input from 'ui/Input/Input'
+import PageWithForm from 'components/shared/PageWithForm/PageWithForm'
+import useAuth from 'hooks/useAuth';
 
 
 

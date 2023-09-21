@@ -1,0 +1,54 @@
+@import '../../../styles/index';
+
+.bike-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(5, 4, 10, 0.8);
+}
+
+.bike-popup_on {
+  display: flex;
+}
+
+.bike-popup__container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  max-height: 1000px;
+  max-width: 1000px;
+}
+
+.bike-popup__close-btn {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  top: -40px;
+  right: -40px;
+  cursor: pointer;
+  background: url('../../../assets/images/close-btn.png') center no-repeat $details-bg;
+  border: none;
+}
+
+.bike-popup__image {
+  margin-bottom: 15px;
+  width: 100%;
+  object-fit: cover;
+  overflow: hidden;
+}
+
+.bike-popup__bike-name {
+  font-size: 24px;
+  line-height: 121%;
+  font-weight: 300;
+  color: aliceblue;
+  margin: 0;
+}

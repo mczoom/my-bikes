@@ -1,0 +1,12 @@
+.section-cards-list {
+  width: 100%;
+}
+
+.section-cards-list__card {  
+  margin: 30px auto 80px;
+  padding: 0;  
+}
+
+.section-cards-list__card:hover {
+  transform: scale(1.02);
+}

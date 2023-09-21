@@ -1,12 +1,12 @@
 import React from 'react'
-import Profile from '../Profile/Profile';
-import Navigation from '../Navigation/Navigation';
-import logo from '../../images/logo.png'
-import AuthButton from '../AuthButton/AuthButton';
-import HeaderAuthLinks from '../HeaderAuthLinks/HeaderAuthLinks';
+import Profile from 'components/Header/Profile/Profile';
+import Navigation from 'components/Header/NavBar/NavBar';
+import logo from 'assets/images/logo.png'
+import AuthButton from 'ui/AuthButton/AuthButton';
+import HeaderAuthLinks from 'components/Header/HeaderAuthLinks/HeaderAuthLinks';
 import { Link } from 'react-router-dom';
-import useAuth from '../../hooks/useAuth';
-import { Profile as ProfileType } from '../../models/Profile';
+import useAuth from 'hooks/useAuth';
+import { Profile as ProfileType } from 'types/Profile';
 
 
 interface HeaderProps {

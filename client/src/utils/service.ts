@@ -1,5 +1,4 @@
-import { checkStravaPermissions } from "./stravaAuthApi";
-
+import { checkStravaPermissions } from "utils/stravaAuthApi";
 
 
 export function setLocalStorage(key: string, value: any) {

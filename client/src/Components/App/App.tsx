@@ -1,27 +1,27 @@
 /* eslint-disable no-loop-func */
 import {useState, useEffect} from 'react';
-import {CurrentUserContext} from '../../contexts/CurrentUserContext';
+import {CurrentUserContext} from 'contexts/CurrentUserContext'; 
 import {Route, Navigate, Routes } from 'react-router-dom';
-import * as appApi from '../../utils/appApi';
-import Main from '../Main/Main';
-import Stats from '../Stats/Stats';
-import { getStravaToken, stravaTokenCheck } from '../../utils/stravaAuthApi';
-import {getCurrentAthlete, getActivities, getAthlete} from '../../utils/stravaApi';
-import {Profile} from '../../models/Profile';
-import StravaAccessPage from '../Auth/StravaAuth/StravaAccessPage';
-import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
-import Garage from '../Garage/Garage';
-import { Activity } from '../../models/Activity';
-import Page404 from '../Page404/Page404';
-import Maintenance from '../Maintenance/Maintenance';
-import { AthleteStats, RidesTotals } from '../../models/AthleteStats';
-import RegPage from '../Auth/RegPage/RegPage';
-import LoginPage from '../Auth/LoginPage/LoginPage';
-import { Bike } from '../../models/Bike';
-import AppLayout from '../AppLayout/AppLayout';
-import { ActivitiesLoadingState } from '../../contexts/ActivitiesLoadingState';
-import StravaAccessResult from '../Auth/StravaAuth/StravaAccessResult';
-import useAuth from '../../hooks/useAuth';
+import * as appApi from 'utils/appApi';
+import Main from 'components/Main/Main';
+import Stats from 'components/Main/Stats/Stats';
+import { getStravaToken, stravaTokenCheck } from 'utils/stravaAuthApi';
+import {getCurrentAthlete, getActivities, getAthlete} from 'utils/stravaApi'; 
+import {Profile} from 'types/Profile';
+import StravaAccessPage from 'components/Auth/StravaAuth/StravaAccessPage';
+import ProtectedRoute from 'components/ProtectedRoute/ProtectedRoute';
+import Garage from 'components/Main/Garage/Garage';
+import { Activity } from 'types/Activity';
+import Page404 from 'components/Page404/Page404';
+import Maintenance from 'components/Maintenance/Maintenance';
+import { AthleteStats, RidesTotals } from 'types/AthleteStats';
+import RegPage from 'components/Auth/RegPage/RegPage';
+import LoginPage from 'components/Auth/LoginPage/LoginPage';
+import { Bike } from 'types/Bike';
+import AppLayout from 'components/AppLayout/AppLayout';
+import { ActivitiesLoadingState } from 'contexts/ActivitiesLoadingState';
+import StravaAccessResult from 'components/Auth/StravaAuth/StravaAccessResult';
+import useAuth from 'hooks/useAuth';
 
 
 
@@ -31,8 +31,8 @@ export default function App() {
   const [allActivities, setAllActivities] = useState<Activity[]>([]);
   const [hasAllActivitiesLoaded, setHasAllActivitiesLoaded] = useState<boolean>(false)
   const [userBikes, setUserBikes] = useState<Bike[]>([]);
-  const [allRidesTotals, setAllRidesTotals] = useState<RidesTotals>({} as RidesTotals);
-  const [allYTDRidesTotals, setAllYTDRidesTotals] = useState<RidesTotals>({} as RidesTotals);
+  const [allRidesTotalData, setallRidesTotalData] = useState<RidesTotals>({} as RidesTotals);
+  const [allYTDRidesTotalData, setAllYTDRidesTotalDist] = useState<RidesTotals>({} as RidesTotals);
   const [errMessage, setErrMessage] = useState<string[]>([]);
   
   const auth = useAuth();
@@ -142,8 +142,8 @@ export default function App() {
   function getUserRideStats(user: Profile) {
     getAthlete(user.id)
       .then((res: AthleteStats) => {
-        setAllRidesTotals((res.all_ride_totals));
-        setAllYTDRidesTotals(res.ytd_ride_totals);
+        setallRidesTotalData(res.all_ride_totals);
+        setAllYTDRidesTotalDist(res.ytd_ride_totals);
       })
       .catch((err) => console.log(err))
   };
@@ -272,8 +272,8 @@ console.log(userBikes);
                 element={<Stats               
                   registrationYear={yearOfRegistrationAtStrava} 
                   yearsAtStrava={yearsAtStrava} 
-                  allRidesTotals={allRidesTotals} 
-                  allYTDRidesTotals={allYTDRidesTotals}
+                  allRidesTotalData={allRidesTotalData} 
+                  allYTDRidesTotalData={allYTDRidesTotalData}
                   allActivities={allActivities} 
                 />}
               />          

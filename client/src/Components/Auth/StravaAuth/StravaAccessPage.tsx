@@ -1,5 +1,5 @@
-import AccessButton from '../AccessButton/AccessButton';
-import FeaturesList from '../FeaturesList/FeaturesList';
+import AccessButton from 'ui/AccessButton/AccessButton';
+import FeaturesList from 'components/Feature/FeaturesList/FeaturesList'; 
 
 
 export default function StravaAccessPage() {

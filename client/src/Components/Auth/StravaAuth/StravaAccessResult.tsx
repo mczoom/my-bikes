@@ -1,8 +1,8 @@
-import { useEffect } from 'react'
-import { addStravaPermissions, exchangeToken } from '../../../utils/stravaAuthApi'
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { mandatoryStravaPermissions } from '../../../utils/constants';
-import useAuth from '../../../hooks/useAuth';
+import { addStravaPermissions, exchangeToken } from 'utils/stravaAuthApi';
+import { mandatoryStravaPermissions } from 'utils/constants';
+import useAuth from 'hooks/useAuth';
 
 
 interface StravaAccessResultProps {
