@@ -1,21 +1,13 @@
 {
     "compilerOptions": {
       "baseUrl": "./src",
-      "paths": {
-        "components": ["Components"],
-        "components/*": ["Components/*"],
-        "ui": ["Components/UI"],
-        "ui/*": ["Components/UI/*"],
-        "types": ["types"],
-        "types/*": ["types/*"],
-        "utils": ["utils"],
-        "utils/*": ["utils/*"],
-        "assets": ["assets"],
-        "assets/*": ["assets/*"],
-        "contexts": ["contexts"],
-        "contexts/*": ["contexts/*"],
-        "hooks": ["hooks"],
-        "hooks/*": ["hooks/*"],
-      }
+      "paths": {        
+        "components/*": ["Components/*"],        
+        "ui/*": ["Components/UI/*"],        
+        "types/*": ["types/*"],        
+        "utils/*": ["utils/*"],        
+        "assets/*": ["assets/*"],        
+        "contexts/*": ["contexts/*"],        
+        "hooks/*": ["hooks/*"],      }
     }  
   }

@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import './index.scss';
 import App from 'components/App/App';
 import 'components/ActivitiesCalendar/Calendar.css';
-import { AuthProvider } from 'contexts/AuthProvider';
+import { AuthProvider } from 'contexts/AuthProvider'; 
 
 
 const root = ReactDOM.createRoot(
