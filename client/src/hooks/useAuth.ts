@@ -3,7 +3,7 @@ import { AuthContext } from "contexts/AuthContext";
 
 
 function useAuth() {
- return useContext(AuthContext);
+  return useContext(AuthContext);
 }
 
 export default useAuth;

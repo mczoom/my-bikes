@@ -3,6 +3,7 @@ import { UserBike } from 'types/UserBike';
 import EditButton from 'ui/EditButton/EditButton';
 import { ActivitiesLoadingState } from 'contexts/ActivitiesLoadingState';
 import { Preloader } from 'ui/Preloader/Preloader';
+import { convertDistanceToKM } from 'utils/constants';
 
 
 interface BikeSpecsProps {
@@ -15,6 +16,7 @@ interface BikeSpecsProps {
 export default function BikeSpecs({bike, bikeTotalDistance, openEditInfoPopup, getBikeId}: BikeSpecsProps) {
 
   const hasAllActivitiesLoaded = useContext(ActivitiesLoadingState);
+  const totalDist = convertDistanceToKM(bikeTotalDistance(bike.id));
 
 
   return (
@@ -38,7 +40,7 @@ export default function BikeSpecs({bike, bikeTotalDistance, openEditInfoPopup, g
         <li className='bike-specs__spec'>
           {hasAllActivitiesLoaded ? (
             <p className='spec'>Пробег:
-              <span className='bold'> {Math.round(bikeTotalDistance(bike.id) / 1000)} км</span>
+              <span className='bold'> {totalDist} км</span>
             </p> 
           ) : (
             <div className='spec__preloader-container'>

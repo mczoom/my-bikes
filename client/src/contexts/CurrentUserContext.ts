@@ -1,4 +1,4 @@
-import React from "react";
+import { createContext } from "react";
 import { Profile } from "types/Profile";
 
-export const CurrentUserContext = React.createContext<Profile>({} as Profile);
+export const CurrentUserContext = createContext<Profile>({} as Profile);

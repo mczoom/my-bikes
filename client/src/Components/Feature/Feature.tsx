@@ -1,8 +1,9 @@
 import logo from 'assets/images/logo.png'
+import { FeatureInterface } from 'types/FeatureInterface';
 
 
 interface FeatureProps {
-  feature: any
+  feature: FeatureInterface
   i: number
 }
 

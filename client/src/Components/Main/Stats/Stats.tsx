@@ -17,7 +17,7 @@ interface StatsProps {
 
 export default function Stats({registrationYear, yearsAtStrava, allRidesTotalData, allYTDRidesTotalData, allActivities}: StatsProps) {
 
-  const isYearMatch = (y: number, activity: Activity) => {
+  const isYearMatch = (y: number, activity: Activity): boolean => {
     return new Date(activity.start_date).getFullYear() === y;
   };
 

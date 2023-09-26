@@ -6,13 +6,8 @@ interface DistancePerYear {
 
 export default function DistancePerYear({year, distancePerYear}: DistancePerYear) {
 
-  // const distanceInKM = (y: number) => {
-  //   return Math.round(distancePerYear(y) / 1000);
-  // };
-
   const dist = distancePerYear(year);
   
-
 
   return (
     <>

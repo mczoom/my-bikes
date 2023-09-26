@@ -1,4 +1,3 @@
-
 import BikeSpecs from 'components/Main/Garage/BikeSpecs/BikeSpecs';
 import DistancePerYearList from 'components/Main/Garage/DistancePerYearList/DistancePerYearList';
 import { Activity } from 'types/Activity';

@@ -1,11 +1,10 @@
 import poweredByStravaLogo from 'assets/images/pwrd_by_strava_horiz.png';
-import { currentYear } from 'utils/constants';
+import { appStartYear, currentYear } from 'utils/constants';
 
-export default function Footer() {
+export default function Footer() {  
   
-  const startYear = 2023;
-  const isSameYear = currentYear === startYear;
-  const yearsInService = isSameYear ? startYear : `${startYear} - ${currentYear}`;
+  const isSameYear = currentYear === appStartYear;
+  const yearsInService = isSameYear ? appStartYear : `${appStartYear} - ${currentYear}`;
 
 
   return (

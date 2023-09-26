@@ -1,4 +1,3 @@
-import React from 'react'
 import Profile from 'components/Header/Profile/Profile';
 import Navigation from 'components/Header/NavBar/NavBar';
 import logo from 'assets/images/logo.png'
