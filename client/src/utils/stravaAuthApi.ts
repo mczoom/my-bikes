@@ -2,14 +2,6 @@ import axios from 'axios';
 import {BASE_URL} from 'utils/constants';
 
 
-// const handleResponse = (res:any, errMsg:string) => {
-//   if (res.ok) {
-//     return res.json();
-//   };  
-//   return Promise.reject(errMsg);
-// }
-
-
 
 export function exchangeToken() {
   const params: any = new Proxy(new URLSearchParams(window.location.search), {
@@ -26,7 +18,7 @@ export function exchangeToken() {
     body: JSON.stringify({token: accessToken}),
   })
   .then(res => res.data)
-  .catch((err) => console.log(`${err} 'Ошибка получения Strava токена'`))
+  .catch((err) => console.log(`${err.message}: Ошибка получения Strava токена`))
 };
 
 
@@ -44,7 +36,7 @@ export function refreshToken() {
       localStorage.setItem('stravaToken', tokenData.accessToken);
     }
   })
-  .catch(() => console.log('Ошибка получения токена обновления'))
+  .catch((err) => console.log(`${err.message}: Ошибка получения токена обновления`))
 };
 
 
@@ -56,7 +48,7 @@ export const getStravaToken = () => {
     },    
   })
   .then((res) => res.data)
-  .catch(err => console.log(err));
+  .catch((err) => console.log(`${err.message}: Ошибка получения Strava токена`));
 };
 
 
@@ -68,7 +60,7 @@ export function stravaTokenCheck() {
     },
   })
   .then((res) => res.data)
-  .catch(() => console.log('Ошибка проверки Страва-токена'))
+  .catch((err) => console.log(`${err.message}: Strava токен не найден`))
 };
 
 
@@ -81,7 +73,7 @@ export function addStravaPermissions(scope: string[] | undefined) {
     body: JSON.stringify({scope}),
   })
   .then(res => res.data)  
-  .catch(() => console.log('Необходимо разрешить приложению доступ к аккаунту Strava'));
+  .catch((err) => console.log(`${err.message}: 'Необходимо разрешить приложению доступ к аккаунту Strava`));
 };
 
 
@@ -92,88 +84,6 @@ export function checkStravaPermissions() {
       "Authorization": `Bearer ${localStorage.getItem('jwt')}`
     },
   })
-  .then((res) => {
-    if(res.status >= 300) {
-      throw new Error(res.statusText);
-    };      
-    
-    return res.data;   
-  })
+  .then((res) => res.data)
   .catch((err) => console.log(err.message));
 };
-
-
-// export function refreshToken() {
-//   return fetch(`${BASE_URL}/strtokenrefresh`, {
-//     method: 'GET',
-//     headers: {
-//       "Content-Type": "application/json",
-//       "Authorization": `Bearer ${localStorage.getItem('jwt')}`
-//     }
-//   })
-//   .then((res) => res.json())
-//   .then((token: any) => {
-//     console.log(token);
-//     if (token) {
-//       localStorage.setItem('stravaToken', token.accessToken);
-//     }
-//   })
-//   .catch(() => console.log('Ошибка получения токена обновления'))
-// };
-
-
-// export const getStravaToken = () => {
-//   return fetch(`${BASE_URL}/strtoken`, {    
-//     headers: {
-//       "Content-Type": "application/json",
-//       "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
-//     },    
-//   })
-//   .then((res) => res.json())
-//   .catch(err => console.log(err));
-// };
-
-
-// export function stravaTokenCheck() {
-//   return fetch(`${BASE_URL}/tokencheck`, {    
-//     headers: {
-//       "Content-Type": "application/json",
-//       "Authorization": `Bearer ${localStorage.getItem('jwt')}`
-//     },
-//   })
-//   .then((res) => res.json())
-//   .catch(() => console.log('Ошибка'))
-// };
-
-
-// export function addStravaPermissions(scope: string[] | undefined) {
-//   return fetch(`${BASE_URL}/strava-permissions`, {
-//     method: 'POST',
-//     headers: {
-//       "Content-Type": "application/json",
-//       "Authorization": `Bearer ${localStorage.getItem('jwt')}`
-//     },
-//     body: JSON.stringify({scope}),
-//   })
-//   .then(res => handleResponse(res, 'Необходимо разрешить приложению доступ к аккаунту Strava'))  
-//   .catch((err) => console.log(err));
-// };
-
-
-// export function checkStravaPermissions() {  
-//   return fetch(`${BASE_URL}/strava-permissions`, {    
-//     headers: {
-//       "Content-Type": "application/json",
-//       "Authorization": `Bearer ${localStorage.getItem('jwt')}`
-//     },
-//   })
-//   .then(res => res.json())
-//   .then((res) => {
-//     if(res && !res.message) {
-//     return res;
-//     } else {
-//       throw new Error(res.message);
-//     }
-//   })
-//   .catch((err) => console.log(err.message));
-// };

@@ -202,7 +202,7 @@ export default function App() {
         updateBikeDistance(currentUser);
       })
       .catch((err) => {
-        setErrMessage([...errMessage, `Не удалось получить данные пользователя: ${err.message}`])
+        setErrMessage([...errMessage, `Не удалось получить данные пользователя`])
         console.log(`Не удалось получить данные пользователя: ${err.message}`);        
       });    
   };
