@@ -11,15 +11,6 @@ interface AuthProviderProps {
   children: React.ReactNode
 }
 
-interface ResWithToken {
-  strToken: string
-}
-
-interface ResWithError {
-  message: string
-  status: number
-}
-
 export function AuthProvider({ children }: AuthProviderProps) {
 
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(() => getLocalStorage('logged'));
@@ -29,8 +20,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   function setStrTokenToLocalStorage() {
     getStravaToken()
-      .then((res: ResWithToken | ResWithError) => {
-        if ("message" in res) {
+      .then((res) => {
+        if (res.message) {
           throw new Error(res.message);
         }
         setLocalStorage('stravaToken', res);
@@ -71,13 +62,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   function handleRegistration(login: string, password: string) {
     appApi.register(login, password)
-      .then((res) => {       
-        if(res.message) {
-          throw new Error(res.message);
-        } else {
-          handleLogin(login, password);
-          navigate('/access');
-        }
+      .then((res) => {     
+        console.log(res);        
+        handleLogin(login, password);
+        navigate('/access');       
       })
       .catch((err) => console.log(err));
   };
