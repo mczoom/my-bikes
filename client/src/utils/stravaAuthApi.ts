@@ -48,7 +48,7 @@ export const getStravaToken = () => {
     },    
   })
   .then((res) => res.data)
-  .catch((err) => console.log(`${err.message}: Ошибка получения Strava токена`));
+  .catch((err) => `${err.message}: Ошибка получения Strava токена`);
 };
 
 
@@ -73,7 +73,7 @@ export function addStravaPermissions(scope: string[] | undefined) {
     body: JSON.stringify({scope}),
   })
   .then(res => res.data)  
-  .catch((err) => console.log(`${err.message}: 'Необходимо разрешить приложению доступ к аккаунту Strava`));
+  .catch((err) => `${err.message}: 'Необходимо разрешить приложению доступ к аккаунту Strava`);
 };
 
 
@@ -85,5 +85,5 @@ export function checkStravaPermissions() {
     },
   })
   .then((res) => res.data)
-  .catch((err) => console.log(err.message));
+  .catch((err) => err);
 };

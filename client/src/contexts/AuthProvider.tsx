@@ -5,6 +5,9 @@ import { getLocalStorage, setLocalStorage } from "utils/service";
 import { AuthContext } from "contexts/AuthContext";
 import { checkStravaPermissions, getStravaToken } from "utils/stravaAuthApi";
 import { useNavigate } from "react-router-dom";
+import useSnackbar from "hooks/useSnackbar";
+import { ErrorAPI } from "types/ErrorAPI";
+
 
 
 interface AuthProviderProps {
@@ -17,29 +20,40 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [isConnectedToStrava, setIsConnectedToStrava] = useState<boolean | null>(() => getLocalStorage('isStravaConnected'));
 
   const navigate = useNavigate();
+  const snackbar = useSnackbar();
+
+  function handleSnackbarError(err: ErrorAPI) {
+    if(!err.status) {
+      snackbar.addMessage(`${err}`);      
+    }else{
+      snackbar.addMessage(`Ошибка ${err.status}: ${err.message}`);
+    }    
+    console.log(err);
+  };
+  
 
   function setStrTokenToLocalStorage() {
     getStravaToken()
-      .then((res) => {
-        if (res.message) {
-          throw new Error(res.message);
-        }
-        setLocalStorage('stravaToken', res);
-        return res;
-      })
-      .catch((err) => console.log(err)); 
+    .then((res) => {
+      if (res.message) {
+        throw new Error(res.message);
+      }
+      setLocalStorage('stravaToken', res);
+      return res;
+    })
+    .catch((err) => handleSnackbarError(err)); 
   };
 
 
   function checkPermissions() {
     checkStravaPermissions()
-      .then((permits) => {        
-        if(!permits) {
-          throw new Error('Приложение не привязано к аккаунту в Strava')
-        }
-        setIsConnectedToStrava(permits);
-      })
-      .catch((err) => console.log(err));
+    .then((permits) => {        
+      if(!permits) {
+        throw new Error('Приложение не привязано к аккаунту в Strava')
+      }
+      setIsConnectedToStrava(permits);
+    })
+    .catch((err) => handleSnackbarError(err));
   };
   
 
@@ -55,19 +69,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
         throw new Error(res.message);
       };        
     })
-    .catch((err) => console.log(err));
+    .catch((err) => handleSnackbarError(err));
   };
-
 
 
   function handleRegistration(login: string, password: string) {
     appApi.register(login, password)
-      .then((res) => {     
-        console.log(res);        
-        handleLogin(login, password);
-        navigate('/access');       
-      })
-      .catch((err) => console.log(err));
+    .then((res) => {     
+      console.log(res);        
+      handleLogin(login, password);
+      navigate('/access');       
+    })
+    .catch((err) => handleSnackbarError(err));
   };
 
 
@@ -108,5 +121,3 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return <AuthContext.Provider value={authData}>{children}</AuthContext.Provider>;  
     
   }
-
-  

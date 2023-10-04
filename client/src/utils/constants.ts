@@ -9,6 +9,8 @@ export const mandatoryStravaPermissions = ['read', 'activity:read_all', 'profile
 export const currentYear: number = new Date().getFullYear();
 export const appStartYear = 2023;
 
+export const snackbarTime = 7000;
+
 export const fromYear = (y: number): number => {
   return Date.parse(y.toString()) / 1000;
 };

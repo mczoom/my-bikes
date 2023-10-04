@@ -1,8 +1,9 @@
 import { Outlet } from "react-router-dom";
 import Header from "components/Header/Header";
-import ErrorMessagePopup from "components/shared/ErrorMessagePopup/ErrorMessagePopup";
+import Snackbar from "components/shared/Snackbar/Snackbar";
 import Footer from "components/Footer/Footer";
 import { Profile } from "types/Profile";
+import useSnackbar from "hooks/useSnackbar";
 
 interface AppLayoutProps {
   setUser: React.Dispatch<React.SetStateAction<Profile>>
@@ -11,7 +12,7 @@ interface AppLayoutProps {
 
 export default function AppLayout({setUser, errMessage}: AppLayoutProps) {
 
-      
+  const snackbar = useSnackbar();    
   
   return (
     <div className="page">
@@ -20,7 +21,7 @@ export default function AppLayout({setUser, errMessage}: AppLayoutProps) {
         <Outlet />
       </main>  
       <Footer />
-      <ErrorMessagePopup errMsg={errMessage}/>
+      <Snackbar errMsg={snackbar.messages}/>
     </div>
   )
 }

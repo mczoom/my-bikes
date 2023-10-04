@@ -6,6 +6,7 @@ import './index.scss';
 import App from 'components/App/App';
 import 'components/ActivitiesCalendar/Calendar.css';
 import { AuthProvider } from 'contexts/AuthProvider'; 
+import { SnackbarProvider } from 'contexts/SnackbarProvider';
 
 
 const root = ReactDOM.createRoot(
@@ -16,9 +17,11 @@ const root = ReactDOM.createRoot(
 root.render(  
     <React.StrictMode> 
       <BrowserRouter> 
-        <AuthProvider>    
-          <App /> 
-        </AuthProvider>
+        <SnackbarProvider>
+          <AuthProvider>  
+            <App /> 
+          </AuthProvider>
+        </SnackbarProvider>
       </BrowserRouter>       
     </React.StrictMode>  
 );
