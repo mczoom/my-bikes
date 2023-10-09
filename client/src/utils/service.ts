@@ -6,10 +6,16 @@ export function setLocalStorage(key: string, value: any) {
 };
 
 
-export function getLocalStorage(key: string) {
+export function getLocalStorageParsedValue(key: string) {
   const value = localStorage.getItem(key);
   return value ? JSON.parse(value) : null;
-}
+};
+
+
+export function getLocalStorageValue(key: string) {
+  const value = localStorage.getItem(key);
+  return value ? value : null;
+};
 
 
 export function checkPermissions() {

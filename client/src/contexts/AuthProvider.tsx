@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import * as appApi from 'utils/appApi'
 
-import { getLocalStorage, setLocalStorage } from "utils/service";
+import { getLocalStorageParsedValue, setLocalStorage } from "utils/service";
 import { AuthContext } from "contexts/AuthContext";
 import { checkStravaPermissions, getStravaToken } from "utils/stravaAuthApi";
 import { useNavigate } from "react-router-dom";
@@ -16,20 +16,20 @@ interface AuthProviderProps {
 
 export function AuthProvider({ children }: AuthProviderProps) {
 
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(() => getLocalStorage('logged'));
-  const [isConnectedToStrava, setIsConnectedToStrava] = useState<boolean | null>(() => getLocalStorage('isStravaConnected'));
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(() => getLocalStorageParsedValue('logged'));
+  const [isConnectedToStrava, setIsConnectedToStrava] = useState<boolean | null>(() => getLocalStorageParsedValue('isStravaConnected'));
 
   const navigate = useNavigate();
   const snackbar = useSnackbar();
 
-  function handleSnackbarError(err: ErrorAPI) {
-    if(!err.status) {
-      snackbar.addMessage(`${err}`);      
-    }else{
-      snackbar.addMessage(`Ошибка ${err.status}: ${err.message}`);
-    }    
-    console.log(err);
-  };
+  // function handleSnackbarError(err: ErrorAPI) {
+  //   if(!err.status) {
+  //     snackbar.addMessage(`${err}`);      
+  //   }else{
+  //     snackbar.addMessage(`Ошибка ${err.status}: ${err.message}`);
+  //   }    
+  //   console.log(err);
+  // };
   
 
   function setStrTokenToLocalStorage() {
@@ -41,7 +41,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setLocalStorage('stravaToken', res);
       return res;
     })
-    .catch((err) => handleSnackbarError(err)); 
+    .catch((err) => snackbar.handleSnackbarError(err)); 
   };
 
 
@@ -53,7 +53,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       }
       setIsConnectedToStrava(permits);
     })
-    .catch((err) => handleSnackbarError(err));
+    .catch((err) => snackbar.handleSnackbarError(err));
   };
   
 
@@ -69,7 +69,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         throw new Error(res.message);
       };        
     })
-    .catch((err) => handleSnackbarError(err));
+    .catch((err) => snackbar.handleSnackbarError(err));
   };
 
 
@@ -80,7 +80,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       handleLogin(login, password);
       navigate('/access');       
     })
-    .catch((err) => handleSnackbarError(err));
+    .catch((err) => snackbar.handleSnackbarError(err));
   };
 
 

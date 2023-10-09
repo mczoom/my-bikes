@@ -30,7 +30,8 @@ module.exports.addBike = async(req, res, next) => {
   const userID = req.user._id;
   const storedBikes = await Bike.findOneAndUpdate({userID}, {$push: {"bikes": newBike}}, {new: true});  
   
-  storedBikes.save();  
+  await storedBikes.save(); 
+ res.send('Велосипед успешно добавлен');
 };
 
 
@@ -43,8 +44,7 @@ module.exports.updateOdo = async(req, res, next) => {
   .orFail(() => new NotFoundError('Велосипеды пользователя не найдены'))
   .then((savedBikes) => updateBikesOdo(savedBikes, actualBikesInfo))
   .then(() => storedBikes.save())
-  .catch((err) => console.log(err));
-  
+  .catch((err) => console.log(err));  
   
 };
 

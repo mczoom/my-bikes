@@ -36,24 +36,32 @@ export default function Garage({userBikesStrava, yearsAtStrava, activities, bike
   const [curentBikeId, setCurentBikeId] = useState<string>('');
 
   
+  
   function checkForNewBikesInStrava(stravaBikes: Bike[], savedBikes: Bike[]): Bike[] {    
-    const newBike = stravaBikes.filter((b) => savedBikes.every((bike) => !bike.id.includes(b.id)));
-    return newBike;        
+    const newBike = stravaBikes.filter((b) => savedBikes.every((bike) => !bike.id.includes(b.id)));    
+        
+    return newBike;
   };
+
+  function addNewBike(bikes: Bike | Bike[]) {
+    appApi.addBike(bikes)
+    .catch((err) => console.log(err)    
+    )
+  }; 
     
 
   function getUserBikes() {
     appApi.getAllBikes()
       .then((bikes: UserBike[]) => {
         const newBikes = checkForNewBikesInStrava(userBikesStrava, bikes);
-          if(newBikes.length > 0) {        
-            appApi.addBike(newBikes);
+          if(newBikes.length > 0) {
+            addNewBike(newBikes);
           }          
           setUserBikes(bikes); 
           setBikesToRender(bikes);       
       })
       .catch(err => console.log(err));
-  };
+  }; 
 
 
   function toggleBikesFilter() {

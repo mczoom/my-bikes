@@ -102,11 +102,7 @@ export default function App() {
   function addAllBikes(user: Profile) {
     appApi.getAllBikes()
       .then((res) => {
-        if(res.message) {
-          addAllUserBikes(user);
-        } else {
-          return;
-        }
+        addAllUserBikes(user);        
       })
       .catch(err => console.log(err));
   };
