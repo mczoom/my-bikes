@@ -5,16 +5,12 @@ import { mandatoryStravaPermissions } from 'utils/constants';
 import useAuth from 'hooks/useAuth';
 
 
-interface StravaAccessResultProps {
-  onError: (errMsg: string) => void
-}
-
 interface stravaToken {
   strToken: string  
 }
 
 
-export default function StravaAccessResult ({onError}: StravaAccessResultProps) {
+export default function StravaAccessResult () {
 
   const navigate = useNavigate();
   const auth = useAuth();
@@ -52,8 +48,7 @@ export default function StravaAccessResult ({onError}: StravaAccessResultProps) 
         auth.checkPermissions();
         navigate('/');
       })
-      .catch((err) => {
-        onError(err)
+      .catch((err) => {        
         console.log(err);
         navigate('/access');
       });    
@@ -66,7 +61,7 @@ export default function StravaAccessResult ({onError}: StravaAccessResultProps) 
   
 
   return (
-    <div>About</div>
+    <div>Page is under construction</div>
   )
 }
 

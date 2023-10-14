@@ -7,10 +7,9 @@ import useSnackbar from "hooks/useSnackbar";
 
 interface AppLayoutProps {
   setUser: React.Dispatch<React.SetStateAction<Profile>>
-  errMessage: string[]
 }
 
-export default function AppLayout({setUser, errMessage}: AppLayoutProps) {
+export default function AppLayout({setUser}: AppLayoutProps) {
 
   const snackbar = useSnackbar();    
   

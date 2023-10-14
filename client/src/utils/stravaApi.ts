@@ -9,7 +9,13 @@ export interface ActivitiesRequest {
   tillDate: number
   page?: number
   perPage?: number
-}
+};
+
+
+const handleStravaErrResponse = (err: any) => {
+  console.log(err);
+  return Promise.reject({axiosCode: err.code, message: err.response.data.message, status: err.message})
+};
 
 
 export const getCurrentAthlete = () => {
@@ -20,7 +26,7 @@ export const getCurrentAthlete = () => {
     }
   })
   .then((res) => res.data)
-  .catch((err) => console.log(`${err.message}: Не удалось получить данные пользователя`))
+  .catch((err) => handleStravaErrResponse(err))
 };
 
 
@@ -33,7 +39,7 @@ export const getAthlete = (id: number) => {
     }
   })
   .then((res) => res.data)
-  .catch((err) => console.log(`${err.message}: Не удалось получить данные пользователя`))
+  .catch((err) => handleStravaErrResponse(err))
 };
 
 
@@ -46,5 +52,5 @@ export const getActivities = ({fromDate, tillDate, page = 1, perPage = 200}: Act
     }
   })  
   .then((res) => res.data)
-  .catch((err) => console.log(`${err.message} Ошибка получения списка тренировок`))
+  .catch((err) => handleStravaErrResponse(err))
 };

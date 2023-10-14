@@ -25,7 +25,6 @@ export function exchangeToken() {
     })
     .then(res => res.data)
     .catch((err) => handleErrorResponse(err))
-    //.catch((err) => console.log(`${err.message}: Ошибка получения Strava токена`))
 };
 
 
@@ -44,7 +43,6 @@ export function refreshToken() {
     }
   })
   .catch((err) => handleErrorResponse(err))
-  //.catch((err) => console.log(`${err.message}: Ошибка получения токена обновления`))
 };
 
 
@@ -57,7 +55,6 @@ export const getStravaToken = () => {
   })
   .then((res) => res.data)
   .catch((err) => handleErrorResponse(err))
-  //.catch((err) => `${err.message}: Ошибка получения Strava токена`);
 };
 
 
@@ -70,7 +67,6 @@ export function stravaTokenCheck() {
   })
   .then((res) => res.data)
   .catch((err) => handleErrorResponse(err))
-  //.catch((err) => console.log(`${err.message}: Strava токен не найден`))
 };
 
 
@@ -84,7 +80,6 @@ export function addStravaPermissions(scope: string[] | undefined) {
     })
     .then(res => res.data)
     .catch((err) => handleErrorResponse(err))
-    //.catch((err) => `${err.message}: 'Необходимо разрешить приложению доступ к аккаунту Strava`);
 };
 
 

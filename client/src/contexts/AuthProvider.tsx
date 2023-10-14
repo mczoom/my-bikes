@@ -6,7 +6,6 @@ import { AuthContext } from "contexts/AuthContext";
 import { checkStravaPermissions, getStravaToken } from "utils/stravaAuthApi";
 import { useNavigate } from "react-router-dom";
 import useSnackbar from "hooks/useSnackbar";
-import { ErrorAPI } from "types/ErrorAPI";
 
 
 
@@ -22,26 +21,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const navigate = useNavigate();
   const snackbar = useSnackbar();
 
-  // function handleSnackbarError(err: ErrorAPI) {
-  //   if(!err.status) {
-  //     snackbar.addMessage(`${err}`);      
-  //   }else{
-  //     snackbar.addMessage(`Ошибка ${err.status}: ${err.message}`);
-  //   }    
-  //   console.log(err);
-  // };
   
-
   function setStrTokenToLocalStorage() {
     getStravaToken()
     .then((res) => {
-      if (res.message) {
-        throw new Error(res.message);
-      }
       setLocalStorage('stravaToken', res);
       return res;
     })
-    .catch((err) => snackbar.handleSnackbarError(err)); 
+    .catch((err) => console.log(err)); 
   };
 
 
@@ -66,7 +53,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setStrTokenToLocalStorage();
         checkPermissions();
       } else {
-        throw new Error(res.message);
+        throw new Error('Не удалось войти в приложение');
       };        
     })
     .catch((err) => snackbar.handleSnackbarError(err));
@@ -75,8 +62,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   function handleRegistration(login: string, password: string) {
     appApi.register(login, password)
-    .then((res) => {     
-      console.log(res);        
+    .then(() => {      
       handleLogin(login, password);
       navigate('/access');       
     })

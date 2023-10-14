@@ -1,4 +1,4 @@
-import { checkStravaPermissions } from "utils/stravaAuthApi";
+//import { checkStravaPermissions } from "utils/stravaAuthApi";
 
 
 export function setLocalStorage(key: string, value: any) {
@@ -18,13 +18,13 @@ export function getLocalStorageValue(key: string) {
 };
 
 
-export function checkPermissions() {
-  checkStravaPermissions()
-    .then((permits: boolean) => {        
-      if(!permits) {
-        throw new Error('Приложение не привязано к аккаунту в Strava')
-      }
-      return permits
-    })
-    .catch((err) => console.log(err));
-}
+// export function checkPermissions() {
+//   checkStravaPermissions()
+//     .then((permits: boolean) => {        
+//       if(!permits) {
+//         throw new Error('Приложение не привязано к аккаунту в Strava')
+//       }
+//       return permits
+//     })
+//     .catch((err) => console.log(err));
+// }

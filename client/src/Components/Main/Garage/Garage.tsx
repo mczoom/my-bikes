@@ -7,6 +7,7 @@ import { Bike } from 'types/Bike';
 import  *  as appApi from 'utils/appApi';
 import { UserBike } from 'types/UserBike';
 import EditBikeInfoPopup from 'components/Main/Garage/EditBikeInfoPopup/EditBikeInfoPopup';
+import useSnackbar from 'hooks/useSnackbar';
 
 
 interface GarageProps {
@@ -35,18 +36,18 @@ export default function Garage({userBikesStrava, yearsAtStrava, activities, bike
   const [bikePopupData, setBikePopupData] = useState<UserBike | undefined>({} as UserBike);
   const [curentBikeId, setCurentBikeId] = useState<string>('');
 
+  const snackbar = useSnackbar();
+
   
   
   function checkForNewBikesInStrava(stravaBikes: Bike[], savedBikes: Bike[]): Bike[] {    
-    const newBike = stravaBikes.filter((b) => savedBikes.every((bike) => !bike.id.includes(b.id)));    
-        
+    const newBike = stravaBikes.filter((b) => savedBikes.every((bike) => !bike.id.includes(b.id)));        
     return newBike;
   };
 
   function addNewBike(bikes: Bike | Bike[]) {
     appApi.addBike(bikes)
-    .catch((err) => console.log(err)    
-    )
+    .catch((err) => snackbar.handleSnackbarError(err));
   }; 
     
 
@@ -56,11 +57,11 @@ export default function Garage({userBikesStrava, yearsAtStrava, activities, bike
         const newBikes = checkForNewBikesInStrava(userBikesStrava, bikes);
           if(newBikes.length > 0) {
             addNewBike(newBikes);
-          }          
+          }    
           setUserBikes(bikes); 
           setBikesToRender(bikes);       
       })
-      .catch(err => console.log(err));
+      .catch(err => snackbar.handleSnackbarError(err));
   }; 
 
 
@@ -103,7 +104,7 @@ export default function Garage({userBikesStrava, yearsAtStrava, activities, bike
   function updateBikeCardInfo(id: string, specs: BikeCardInfo) {
     appApi.updateBikeInfo(id, specs)
       .then(updatedInfo => setBikesToRender(updatedInfo))
-      .catch(() => console.log('Ошибка обновления данных байка'));    
+      .catch((err) => snackbar.handleSnackbarError(err));    
   };
 
   useEffect(() => {

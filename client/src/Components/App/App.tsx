@@ -22,6 +22,7 @@ import AppLayout from 'components/AppLayout/AppLayout';
 import { ActivitiesLoadingState } from 'contexts/ActivitiesLoadingState';
 import StravaAccessResult from 'components/Auth/StravaAuth/StravaAccessResult';
 import useAuth from 'hooks/useAuth';
+import useSnackbar from 'hooks/useSnackbar';
 
 
 
@@ -33,12 +34,13 @@ export default function App() {
   const [userBikes, setUserBikes] = useState<Bike[]>([]);
   const [allRidesTotalData, setallRidesTotalData] = useState<RidesTotals>({} as RidesTotals);
   const [allYTDRidesTotalData, setAllYTDRidesTotalDist] = useState<RidesTotals>({} as RidesTotals);
-  const [errMessage, setErrMessage] = useState<string[]>([]);
   
   const auth = useAuth();
   const isLoggedIn = auth.isLoggedIn;
   const isStravaConnected = auth.isConnectedToStrava;
   const setIsLoggedIn = auth.setIsLoggedIn;
+
+  const snackbar = useSnackbar();
   
   const strToken = localStorage.getItem('stravaToken');
   const yearOfRegistrationAtStrava: number = new Date(currentUser.created_at).getFullYear();
@@ -54,10 +56,10 @@ export default function App() {
             localStorage.setItem('logged', 'true')
         }
       })
-      .catch(() => {
+      .catch((err) => {
         setIsLoggedIn(false);
         localStorage.setItem('logged', '');
-        setErrMessage([...errMessage, 'Необходимо авторизоваться в приложении']);
+        snackbar.handleSnackbarError(err);
       });             
     }
   };
@@ -69,7 +71,7 @@ export default function App() {
         .then((res: {accessToken: string}) => {
           if(res.accessToken !== token) {
             localStorage.setItem('stravaToken', res.accessToken);
-          }
+          };
         })
         .catch((err) => console.log(err));
     }  
@@ -101,13 +103,13 @@ export default function App() {
 
   function addAllBikes(user: Profile) {
     appApi.getAllBikes()
-      .then((res) => {
+      .then(() => {
         addAllUserBikes(user);        
       })
-      .catch(err => console.log(err));
+      .catch(() => snackbar.handleSnackbarError('Не удалось добавить велосипеды пользователя'));
   };
 
-
+//TODO - REFACTOR
   function updateBikeDistance(currentUser: Profile) {    
     const currentUserBikes: Bike[] = currentUser.bikes;
     if(currentUserBikes.length > 0) {
@@ -119,18 +121,12 @@ export default function App() {
 
 
   function onAppLoad() {
-    setErrMessage([]);
     getStravaToken()
-      .then((strToken: string) => {
-        if(!strToken) {
-          throw new Error('StravaToken не найден')
-        };  
+      .then((strToken: string) => {        
         return checkStravaToken(strToken);
       })
       .then(() => getCurrentUserData())
-      .catch((err) => {
-        setErrMessage([...errMessage, `Ошибка: ${err.message}`])
-      });    
+      .catch((err) => snackbar.handleSnackbarError(err));
   };
   
 
@@ -141,7 +137,7 @@ export default function App() {
         setallRidesTotalData(res.all_ride_totals);
         setAllYTDRidesTotalDist(res.ytd_ride_totals);
       })
-      .catch((err) => console.log(err))
+      .catch((err) => console.log(err));
   };
 
 
@@ -181,9 +177,6 @@ export default function App() {
   async function getCurrentUserData() { 
     getCurrentAthlete()
       .then((user) => {
-        if(!user.id) {
-         throw new Error(JSON.stringify(user))         
-        }
         setCurrentUser(user); 
         return user;       
       })      
@@ -197,17 +190,10 @@ export default function App() {
         setUserBikes(currentUser.bikes);
         updateBikeDistance(currentUser);
       })
-      .catch((err) => {
-        setErrMessage([...errMessage, `Не удалось получить данные пользователя`])
-        console.log(`Не удалось получить данные пользователя: ${err.message}`);        
-      });    
+      .catch((err) => snackbar.handleSnackbarError(err));    
   };
 
-  function handleErrorMessage(errMsg: string) {
-    setErrMessage([...errMessage, errMsg])
-  };
-
-
+  
   function getBikeTotalDistance(bikeId: string): number {
     let dist = 0;
     allActivities.forEach((act: Activity) => {
@@ -230,11 +216,6 @@ export default function App() {
 console.log(userBikes);
   
 
-  function handleErrors(errMsg: string) {
-    setErrMessage([...errMessage, errMsg])
-  };
-  
-
   useEffect(() => {
     checkAppToken();   
   }, []); 
@@ -254,13 +235,13 @@ console.log(userBikes);
       <CurrentUserContext.Provider value={currentUser}> 
       <ActivitiesLoadingState.Provider value={hasAllActivitiesLoaded}>            
         <Routes>
-          <Route path='/' element={<AppLayout setUser={setCurrentUser} errMessage={errMessage}/>}>
+          <Route path='/' element={<AppLayout setUser={setCurrentUser} />}>
             
             <Route path='/registration' element={!isLoggedIn ? <RegPage /> : <Navigate to='/' replace={true} />} />
             <Route path='/login' element={!isLoggedIn ? <LoginPage /> : <Navigate to='/' replace={true} />} />        
             
             <Route path='/access' element={!isStravaConnected ? <StravaAccessPage /> : <Navigate to='/' replace={true} />} />
-            <Route path='/access-result' element={<StravaAccessResult onError={handleErrors}/>} />
+            <Route path='/access-result' element={<StravaAccessResult />} />
       
             <Route path='/' element={<ProtectedRoute />}>
               <Route index element={<Main />}  />                

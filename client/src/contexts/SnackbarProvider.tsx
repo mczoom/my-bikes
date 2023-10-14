@@ -21,17 +21,16 @@ export function SnackbarProvider({ children }: SnackbarProviderProps) {
     setTimeout(clearMessages, time);   
   };
 
-  function handleSnackbarError(err: ErrorAPI) {
-    if(!err.status) {
-      addMessage(`Ошибка: ${err}`);      
+  function handleSnackbarError(err: ErrorAPI | string) {
+    if(typeof err === 'string') {
+      addMessage(`${err}`);      
     }else{
       addMessage(`Ошибка ${err.status}: ${err.message}`);
-    }
-    
+    }    
     console.log(err);
-  }
+  };
 
-  const snackbarData = {messages, addMessage, handleSnackbarError}
+  const snackbarData = {messages, addMessage, handleSnackbarError};
 
   return <SnackbarContext.Provider value={snackbarData}>{children}</SnackbarContext.Provider>;
 }

@@ -22,6 +22,7 @@ module.exports.createUser = (req, res, next) => {
     });
 };
 
+
 module.exports.login = (req, res, next) => {
   const { login, password } = req.body;
   
@@ -38,29 +39,6 @@ module.exports.login = (req, res, next) => {
 };
 
 
-// module.exports.addStravaPermissions = async (req, res, next) => {
-//   const userID = req.user._id;
-//   const {scope} = req.body;
-//   const user = await User.findOne({_id: userID})
-//   try{
-//     if (!scope) {
-//       throw new RegistrationError('Необходимо разрешить приложению доступ к аккаунту Strava')
-//     } else {       
-//       user.accessToStrava = true;
-//       user.read = true;
-//       user.activity_read_all = true;
-//       user.profile_read_all = true;
-//       user.read_all = true;    
-
-//       await user.save();
-//       res.send(user.accessToStrava);  
-//     }    
-//   } catch (err) {
-//     next(err);
-//   };
-// }
-
-
 module.exports.checkStravaPermissions = async (req, res, next) => {
   const userID = req.user._id;
   User.findOne({_id: userID})
@@ -69,7 +47,7 @@ module.exports.checkStravaPermissions = async (req, res, next) => {
       res.send(user.accessToStrava);  
     })
     .catch(next);
-}
+};
 
 
 module.exports.addStravaPermissions = async (req, res, next) => {
@@ -92,8 +70,7 @@ module.exports.addStravaPermissions = async (req, res, next) => {
       }    
     })
     .catch(next);
-}
-
+};
 
 
 module.exports.getUser = (req, res, next) => {

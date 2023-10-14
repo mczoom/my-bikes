@@ -1,5 +1,5 @@
 export interface ErrorAPI {
-  axiosCode: string
+  axiosCode?: string
   message: string
-  status: number   
+  status?: number   
 }
