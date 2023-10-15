@@ -98,14 +98,14 @@ export default function App() {
         return {...bike, trainer: isTrainer};
       });      
       appApi.addAllBikes(userBikesFromStrava);    
-    }
+    };
   };
 
   function addAllBikes(user: Profile) {
     appApi.getAllBikes()
       .then((res) => {
         if(res.length < 1) {
-        addAllUserBikes(user);        
+          addAllUserBikes(user);        
         }
       })
       .catch(() => snackbar.handleSnackbarError('Не удалось добавить велосипеды пользователя'));
