@@ -103,20 +103,20 @@ export default function App() {
 
   function addAllBikes(user: Profile) {
     appApi.getAllBikes()
-      .then(() => {
+      .then((res) => {
+        if(res.length < 1) {
         addAllUserBikes(user);        
+        }
       })
       .catch(() => snackbar.handleSnackbarError('Не удалось добавить велосипеды пользователя'));
   };
 
-//TODO - REFACTOR
-  function updateBikeDistance(currentUser: Profile) {    
-    const currentUserBikes: Bike[] = currentUser.bikes;
-    if(currentUserBikes.length > 0) {
-      appApi.updateBikeOdo(currentUserBikes);
-    } else {
-      console.log('Байки пользователя не найдены');      
-    }
+
+
+  function updateBikeDistance(bikes: Bike[]) {    
+    appApi.updateBikeOdo(bikes)
+      .then((res) => console.log(res))
+      .catch(() => snackbar.handleSnackbarError('Не удалось обновить пробег байков'))
   };  
 
 
@@ -176,7 +176,7 @@ export default function App() {
   
   async function getCurrentUserData() { 
     getCurrentAthlete()
-      .then((user) => {
+      .then((user: Profile) => {
         setCurrentUser(user); 
         return user;       
       })      
@@ -188,7 +188,7 @@ export default function App() {
       .then((currentUser) => {
         addAllBikes(currentUser);
         setUserBikes(currentUser.bikes);
-        updateBikeDistance(currentUser);
+        updateBikeDistance(currentUser.bikes);
       })
       .catch((err) => snackbar.handleSnackbarError(err));    
   };

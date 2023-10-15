@@ -6,7 +6,7 @@ import {BASE_URL} from 'utils/constants';
 
 const handleErrorResponse = (error: any) => {
   console.log(error)
-  return Promise.reject({axiosCode: error.code, message: error.response.data.message, status: error.response.data.status})
+  return Promise.reject({axiosCode: error.code, message: error.response.data?.message, status: error.response.data?.status})
 }
 
 
