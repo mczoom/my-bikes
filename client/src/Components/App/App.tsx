@@ -30,6 +30,7 @@ export default function App() {
 
   const [currentUser, setCurrentUser] = useState<Profile>({} as Profile);
   const [allActivities, setAllActivities] = useState<Activity[]>([]);
+  const [storedActivities, setStoredActivities] = useState<Activity[] | null>(null);
   const [hasAllActivitiesLoaded, setHasAllActivitiesLoaded] = useState<boolean>(false)
   const [userBikes, setUserBikes] = useState<Bike[]>([]);
   const [allRidesTotalData, setallRidesTotalData] = useState<RidesTotals>({} as RidesTotals);
@@ -141,7 +142,7 @@ export default function App() {
   };
 
 
-  async function getAllActivities(user: Profile) {        
+  async function getAllActivitiesFromStrava(user: Profile) {        
     if(hasAllActivitiesLoaded) {      
       return allActivities;
     };
@@ -169,7 +170,25 @@ export default function App() {
 
       setAllActivities(activities);      
     }
-    setHasAllActivitiesLoaded(true); 
+    setHasAllActivitiesLoaded(true);
+    return activities;
+  };
+
+
+  function getAllStoredActivities(): any {    
+    return appApi.getAllActivities()
+      .then((res: Activity[]) => {
+        setStoredActivities(res)
+        return res;
+      })
+      .catch(() => console.log('Тренировки не найдены'));      
+  };
+
+
+  function addAllActivitiesToDB(trainings: Activity[]) {
+    appApi.addAllActivities(trainings)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err))
   };
 
   console.log(allActivities);
@@ -180,9 +199,14 @@ export default function App() {
         setCurrentUser(user); 
         return user;       
       })      
-      .then(async(currentUser) => { 
+      .then(async(currentUser) => {
         getUserRideStats(currentUser);     
-        await getAllActivities(currentUser);
+        const activitiesFromStrava = await getAllActivitiesFromStrava(currentUser);
+        const activitiesFromDB = getAllStoredActivities();
+        if(!storedActivities || storedActivities.length < 90) {
+          console.log(storedActivities)
+          addAllActivitiesToDB(activitiesFromStrava.slice(0, 52));
+        }
         return currentUser;       
       })
       .then((currentUser) => {
@@ -207,7 +231,7 @@ export default function App() {
 
   const yearsAtStrava = (currentYear: number): number[] => {
     let years: number[] = [];
-    for(let y = yearOfRegistrationAtStrava; y <= (currentYear); y++) {
+    for(let y = yearOfRegistrationAtStrava; y <= currentYear; y++) {
       years.push(y);
     };
     return years;

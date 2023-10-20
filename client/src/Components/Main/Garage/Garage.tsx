@@ -40,9 +40,13 @@ export default function Garage({userBikesStrava, yearsAtStrava, activities, bike
 
   
   
-  function checkForNewBikesInStrava(stravaBikes: Bike[], savedBikes: Bike[]): Bike[] {    
-    const newBike = stravaBikes.filter((b) => savedBikes.every((bike) => !bike.id.includes(b.id)));        
-    return newBike;
+  function checkForNewBikesInStrava(stravaBikes: Bike[], savedBikes: Bike[]): Bike[] {
+    if(stravaBikes.length !== savedBikes.length) {   
+      const newBike = stravaBikes.filter((b) => savedBikes.every((bike) => !bike.id.includes(b.id)));        
+      return newBike;
+    } else {
+      return [];
+    }
   };
 
   function addNewBike(bikes: Bike | Bike[]) {

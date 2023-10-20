@@ -5,6 +5,7 @@ const { auth } = require('../middlewares/auth');
 const { exchangeStrToken, refreshStrToken, getStrToken } = require('../controllers/strToken');
 const { checkStravaToken } = require('../middlewares/stravaAuth');
 const { updateBikeInfoValidation } = require('../middlewares/validation');
+const { addAllActivities, getAllActivities } = require('../controllers/activities');
 
 
 
@@ -19,9 +20,12 @@ router.get('/strava-permissions', auth, checkStravaPermissions);
 router.get('/strtoken', auth, getStrToken);
 router.post('/strtokenexchange', auth, exchangeStrToken);
 router.get('/strtokenrefresh', auth, refreshStrToken);
-
 router.get('/user', auth, getUser);
 router.get('/tokencheck', auth, checkStravaToken, refreshStrToken);
+
+router.post('/activities', auth, checkStravaToken, addAllActivities);
+router.get('/activities', auth, checkStravaToken, getAllActivities);
+
 router.post('/bikes', auth, checkStravaToken, addAllBikes);
 router.get('/bikes', auth, checkStravaToken, getAllBikes);
 router.post('/addbike', auth, checkStravaToken, addBike);

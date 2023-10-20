@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Activity } from 'types/Activity';
 import { Bike } from 'types/Bike';
 import {BASE_URL} from 'utils/constants';
 
@@ -45,6 +46,31 @@ export const getCurrentUser = () => {
     })
     .then((res) => res.data)    
     .catch((err) => handleErrorResponse(err))
+};
+
+
+export const addAllActivities = (activities: Activity[]) => {
+  return axios.post(`${BASE_URL}/activities`, 
+    { activities },
+    { headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+      },      
+    })
+  .then((res) => res.data)    
+  .catch((err) => handleErrorResponse(err))
+};
+
+
+export const getAllActivities = () => {
+  return axios.get(`${BASE_URL}/activities`, {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+    }
+  })
+  .then((res) => res.data)    
+  .catch((err) => handleErrorResponse(err))
 };
 
 

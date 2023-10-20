@@ -1,7 +1,6 @@
 const NotFoundError = require('../errors/NotFoundError');
 const Bike = require('../models/bike');
-const stravaToken = require('../models/stravaToken');
-const { updateBikesOdo, getActualBikesOdo } = require('../utils/services');
+const { updateBikesOdo } = require('../utils/services');
 
 
 module.exports.addAllBikes = async(req, res, next) => {
@@ -52,7 +51,6 @@ module.exports.updateOdo = async(req, res, next) => {
     res.send('Километраж обновлен');
   })
   .catch(next);  
-  
 };
 
 
