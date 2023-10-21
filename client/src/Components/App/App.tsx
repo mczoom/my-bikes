@@ -121,17 +121,7 @@ export default function App() {
   };  
 
 
-  function onAppLoad() {
-    getStravaToken()
-      .then((strToken: string) => {        
-        return checkStravaToken(strToken);
-      })
-      .then(() => getCurrentUserData())
-      .catch((err) => snackbar.handleSnackbarError(err));
-  };
   
-
-
   function getUserRideStats(user: Profile) {
     getAthlete(user.id)
       .then((res: AthleteStats) => {
@@ -181,31 +171,26 @@ export default function App() {
         setStoredActivities(res)
         return res;
       })
-      .catch(() => console.log('Тренировки не найдены'));      
+      .catch(() => console.log('Тренировки не найдены в базе'));      
   };
 
 
-  function addAllActivitiesToDB(trainings: Activity[]) {
-    appApi.addAllActivities(trainings)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err))
-  };
-
-  console.log(allActivities);
+   console.log(allActivities);
   
   async function getCurrentUserData() { 
     getCurrentAthlete()
       .then((user: Profile) => {
         setCurrentUser(user); 
+        getUserRideStats(user);
         return user;       
       })      
-      .then(async(currentUser) => {
-        getUserRideStats(currentUser);     
+      .then(async(currentUser) => {             
         const activitiesFromStrava = await getAllActivitiesFromStrava(currentUser);
-        const activitiesFromDB = getAllStoredActivities();
-        if(!storedActivities || storedActivities.length < 90) {
-          console.log(storedActivities)
-          addAllActivitiesToDB(activitiesFromStrava.slice(0, 52));
+        const activitiesFromDB = await getAllStoredActivities();
+        if(!activitiesFromDB.length) {
+          appApi.addAllActivities(activitiesFromStrava);
+        } else if (activitiesFromStrava.length !== activitiesFromDB.length) {
+          appApi.updateAllActivities(activitiesFromStrava);
         }
         return currentUser;       
       })
@@ -238,6 +223,16 @@ export default function App() {
   };  
   
 console.log(userBikes);
+
+
+function onAppLoad() {
+  getStravaToken()
+    .then((strToken: string) => {        
+      return checkStravaToken(strToken);
+    })
+    .then(() => getCurrentUserData())
+    .catch((err) => snackbar.handleSnackbarError(err));
+};
   
 
   useEffect(() => {

@@ -38,8 +38,14 @@ mongoose.connect(BD_ADRESS, {
   useNewUrlParser: true,
 });
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({limit: '35mb'}));
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+    limit: '35mb',
+    parameterLimit: 50000,
+  }),
+);
 app.use(cookieParser());
 
 app.use(express.static('images'));

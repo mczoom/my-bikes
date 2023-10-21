@@ -74,6 +74,19 @@ export const getAllActivities = () => {
 };
 
 
+export const updateAllActivities = (activities: Activity[]) => {
+  return axios.patch(`${BASE_URL}/updateactivities`, 
+    { activities },
+    { headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+      },
+    })
+    .then((res) => res.data)    
+    .catch((err) => handleErrorResponse(err))
+};
+
+
 export const addAllBikes = (bikes: Bike[]) => {
   return axios.post(`${BASE_URL}/bikes`, 
     { bikes },
