@@ -83,17 +83,15 @@ export default function App() {
     const trainings = allActivities.filter((activity: Activity) => {
       return activity.gear_id === bikeId
     });
-
     const isTrainer = trainings.every((ride) => {
       return ride.trainer === true;
     });
-
     return isTrainer;
   };  
 
   
-  function addAllUserBikes(currentUser: Profile) {
-    if(currentUser.bikes.length !== 0 && hasAllActivitiesLoaded === true) {
+  function storeAllUserBikesToDB(currentUser: Profile) {
+    if(currentUser.bikes.length && hasAllActivitiesLoaded === true) {
       const userBikesFromStrava: Bike[] = currentUser.bikes.map((bike: Bike) => {  
         const isTrainer = checkIfTrainer(bike.id);
         return {...bike, trainer: isTrainer};
@@ -102,12 +100,15 @@ export default function App() {
     };
   };
 
-  function addAllBikes(user: Profile) {
+
+  function handleBikes(user: Profile) {
     appApi.getAllBikes()
       .then((res) => {
-        if(res.length < 1) {
-          addAllUserBikes(user);        
+        if(!res.length) {
+          storeAllUserBikesToDB(user);
+          return;
         }
+        updateBikeDistance(user.bikes)
       })
       .catch(() => snackbar.handleSnackbarError('Не удалось добавить велосипеды пользователя'));
   };
@@ -195,9 +196,9 @@ export default function App() {
         return currentUser;       
       })
       .then((currentUser) => {
-        addAllBikes(currentUser);
+        handleBikes(currentUser);
         setUserBikes(currentUser.bikes);
-        updateBikeDistance(currentUser.bikes);
+        //updateBikeDistance(currentUser.bikes);
       })
       .catch((err) => snackbar.handleSnackbarError(err));    
   };

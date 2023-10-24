@@ -13,9 +13,8 @@ export function exchangeToken() {
   const params: any = new Proxy(new URLSearchParams(window.location.search), {
     get: (searchParams, prop:string) => searchParams.get(prop),
   });
-  const accessToken: string = params.code;  // Get the value of "some_key" in eg "https://example.com/?some_key=some_value"
+  const accessToken: string = params.code;  // Get the value of "some_key" in eg "https://example.com/?some_key=some_value"  
   
-
   return axios.post(`${BASE_URL}/strtokenexchange`, 
     { token: accessToken },
     { headers: {
@@ -24,7 +23,7 @@ export function exchangeToken() {
       },
     })
     .then(res => res.data)
-    .catch((err) => handleErrorResponse(err))
+    .catch((err) => handleErrorResponse(err))    
 };
 
 

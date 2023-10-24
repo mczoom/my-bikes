@@ -7,19 +7,19 @@ module.exports.addAllBikes = async(req, res, next) => {
   const actualBikesInfo = req.body.bikes;
   const userID = req.user._id;
   const storedBikes = await Bike.findOne({userID});
+  console.log(storedBikes);
   
   try{
-    if(!storedBikes) {
-    return Bike.create({bikes: actualBikesInfo, userID})
+    if(storedBikes) {
+      updateBikesOdo(storedBikes, actualBikesInfo);
+      storedBikes.save();
+      return;
+    };
+    Bike.create({bikes: actualBikesInfo, userID})
       .then((garage) => {
         res.send({ bikes: garage.bikes });
-      })
-      .catch(next);
-    };
-    updateBikesOdo(storedBikes, actualBikesInfo);
-    storedBikes.save();
+      })      
   } catch (err) {
-      console.log('Велосипеды пользователя не найденыsss');
       next(err);
   }
 };
@@ -30,7 +30,7 @@ module.exports.addBike = async(req, res, next) => {
   const userID = req.user._id;
   try {
     const storedBikes = await Bike.findOneAndUpdate({userID}, {$push: {"bikes": newBike}}, {new: true});    
-    await storedBikes.save(); 
+    //await storedBikes.save(); 
     res.send('Велосипед успешно добавлен');
   } catch(err) {
     next(err);
@@ -58,13 +58,9 @@ module.exports.getAllBikes = async(req, res, next) => {
   const userID = req.user._id;
   
   Bike.findOne({userID})
-    //.orFail(() => new NotFoundError('Велосипеды пользователя не найдены'))
+    .orFail(() => res.send([]))
     .then((garage) => {
-      if(garage) {
-        return res.send(garage.bikes);
-      } else {
-        return res.send([]);
-      }
+      res.send(garage.bikes);      
     })
     .catch(next);
 };

@@ -26,7 +26,7 @@ module.exports.getAllActivities = async(req, res, next) => {
 
 module.exports.updateActivities = async(req, res, next) => {
   const actualActivities = req.body.activities;
-  const userID = req.user._id;
+  const id = req.user._id;
 
   Activity.findOne({userID})
   .orFail(() => new NotFoundError('Тренировки не найдены в базе'))
@@ -34,7 +34,7 @@ module.exports.updateActivities = async(req, res, next) => {
     if(data.activities.length === actualActivities.length) {
       return res.send(actualActivities);
     };
-    await Activity.updateOne({activities: actualActivities});
+    await Activity.updateOne({userID: id}, {activities: actualActivities});
     res.send('Список тренировок обновлен');
   })  
   .catch(next);  
