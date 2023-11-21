@@ -6,8 +6,18 @@ export const stravaApiUrl: string = 'https://www.strava.com/api/v3';
 
 export const mandatoryStravaPermissions = ['read', 'activity:read_all', 'profile:read_all', 'read_all'];
 
-export const currentYear: number = new Date().getFullYear();
 export const appStartYear = 2023;
+export const currentYear: number = new Date().getFullYear();
+export const yearOfRegistrationAtStrava = (creationDate: string) => new Date(creationDate).getFullYear();
+
+export const yearsAtStrava = (currentYear: number, creationDate: string): number[] => {
+  let years: number[] = [];
+  for(let y = yearOfRegistrationAtStrava(creationDate); y <= currentYear; y++) {
+    years.push(y);
+  };
+  return years;
+};
+
 
 export const snackbarTime = 7000;
 

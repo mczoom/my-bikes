@@ -23,6 +23,7 @@ import { ActivitiesLoadingState } from 'contexts/ActivitiesLoadingState';
 import StravaAccessResult from 'components/Auth/StravaAuth/StravaAccessResult';
 import useAuth from 'hooks/useAuth';
 import useSnackbar from 'hooks/useSnackbar';
+import useBikes from 'hooks/useBikes';
 
 
 
@@ -35,15 +36,18 @@ export default function App() {
   const [userBikes, setUserBikes] = useState<Bike[]>([]);
   const [allRidesTotalData, setallRidesTotalData] = useState<RidesTotals>({} as RidesTotals);
   const [allYTDRidesTotalData, setAllYTDRidesTotalDist] = useState<RidesTotals>({} as RidesTotals);
-  
+
   const auth = useAuth();
   const isLoggedIn = auth.isLoggedIn;
   const isStravaConnected = auth.isConnectedToStrava;
   const setIsLoggedIn = auth.setIsLoggedIn;
 
+  //const strToken = localStorage.getItem('stravaToken');
+
+  const savedBikes = useBikes();
   const snackbar = useSnackbar();
   
-  const strToken = localStorage.getItem('stravaToken');
+  
   const yearOfRegistrationAtStrava: number = new Date(currentUser.created_at).getFullYear();
 
   
@@ -79,13 +83,21 @@ export default function App() {
   }; 
 
 
-  function checkIfTrainer(bikeId: string): boolean {
-    const trainings = allActivities.filter((activity: Activity) => {
+  function filterRidesByBike(bikeId: string, rides: Activity[]) {
+    return rides.filter((activity) => {
       return activity.gear_id === bikeId
     });
-    const isTrainer = trainings.every((ride) => {
-      return ride.trainer === true;
-    });
+  }
+
+
+  function isBikeTrainer(rides: Activity[]) {
+    return rides.every((ride) => ride.trainer);
+  }
+
+
+  function checkIfTrainer(bikeId: string, activities: Activity[]): boolean {
+    const bikeRides = filterRidesByBike(bikeId, activities)
+    const isTrainer = isBikeTrainer(bikeRides)
     return isTrainer;
   };  
 
@@ -93,7 +105,7 @@ export default function App() {
   function storeAllUserBikesToDB(currentUser: Profile) {
     if(currentUser.bikes.length && hasAllActivitiesLoaded === true) {
       const userBikesFromStrava: Bike[] = currentUser.bikes.map((bike: Bike) => {  
-        const isTrainer = checkIfTrainer(bike.id);
+        const isTrainer = checkIfTrainer(bike.id, allActivities);
         return {...bike, trainer: isTrainer};
       });      
       appApi.addAllBikes(userBikesFromStrava);    
@@ -101,17 +113,29 @@ export default function App() {
   };
 
 
-  function handleBikes(user: Profile) {
-    appApi.getAllBikes()
-      .then((res) => {
-        if(!res.length) {
-          storeAllUserBikesToDB(user);
-          return;
-        }
-        updateBikeDistance(user.bikes)
-      })
-      .catch(() => snackbar.handleSnackbarError('Не удалось добавить велосипеды пользователя'));
-  };
+  function handleBikes(user: Profile, bikes: Bike[]) {
+    if(!bikes.length) {
+      storeAllUserBikesToDB(user);
+      setUserBikes(bikes)
+      return;
+    };
+    setUserBikes(bikes)
+    updateBikeDistance(user.bikes)
+  };      
+  
+
+
+  // function handleBikes(user: Profile) {
+  //   appApi.getAllBikes()
+  //     .then((res) => {
+  //       if(!res.length) {
+  //         storeAllUserBikesToDB(user);
+  //         return;
+  //       }
+  //       updateBikeDistance(user.bikes)
+  //     })
+  //     .catch(() => snackbar.handleSnackbarError('Не удалось добавить велосипеды пользователя'));
+  // };
 
 
 
@@ -196,8 +220,8 @@ export default function App() {
         return currentUser;       
       })
       .then((currentUser) => {
-        handleBikes(currentUser);
-        setUserBikes(currentUser.bikes);
+        handleBikes(currentUser, savedBikes);
+        //setUserBikes(savedBikes);
         //updateBikeDistance(currentUser.bikes);
       })
       .catch((err) => snackbar.handleSnackbarError(err));    
@@ -242,10 +266,8 @@ function onAppLoad() {
   
 
   useEffect(() => {    
-    if(isLoggedIn && strToken) {
-      onAppLoad();   
-    }
-  }, [isLoggedIn, strToken]);
+    onAppLoad();    
+  }, [isLoggedIn]);
   
   
   console.log(currentUser);   
@@ -276,7 +298,7 @@ function onAppLoad() {
               />          
               <Route path='/garage' 
                 element={<Garage             
-                  userBikesStrava={userBikes} 
+                  userBikes={userBikes} 
                   yearsAtStrava={yearsAtStrava} 
                   activities={allActivities} 
                   bikeTotalDistance={getBikeTotalDistance} 

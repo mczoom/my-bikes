@@ -90,8 +90,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const authData = { isLoggedIn, setIsLoggedIn, isConnectedToStrava, setIsConnectedToStrava, signUp, signIn, logout, checkPermissions };
   
   useEffect(() => {
-    setLocalStorage("logged", isLoggedIn);
-    
+    setLocalStorage("logged", isLoggedIn);    
   }, [isLoggedIn]);
 
   useEffect(() => {      
@@ -101,9 +100,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     checkStravaPermissions();
   }, []);
-
     
-
-    return <AuthContext.Provider value={authData}>{children}</AuthContext.Provider>;  
+  return <AuthContext.Provider value={authData}>{children}</AuthContext.Provider>;  
     
   }

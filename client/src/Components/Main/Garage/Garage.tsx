@@ -8,10 +8,11 @@ import  *  as appApi from 'utils/appApi';
 import { UserBike } from 'types/UserBike';
 import EditBikeInfoPopup from 'components/Main/Garage/EditBikeInfoPopup/EditBikeInfoPopup';
 import useSnackbar from 'hooks/useSnackbar';
+import useBikes from 'hooks/useBikes';
 
 
 interface GarageProps {
-  userBikesStrava: Bike[]
+  userBikes: Bike[]
   yearsAtStrava: (currentYear: number) => number[]
   activities: Activity[]
   bikeTotalDistance: (bikeId: string) => number  
@@ -26,9 +27,9 @@ interface BikeCardInfo {
   weight: string | number
 }
 
-export default function Garage({userBikesStrava, yearsAtStrava, activities, bikeTotalDistance}: GarageProps) {
+export default function Garage({userBikes, yearsAtStrava, activities, bikeTotalDistance}: GarageProps) {
 
-  const [userBikes, setUserBikes] = useState<UserBike[]>([]);
+  //const [userBikes, setUserBikes] = useState<UserBike[]>([]);
   const [isBikesFilterChecked, setIsBikesFilterChecked] = useState<boolean>(false);
   const [bikesToRender, setBikesToRender] = useState<Bike[]>([]);
   const [isBikePhotoPopupOpen, setBikePhotoPopupOpen] = useState<boolean>(false);
@@ -37,50 +38,52 @@ export default function Garage({userBikesStrava, yearsAtStrava, activities, bike
   const [curentBikeId, setCurentBikeId] = useState<string>('');
 
   const snackbar = useSnackbar();
+  
+  const bikes = useBikes()
 
   
   
-  function checkForNewBikesInStrava(stravaBikes: Bike[], savedBikes: Bike[]): Bike[] {
-    if(stravaBikes.length !== savedBikes.length) {   
-      const newBike = stravaBikes.filter((b) => savedBikes.every((bike) => !bike.id.includes(b.id)));        
-      return newBike;
-    } else {
-      return [];
-    }
-  };
+  // function checkForNewBikesInStrava(stravaBikes: Bike[], savedBikes: Bike[]): Bike[] {
+  //   if(stravaBikes.length !== savedBikes.length) {   
+  //     const newBike = stravaBikes.filter((b) => savedBikes.every((bike) => !bike.id.includes(b.id)));        
+  //     return newBike;
+  //   } else {
+  //     return [];
+  //   }
+  // };
 
-  function addNewBike(bikes: Bike | Bike[]) {
-    appApi.addBike(bikes)
-    .catch((err) => snackbar.handleSnackbarError(err));
-  }; 
+  // function addNewBike(bikes: Bike | Bike[]) {
+  //   appApi.addBike(bikes)
+  //   .catch((err) => snackbar.handleSnackbarError(err));
+  // }; 
     
 
-  function getUserBikes() {
-    appApi.getAllBikes()
-      .then((bikes: UserBike[]) => {
-        const newBikes = checkForNewBikesInStrava(userBikesStrava, bikes);
-          if(newBikes.length > 0) {
-            addNewBike(newBikes);
-          }    
-          setUserBikes(bikes); 
-          setBikesToRender(bikes);       
-      })
-      .catch(err => snackbar.handleSnackbarError(err));
-  }; 
+  // function getUserBikes() {
+  //   appApi.getAllBikes()
+  //     .then((bikes: UserBike[]) => {
+  //       const newBikes = checkForNewBikesInStrava(userBikesStrava, bikes);
+  //         if(newBikes.length > 0) {
+  //           addNewBike(newBikes);
+  //         }    
+  //         setUserBikes(bikes); 
+  //         setBikesToRender(bikes);       
+  //     })
+  //     .catch(err => snackbar.handleSnackbarError(err));
+  // }; 
 
 
   function toggleBikesFilter() {
     setIsBikesFilterChecked(v => !v);
   };
 
-  function filterBikeCardsToRender() {
+  function filterBikeCardsToRender(bikes: Bike[]) {
     if(isBikesFilterChecked) {
-      const trainerBikesToRender = userBikes.filter((bike) => {
+      const trainerBikesToRender = bikes.filter((bike) => {
         return bike.trainer === true;
     });
     setBikesToRender(trainerBikesToRender);
     } else {
-      setBikesToRender(userBikes);
+      setBikesToRender(bikes);
     }
   };
 
@@ -112,15 +115,13 @@ export default function Garage({userBikesStrava, yearsAtStrava, activities, bike
   };
 
   useEffect(() => {
-    filterBikeCardsToRender();
-  }, [isBikesFilterChecked]);
+    filterBikeCardsToRender(bikes);
+  }, [isBikesFilterChecked, bikes]);
 
-  useEffect(() => {
-    getUserBikes();
-  }, [])
+  
 
 console.log(userBikes);
-console.log(userBikesStrava);
+
 
   return (
     <section className='garage'>

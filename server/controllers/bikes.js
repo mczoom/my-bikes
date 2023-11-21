@@ -7,8 +7,7 @@ module.exports.addAllBikes = async(req, res, next) => {
   const actualBikesInfo = req.body.bikes;
   const userID = req.user._id;
   const storedBikes = await Bike.findOne({userID});
-  console.log(storedBikes);
-  
+    
   try{
     if(storedBikes) {
       updateBikesOdo(storedBikes, actualBikesInfo);
