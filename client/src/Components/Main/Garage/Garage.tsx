@@ -13,9 +13,8 @@ import useBikes from 'hooks/useBikes';
 
 interface GarageProps {
   userBikes: Bike[]
-  yearsAtStrava: (currentYear: number) => number[]
+  yearsAtStrava: number[]
   activities: Activity[]
-  bikeTotalDistance: (bikeId: string) => number  
 }
 
 interface BikeCardInfo {
@@ -27,7 +26,7 @@ interface BikeCardInfo {
   weight: string | number
 }
 
-export default function Garage({userBikes, yearsAtStrava, activities, bikeTotalDistance}: GarageProps) {
+export default function Garage({userBikes, yearsAtStrava, activities}: GarageProps) {
 
   //const [userBikes, setUserBikes] = useState<UserBike[]>([]);
   const [isBikesFilterChecked, setIsBikesFilterChecked] = useState<boolean>(false);
@@ -40,6 +39,16 @@ export default function Garage({userBikes, yearsAtStrava, activities, bikeTotalD
   const snackbar = useSnackbar();
   
   const bikes = useBikes()
+
+  function getBikeTotalDistance(bikeId: string, userBikes: Bike[]): number {
+    let dist = 0;
+    bikes.forEach((bike) => {
+      if(bike.id === bikeId) {
+        dist = bike.converted_distance;
+      }
+    });
+    return dist;
+  };
 
   
   
@@ -132,7 +141,6 @@ console.log(userBikes);
         openEditInfoPopup={openEditBikeInfoPopup}
         yearsAtStrava={yearsAtStrava}
         activities={activities}
-        bikeTotalDistance={bikeTotalDistance}
         getBikeId={getBikeId}
       />
       <BikeCardPopup isPopupOpen={isBikePhotoPopupOpen} bikePopupData={bikePopupData} closePopup={closeBikePhotoPopup} />

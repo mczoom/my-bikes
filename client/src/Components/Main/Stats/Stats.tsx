@@ -3,19 +3,20 @@ import CommonStats from 'components/Main/Stats/CommonStats/CommonStats';
 import { RidesTotals } from 'types/AthleteStats';
 import { Activity } from 'types/Activity';
 import ActivitiesCalendar from 'components/ActivitiesCalendar/ActivitiesCalendar';
-import { convertDistanceToKM, convertSecToHrs } from 'utils/constants';
+import { convertDistanceToKM, convertSecToHrs, currentYear, getYearsAtStrava } from 'utils/constants';
+import { useContext } from 'react';
+import { CurrentUserContext } from 'contexts/CurrentUserContext';
 
 
 interface StatsProps {
-  registrationYear: number
-  yearsAtStrava: (p: number) => number[]
+  yearsAtStrava: number[]
   allRidesTotalData: RidesTotals
   allYTDRidesTotalData: RidesTotals
   allActivities: Activity[]
 }
 
 
-export default function Stats({registrationYear, yearsAtStrava, allRidesTotalData, allYTDRidesTotalData, allActivities}: StatsProps) {
+export default function Stats({yearsAtStrava, allRidesTotalData, allYTDRidesTotalData, allActivities}: StatsProps) {
 
   const isYearMatch = (y: number, activity: Activity): boolean => {
     return new Date(activity.start_date).getFullYear() === y;
@@ -85,7 +86,6 @@ export default function Stats({registrationYear, yearsAtStrava, allRidesTotalDat
         <ActivitiesCalendar allActivities={allActivities} />
       </div>
       <StatsYearsList
-        registrationYear={registrationYear}
         yearsAtStrava={yearsAtStrava}
         totalDistance={sumTotalRideDistance}
         totalTime={sumTotalRideTime}

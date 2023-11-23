@@ -2,9 +2,8 @@ import { currentYear } from 'utils/constants';
 import StatsYearCard from 'components/Main/Stats/StatsYearCard/StatsYearCard';
 
 
-interface StatsYearsListProps {
-  registrationYear: number
-  yearsAtStrava: (p: number) => number[]
+interface StatsYearsListProps {  
+  yearsAtStrava: number[]
   totalDistance: (y: number) => number
   totalTime: (y: number) => number
   totalTrainings: (y: number) => number
@@ -15,7 +14,7 @@ interface StatsYearsListProps {
 export default function StatsYearsList({yearsAtStrava, totalDistance, totalTime, totalTrainings, yearLongestDistance, totalOverHundredRides}: StatsYearsListProps) {
   return (
     <ul className='years-list'>
-      {yearsAtStrava(currentYear).reverse().map((year: number, i: number) => (
+      {yearsAtStrava.map((year: number, i: number) => (
           <li key={i}>
             <StatsYearCard
               year={year}

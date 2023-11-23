@@ -24,6 +24,7 @@ import StravaAccessResult from 'components/Auth/StravaAuth/StravaAccessResult';
 import useAuth from 'hooks/useAuth';
 import useSnackbar from 'hooks/useSnackbar';
 import useBikes from 'hooks/useBikes';
+import { checkIfTrainer, currentYear, getYearsAtStrava } from 'utils/constants';
 
 
 
@@ -48,7 +49,7 @@ export default function App() {
   const snackbar = useSnackbar();
   
   
-  const yearOfRegistrationAtStrava: number = new Date(currentUser.created_at).getFullYear();
+  const yearsAtStrava = getYearsAtStrava(currentYear, currentUser.created_at).reverse();
 
   
   function checkAppToken() {
@@ -82,25 +83,6 @@ export default function App() {
     }  
   }; 
 
-
-  function filterRidesByBike(bikeId: string, rides: Activity[]) {
-    return rides.filter((activity) => {
-      return activity.gear_id === bikeId
-    });
-  }
-
-
-  function isBikeTrainer(rides: Activity[]) {
-    return rides.every((ride) => ride.trainer);
-  }
-
-
-  function checkIfTrainer(bikeId: string, activities: Activity[]): boolean {
-    const bikeRides = filterRidesByBike(bikeId, activities)
-    const isTrainer = isBikeTrainer(bikeRides)
-    return isTrainer;
-  };  
-
   
   function storeAllUserBikesToDB(currentUser: Profile) {
     if(currentUser.bikes.length && hasAllActivitiesLoaded === true) {
@@ -113,6 +95,13 @@ export default function App() {
   };
 
 
+  function updateBikeDistance(bikes: Bike[]) {    
+    appApi.updateBikeOdo(bikes)
+      .then(() => console.log('Пробег байков успешно обновлён'))
+      .catch(() => snackbar.handleSnackbarError('Не удалось обновить пробег байков'))
+  };
+
+
   function handleBikes(user: Profile, bikes: Bike[]) {
     if(!bikes.length) {
       storeAllUserBikesToDB(user);
@@ -121,32 +110,9 @@ export default function App() {
     };
     setUserBikes(bikes)
     updateBikeDistance(user.bikes)
-  };      
-  
-
-
-  // function handleBikes(user: Profile) {
-  //   appApi.getAllBikes()
-  //     .then((res) => {
-  //       if(!res.length) {
-  //         storeAllUserBikesToDB(user);
-  //         return;
-  //       }
-  //       updateBikeDistance(user.bikes)
-  //     })
-  //     .catch(() => snackbar.handleSnackbarError('Не удалось добавить велосипеды пользователя'));
-  // };
-
-
-
-  function updateBikeDistance(bikes: Bike[]) {    
-    appApi.updateBikeOdo(bikes)
-      .then((res) => console.log(res))
-      .catch(() => snackbar.handleSnackbarError('Не удалось обновить пробег байков'))
   };  
 
-
-  
+ 
   function getUserRideStats(user: Profile) {
     getAthlete(user.id)
       .then((res: AthleteStats) => {
@@ -201,6 +167,18 @@ export default function App() {
 
 
    console.log(allActivities);
+
+  function handleActivities(user: Profile) {
+    Promise.all([getAllActivitiesFromStrava(user), getAllStoredActivities()])
+      .then(([activitiesFromStrava, activitiesFromDB]) => {
+        if(!activitiesFromDB.length) {
+          appApi.addAllActivities(activitiesFromStrava);
+        } else if (activitiesFromStrava.length !== activitiesFromDB.length) {
+          appApi.updateAllActivities(activitiesFromStrava);
+        }
+      })
+      .catch((err) => console.log(err))
+  };
   
   async function getCurrentUserData() { 
     getCurrentAthlete()
@@ -209,14 +187,8 @@ export default function App() {
         getUserRideStats(user);
         return user;       
       })      
-      .then(async(currentUser) => {             
-        const activitiesFromStrava = await getAllActivitiesFromStrava(currentUser);
-        const activitiesFromDB = await getAllStoredActivities();
-        if(!activitiesFromDB.length) {
-          appApi.addAllActivities(activitiesFromStrava);
-        } else if (activitiesFromStrava.length !== activitiesFromDB.length) {
-          appApi.updateAllActivities(activitiesFromStrava);
-        }
+      .then((currentUser) => {             
+        handleActivities(currentUser);
         return currentUser;       
       })
       .then((currentUser) => {
@@ -228,24 +200,16 @@ export default function App() {
   };
 
   
-  function getBikeTotalDistance(bikeId: string): number {
-    let dist = 0;
-    allActivities.forEach((act: Activity) => {
-      if(act.gear_id === bikeId) {
-        dist += act.distance;
-      }
-    });
-    return dist;
-  };
+  // function getBikeTotalDistance(bikeId: string): number {
+  //   let dist = 0;
+  //   allActivities.forEach((act: Activity) => {
+  //     if(act.gear_id === bikeId) {
+  //       dist += act.distance;
+  //     }
+  //   });
+  //   return dist;
+  // };
 
-
-  const yearsAtStrava = (currentYear: number): number[] => {
-    let years: number[] = [];
-    for(let y = yearOfRegistrationAtStrava; y <= currentYear; y++) {
-      years.push(y);
-    };
-    return years;
-  };  
   
 console.log(userBikes);
 
@@ -288,8 +252,7 @@ function onAppLoad() {
             <Route path='/' element={<ProtectedRoute />}>
               <Route index element={<Main />}  />                
               <Route path='/stats' 
-                element={<Stats               
-                  registrationYear={yearOfRegistrationAtStrava} 
+                element={<Stats
                   yearsAtStrava={yearsAtStrava} 
                   allRidesTotalData={allRidesTotalData} 
                   allYTDRidesTotalData={allYTDRidesTotalData}
@@ -301,7 +264,7 @@ function onAppLoad() {
                   userBikes={userBikes} 
                   yearsAtStrava={yearsAtStrava} 
                   activities={allActivities} 
-                  bikeTotalDistance={getBikeTotalDistance} 
+                  //bikeTotalDistance={getBikeTotalDistance} 
                 />} 
               />
               <Route path='/maintenance' element={<Maintenance />} />

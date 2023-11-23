@@ -7,16 +7,16 @@ import { convertDistanceToKM } from 'utils/constants';
 
 
 interface BikeSpecsProps {
-  bike: UserBike
-  bikeTotalDistance: (bikeId: string) => number
+  bike: UserBike  
   openEditInfoPopup: () => void
   getBikeId: (id: string) => void
 }
 
-export default function BikeSpecs({bike, bikeTotalDistance, openEditInfoPopup, getBikeId}: BikeSpecsProps) {
+export default function BikeSpecs({bike, openEditInfoPopup, getBikeId}: BikeSpecsProps) {
 
   const hasAllActivitiesLoaded = useContext(ActivitiesLoadingState);
-  const totalDist = convertDistanceToKM(bikeTotalDistance(bike.id));
+  const totalDist = Math.round(bike.converted_distance);
+  
 
 
   return (

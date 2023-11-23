@@ -3,7 +3,7 @@ import DistancePerYear from 'components/Main/Garage/DistancePerYear/DistancePerY
 
 
 interface DistancePerYearListProps {
-  yearsAtStrava: (currentYear: number) => number[]
+  yearsAtStrava: number[]
   distancePerYear: (y: number) => number
 }
 
@@ -11,7 +11,7 @@ export default function DistancePerYearList({yearsAtStrava, distancePerYear}: Di
   
   return (
     <ul className='year-dist-cardslist'>
-      {yearsAtStrava(currentYear).reverse().map((year: number, i: number) => (
+      {yearsAtStrava.map((year: number, i: number) => (
         <li className='year-dist-card' key={i}><DistancePerYear year={year} distancePerYear={distancePerYear} /></li>
       ))}
     </ul>

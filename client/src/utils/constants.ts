@@ -1,3 +1,5 @@
+import { Activity } from "types/Activity";
+
 export const BASE_URL = 'http://localhost:3001';
 
 export const clientId = 98790;
@@ -10,7 +12,7 @@ export const appStartYear = 2023;
 export const currentYear: number = new Date().getFullYear();
 export const yearOfRegistrationAtStrava = (creationDate: string) => new Date(creationDate).getFullYear();
 
-export const yearsAtStrava = (currentYear: number, creationDate: string): number[] => {
+export const getYearsAtStrava = (currentYear: number, creationDate: string): number[] => {
   let years: number[] = [];
   for(let y = yearOfRegistrationAtStrava(creationDate); y <= currentYear; y++) {
     years.push(y);
@@ -35,4 +37,20 @@ export const convertDistanceToKM = (y: number) => {
 
 export const convertSecToHrs = (y: number) => {
   return Math.round(y / 3600);
+};
+
+export function filterRidesByBike(bikeId: string, rides: Activity[]) {
+  return rides.filter((activity) => {
+    return activity.gear_id === bikeId
+  });
+};
+
+export function isBikeTrainer(rides: Activity[]) {
+  return rides.every((ride) => ride.trainer);
+};
+
+export function checkIfTrainer(bikeId: string, activities: Activity[]): boolean {
+  const bikeRides = filterRidesByBike(bikeId, activities)
+  const isTrainer = isBikeTrainer(bikeRides)
+  return isTrainer;
 };
