@@ -1,6 +1,6 @@
 const NotFoundError = require('../errors/NotFoundError');
 const Bike = require('../models/bike');
-const { updateBikesOdo } = require('../utils/services');
+const { updateBikeOdo } = require('../utils/services');
 
 
 module.exports.addAllBikes = async(req, res, next) => {
@@ -10,7 +10,7 @@ module.exports.addAllBikes = async(req, res, next) => {
     
   try{
     if(storedBikes) {
-      updateBikesOdo(storedBikes, actualBikesInfo);
+      updateBikeOdo(storedBikes, actualBikesInfo);
       storedBikes.save();
       return;
     };
@@ -28,8 +28,7 @@ module.exports.addBike = async(req, res, next) => {
   const newBike = await req.body.bike;
   const userID = req.user._id;
   try {
-    const storedBikes = await Bike.findOneAndUpdate({userID}, {$push: {"bikes": newBike}}, {new: true});    
-    //await storedBikes.save(); 
+    await Bike.findOneAndUpdate({userID}, {$push: {"bikes": newBike}}, {new: true});    
     res.send('Велосипед успешно добавлен');
   } catch(err) {
     next(err);
@@ -40,16 +39,15 @@ module.exports.addBike = async(req, res, next) => {
 module.exports.updateOdo = async(req, res, next) => {
   const actualBikesInfo = req.body.bikes;
   const userID = req.user._id;
-  const storedBikes = await Bike.findOne({userID});
-
-  Bike.findOne({userID})
-  .orFail(() => new NotFoundError('Велосипеды пользователя не найдены'))
-  .then((savedBikes) => updateBikesOdo(savedBikes, actualBikesInfo))
-  .then(() => {
-    storedBikes.save()
+  
+  try {
+    const storedBikes = await Bike.findOne({userID});
+    await updateBikeOdo(storedBikes, actualBikesInfo);
+    storedBikes.save();
     res.send('Километраж обновлен');
-  })
-  .catch(next);  
+  } catch (err) {
+    next(err);
+  };
 };
 
 

@@ -108,8 +108,8 @@ export default function App() {
       setUserBikes(bikes)
       return;
     };
-    setUserBikes(bikes)
     updateBikeDistance(user.bikes)
+    setUserBikes(bikes)    
   };  
 
  

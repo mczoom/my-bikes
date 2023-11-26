@@ -28,11 +28,11 @@ module.exports.updateStravaToken = async (tokenInfo, id) => {
 // };
 
 
-module.exports.updateBikesOdo = async(storedBikeData, actualData) => {
-  storedBikeData.bikes.forEach(async (bike) => {    
-    const actualDist = await actualData?.find(bicycle => bicycle.id === bike.id);
-    if(actualDist?.converted_distance !== bike.converted_distance) {
-      bike.converted_distance = actualDist?.converted_distance;
+module.exports.updateBikeOdo = async(storedData, actualData) => {
+  storedData.bikes.forEach(async (bike) => {    
+    const actualDataBike = await actualData.find(bicycle => bicycle.id === bike.id);
+    if(actualDataBike.converted_distance !== bike.converted_distance) {
+      bike.converted_distance = actualDataBike.converted_distance;
     }
   });  
 };

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Bike } from "types/Bike";
+import { Profile } from "types/Profile";
 import { getAllBikes } from "utils/appApi";
 
 export default function useBikes() {
@@ -14,7 +15,7 @@ export default function useBikes() {
 
   useEffect(() => {
     getSavedBikes()
-  }, [strToken])
+  }, [])
 
   console.log(bikes);
   

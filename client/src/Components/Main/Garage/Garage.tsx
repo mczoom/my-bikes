@@ -28,7 +28,6 @@ interface BikeCardInfo {
 
 export default function Garage({userBikes, yearsAtStrava, activities}: GarageProps) {
 
-  //const [userBikes, setUserBikes] = useState<UserBike[]>([]);
   const [isBikesFilterChecked, setIsBikesFilterChecked] = useState<boolean>(false);
   const [bikesToRender, setBikesToRender] = useState<Bike[]>([]);
   const [isBikePhotoPopupOpen, setBikePhotoPopupOpen] = useState<boolean>(false);

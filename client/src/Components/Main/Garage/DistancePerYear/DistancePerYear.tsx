@@ -6,8 +6,7 @@ interface DistancePerYear {
 
 export default function DistancePerYear({year, distancePerYear}: DistancePerYear) {
 
-  const dist = distancePerYear(year);
-  
+  const dist = distancePerYear(year);  
 
   return (
     <>
