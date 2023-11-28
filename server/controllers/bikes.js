@@ -27,6 +27,7 @@ module.exports.addAllBikes = async(req, res, next) => {
 module.exports.addBike = async(req, res, next) => {
   const newBike = await req.body.bike;
   const userID = req.user._id;
+  
   try {
     await Bike.findOneAndUpdate({userID}, {$push: {"bikes": newBike}}, {new: true});    
     res.send('Велосипед успешно добавлен');

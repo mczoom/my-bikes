@@ -87,7 +87,7 @@ export const updateAllActivities = (activities: Activity[]) => {
 };
 
 
-export const addAllBikes = (bikes: Bike[]) => {
+export const addAllBikes = (bikes: Bike[] | undefined) => {
   return axios.post(`${BASE_URL}/bikes`, 
     { bikes },
     { headers: {

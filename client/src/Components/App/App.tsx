@@ -35,19 +35,14 @@ export default function App() {
   const [storedActivities, setStoredActivities] = useState<Activity[] | null>(null);
   const [hasAllActivitiesLoaded, setHasAllActivitiesLoaded] = useState<boolean>(false)
   const [userBikes, setUserBikes] = useState<Bike[]>([]);
-  const [allRidesTotalData, setallRidesTotalData] = useState<RidesTotals>({} as RidesTotals);
-  const [allYTDRidesTotalData, setAllYTDRidesTotalDist] = useState<RidesTotals>({} as RidesTotals);
 
   const auth = useAuth();
   const isLoggedIn = auth.isLoggedIn;
   const isStravaConnected = auth.isConnectedToStrava;
   const setIsLoggedIn = auth.setIsLoggedIn;
 
-  //const strToken = localStorage.getItem('stravaToken');
-
   const savedBikes = useBikes();
-  const snackbar = useSnackbar();
-  
+  const snackbar = useSnackbar();  
   
   const yearsAtStrava = getYearsAtStrava(currentYear, currentUser.created_at).reverse();
 
@@ -84,15 +79,26 @@ export default function App() {
   }; 
 
   
-  function storeAllUserBikesToDB(currentUser: Profile) {
-    if(currentUser.bikes.length && hasAllActivitiesLoaded === true) {
-      const userBikesFromStrava: Bike[] = currentUser.bikes.map((bike: Bike) => {  
-        const isTrainer = checkIfTrainer(bike.id, allActivities);
-        return {...bike, trainer: isTrainer};
-      });      
-      appApi.addAllBikes(userBikesFromStrava);    
-    };
-  };
+  // function storeAllUserBikesToDB(currentUser: Profile) {
+  //   if(currentUser.bikes.length && hasAllActivitiesLoaded === true) {
+  //     const userBikesFromStrava: Bike[] = currentUser.bikes.map((bike: Bike) => {  
+  //       const isTrainer = checkIfTrainer(bike.id, allActivities);
+  //       return {...bike, trainer: isTrainer};
+  //     });      
+  //     appApi.addAllBikes(userBikesFromStrava);    
+  //   };
+  // };
+
+
+  function addTrainerPropToBikes(bikes: Bike[], activities: Activity[]) {
+    
+    return bikes.map((bike) => {  
+      const isTrainer = checkIfTrainer(bike.id, activities);
+      console.log(isTrainer);
+      
+      return {...bike, trainer: isTrainer};
+    });    
+  };  
 
 
   function updateBikeDistance(bikes: Bike[]) {    
@@ -102,10 +108,11 @@ export default function App() {
   };
 
 
-  function handleBikes(user: Profile, bikes: Bike[]) {
+  function handleBikes(user: Profile, bikes: Bike[], activities: Activity[]) {
     if(!bikes.length) {
-      storeAllUserBikesToDB(user);
-      setUserBikes(bikes)
+      const bikesWithTrainerProp = addTrainerPropToBikes(user.bikes, activities);      
+      appApi.addAllBikes(bikesWithTrainerProp);
+      setUserBikes(bikesWithTrainerProp)
       return;
     };
     updateBikeDistance(user.bikes)
@@ -113,14 +120,14 @@ export default function App() {
   };  
 
  
-  function getUserRideStats(user: Profile) {
-    getAthlete(user.id)
-      .then((res: AthleteStats) => {
-        setallRidesTotalData(res.all_ride_totals);
-        setAllYTDRidesTotalDist(res.ytd_ride_totals);
-      })
-      .catch((err) => console.log(err));
-  };
+  // function getUserRideStats(user: Profile) {
+  //   getAthlete(user.id)
+  //     .then((res: AthleteStats) => {
+  //       setallRidesTotalData(res.all_ride_totals);
+  //       setAllYTDRidesTotalDist(res.ytd_ride_totals);
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
 
 
   async function getAllActivitiesFromStrava(user: Profile) {        
@@ -168,7 +175,7 @@ export default function App() {
 
    console.log(allActivities);
 
-  function handleActivities(user: Profile) {
+ async function handleActivities(user: Profile) {
     Promise.all([getAllActivitiesFromStrava(user), getAllStoredActivities()])
       .then(([activitiesFromStrava, activitiesFromDB]) => {
         if(!activitiesFromDB.length) {
@@ -183,16 +190,16 @@ export default function App() {
   async function getCurrentUserData() { 
     getCurrentAthlete()
       .then((user: Profile) => {
-        setCurrentUser(user); 
-        getUserRideStats(user);
+        setCurrentUser(user);
         return user;       
       })      
-      .then((currentUser) => {             
-        handleActivities(currentUser);
+      .then(async(currentUser) => {             
+       await handleActivities(currentUser);
+       handleBikes(currentUser, savedBikes, allActivities);
         return currentUser;       
       })
       .then((currentUser) => {
-        handleBikes(currentUser, savedBikes);
+        // handleBikes(currentUser, savedBikes, allActivities);
         //setUserBikes(savedBikes);
         //updateBikeDistance(currentUser.bikes);
       })
@@ -253,9 +260,7 @@ function onAppLoad() {
               <Route index element={<Main />}  />                
               <Route path='/stats' 
                 element={<Stats
-                  yearsAtStrava={yearsAtStrava} 
-                  allRidesTotalData={allRidesTotalData} 
-                  allYTDRidesTotalData={allYTDRidesTotalData}
+                  yearsAtStrava={yearsAtStrava}
                   allActivities={allActivities} 
                 />}
               />          
@@ -263,8 +268,7 @@ function onAppLoad() {
                 element={<Garage             
                   userBikes={userBikes} 
                   yearsAtStrava={yearsAtStrava} 
-                  activities={allActivities} 
-                  //bikeTotalDistance={getBikeTotalDistance} 
+                  activities={allActivities}
                 />} 
               />
               <Route path='/maintenance' element={<Maintenance />} />

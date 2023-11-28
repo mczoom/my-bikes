@@ -1,9 +1,10 @@
 .bike-card__wrap {
   display: flex;
+  max-height: 250px;
 }
 
 .bike-card__image-wrap {
-  position: relative;
+  position: relative;  
 }
 
 .bike-card__image {
