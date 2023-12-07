@@ -27,6 +27,8 @@ module.exports.exchangeStrToken = (req, res, next) => {
       if (tokenData.access_token) {
         createStravaToken(tokenData, user);
         res.status(201).send({strToken: tokenData.access_token});        
+      } else {
+        return
       }
     }) 
     .catch(next);

@@ -56,7 +56,7 @@ module.exports.getAllBikes = async(req, res, next) => {
   const userID = req.user._id;
   
   Bike.findOne({userID})
-    .orFail(() => res.send([]))
+    //.orFail(() => res.send([]))
     .then((garage) => {
       res.send(garage.bikes);      
     })
@@ -66,20 +66,20 @@ module.exports.getAllBikes = async(req, res, next) => {
 
 module.exports.updateBikeInfo = async(req, res, next) => {
   const {bikeId, updatedInfo} = req.body;
-  const userID = req.user._id;  
-
+  const userID = req.user._id;
   try {
     const userGear = await Bike.findOne({userID});
     const bikeToUpdate = userGear.bikes.find(bike => bike.id === bikeId);
 
     Object.keys(updatedInfo).forEach((spec) => {
-      if(updatedInfo[spec]) {
+      if(updatedInfo[spec] !== "") {
         bikeToUpdate[spec] = updatedInfo[spec];  
       }
-    });
+    });    
     await userGear.save();
     res.send(userGear.bikes);
   } catch (err) {
     next(err);
   }
 };
+

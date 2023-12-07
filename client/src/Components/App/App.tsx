@@ -25,6 +25,7 @@ import useAuth from 'hooks/useAuth';
 import useSnackbar from 'hooks/useSnackbar';
 import useBikes from 'hooks/useBikes';
 import { checkIfTrainer, currentYear, getYearsAtStrava } from 'utils/constants';
+import { log } from 'console';
 
 
 
@@ -92,12 +93,11 @@ export default function App() {
 
   function addTrainerPropToBikes(bikes: Bike[], activities: Activity[]) {
     
-    return bikes.map((bike) => {  
+    return bikes?.map((bike) => {  
       const isTrainer = checkIfTrainer(bike.id, activities);
-      console.log(isTrainer);
-      
       return {...bike, trainer: isTrainer};
     });    
+  
   };  
 
 
@@ -108,11 +108,11 @@ export default function App() {
   };
 
 
-  function handleBikes(user: Profile, bikes: Bike[], activities: Activity[]) {
+  function handleBikes(user: Profile, bikes: Bike[]) {
     if(!bikes.length) {
-      const bikesWithTrainerProp = addTrainerPropToBikes(user.bikes, activities);      
-      appApi.addAllBikes(bikesWithTrainerProp);
-      setUserBikes(bikesWithTrainerProp)
+      //const bikesWithTrainerProp = addTrainerPropToBikes(user.bikes, activities);   
+      appApi.addAllBikes(user.bikes);
+      setUserBikes(user.bikes)
       return;
     };
     updateBikeDistance(user.bikes)
@@ -130,11 +130,8 @@ export default function App() {
   // };
 
 
-  async function getAllActivitiesFromStrava(user: Profile) {        
-    if(hasAllActivitiesLoaded) {      
-      return allActivities;
-    };
-    setHasAllActivitiesLoaded(false);
+  async function getAllActivitiesFromStrava(user: Profile) {    
+    //setHasAllActivitiesLoaded(false);
     const dateOfRegAtStrava: string = user.created_at;
     const fromDate: number = Date.parse(dateOfRegAtStrava) / 1000;
     const tillDate: number = Math.round(Date.now() / 1000);
@@ -158,25 +155,28 @@ export default function App() {
 
       setAllActivities(activities);      
     }
-    setHasAllActivitiesLoaded(true);
+    //setHasAllActivitiesLoaded(true);
     return activities;
   };
 
 
-  function getAllStoredActivities(): any {    
-    return appApi.getAllActivities()
+  function getAllStoredActivities() {  
+    let rides: Activity[] = [];  
+    appApi.getAllActivities()
       .then((res: Activity[]) => {
         setStoredActivities(res)
-        return res;
+        rides = res;
       })
-      .catch(() => console.log('Тренировки не найдены в базе'));      
+      .catch(() => console.log('Тренировки не найдены в базе')); 
+      return rides;     
   };
 
 
    console.log(allActivities);
 
  async function handleActivities(user: Profile) {
-    Promise.all([getAllActivitiesFromStrava(user), getAllStoredActivities()])
+  setHasAllActivitiesLoaded(false);
+    await Promise.all([getAllActivitiesFromStrava(user), appApi.getAllActivities()])
       .then(([activitiesFromStrava, activitiesFromDB]) => {
         if(!activitiesFromDB.length) {
           appApi.addAllActivities(activitiesFromStrava);
@@ -185,6 +185,7 @@ export default function App() {
         }
       })
       .catch((err) => console.log(err))
+      setHasAllActivitiesLoaded(true);
   };
   
   async function getCurrentUserData() { 
@@ -193,16 +194,10 @@ export default function App() {
         setCurrentUser(user);
         return user;       
       })      
-      .then(async(currentUser) => {             
-       await handleActivities(currentUser);
-       handleBikes(currentUser, savedBikes, allActivities);
-        return currentUser;       
-      })
-      .then((currentUser) => {
-        // handleBikes(currentUser, savedBikes, allActivities);
-        //setUserBikes(savedBikes);
-        //updateBikeDistance(currentUser.bikes);
-      })
+      .then((currentUser) => {             
+        handleActivities(currentUser);
+        handleBikes(currentUser, savedBikes); 
+      })      
       .catch((err) => snackbar.handleSnackbarError(err));    
   };
 
@@ -266,7 +261,7 @@ function onAppLoad() {
               />          
               <Route path='/garage' 
                 element={<Garage             
-                  userBikes={userBikes} 
+                  userBikes={savedBikes} 
                   yearsAtStrava={yearsAtStrava} 
                   activities={allActivities}
                 />} 

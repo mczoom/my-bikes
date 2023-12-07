@@ -32,6 +32,7 @@ router.get('/bikes', auth, checkStravaToken, getAllBikes);
 router.post('/addbike', auth, checkStravaToken, addBike);
 router.patch('/bikeodo', auth, checkStravaToken, updateOdo);
 router.patch('/bikeinfo', auth, checkStravaToken, updateBikeInfoValidation, updateBikeInfo);
+router.patch('/trainer', auth, checkStravaToken, updateBikeInfo);
 
 router.use('*', () => {
   throw new Error('Страница не найдена');

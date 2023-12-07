@@ -1,3 +1,13 @@
+interface BikeInfo {
+  photo: string
+  bikename: string
+  brand: string  
+  model: string
+  year: string | number
+  weight: string | number
+  trainer?: boolean
+}
+
 interface InputProps {
   name: string
   label: string
@@ -10,7 +20,7 @@ interface InputProps {
 }
 
 export default function Input({name, label, inputType, placeholder, getInputValue, value}: InputProps) {
-
+  
   return (
     <div className='input'>
       <label className='input-label'>{label}</label>

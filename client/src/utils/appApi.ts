@@ -154,6 +154,19 @@ export const updateBikeOdo = (bikes: Bike[]) => {
 };
 
 
+export const addTrainer = (bikeId: string, updatedInfo: any) => {
+  return axios.patch(`${BASE_URL}/trainer`, 
+    { bikeId, updatedInfo },
+    { headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+      },
+    })
+    .then((res) => res.data)    
+    .catch((err) => handleErrorResponse(err))
+};
+
+
 export const getAllBikes = () => {
   return axios.get(`${BASE_URL}/bikes`, {
     headers: {

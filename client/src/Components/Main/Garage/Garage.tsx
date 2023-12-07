@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react'
 import { Activity } from 'types/Activity';
 import BikeCardPopup from 'components/shared/BikeCardPopup/BikeCardPopup';
-import BikesTypeFilter from 'components/shared/BikesTypeFilter/BikesTypeFilter';
+
 import GarageBikesList from 'components/Main/Garage/GarageBikesList/GarageBikesList';
 import { Bike } from 'types/Bike';
 import  *  as appApi from 'utils/appApi';
@@ -9,6 +9,7 @@ import { UserBike } from 'types/UserBike';
 import EditBikeInfoPopup from 'components/Main/Garage/EditBikeInfoPopup/EditBikeInfoPopup';
 import useSnackbar from 'hooks/useSnackbar';
 import useBikes from 'hooks/useBikes';
+import Checkbox from 'components/shared/Checkbox/Checkbox';
 
 
 interface GarageProps {
@@ -24,62 +25,27 @@ interface BikeCardInfo {
   model: string
   year: string | number
   weight: string | number
+  trainer?: boolean
 }
 
 export default function Garage({userBikes, yearsAtStrava, activities}: GarageProps) {
 
+  //const bikes = useBikes();
+  const snackbar = useSnackbar();
+  console.log(userBikes);
+  
+
   const [isBikesFilterChecked, setIsBikesFilterChecked] = useState<boolean>(false);
-  const [bikesToRender, setBikesToRender] = useState<Bike[]>([]);
+  const [bikesToRender, setBikesToRender] = useState<Bike[]>(userBikes);
   const [isBikePhotoPopupOpen, setBikePhotoPopupOpen] = useState<boolean>(false);
   const [isEditPopupOpen, setEditPopupOpen] = useState<boolean>(false);
   const [bikePopupData, setBikePopupData] = useState<UserBike | undefined>({} as UserBike);
   const [curentBikeId, setCurentBikeId] = useState<string>('');
 
-  const snackbar = useSnackbar();
+  console.log(bikesToRender);
+  //console.log(bikes);
   
-  const bikes = useBikes()
-
-  function getBikeTotalDistance(bikeId: string, userBikes: Bike[]): number {
-    let dist = 0;
-    bikes.forEach((bike) => {
-      if(bike.id === bikeId) {
-        dist = bike.converted_distance;
-      }
-    });
-    return dist;
-  };
-
-  
-  
-  // function checkForNewBikesInStrava(stravaBikes: Bike[], savedBikes: Bike[]): Bike[] {
-  //   if(stravaBikes.length !== savedBikes.length) {   
-  //     const newBike = stravaBikes.filter((b) => savedBikes.every((bike) => !bike.id.includes(b.id)));        
-  //     return newBike;
-  //   } else {
-  //     return [];
-  //   }
-  // };
-
-  // function addNewBike(bikes: Bike | Bike[]) {
-  //   appApi.addBike(bikes)
-  //   .catch((err) => snackbar.handleSnackbarError(err));
-  // }; 
-    
-
-  // function getUserBikes() {
-  //   appApi.getAllBikes()
-  //     .then((bikes: UserBike[]) => {
-  //       const newBikes = checkForNewBikesInStrava(userBikesStrava, bikes);
-  //         if(newBikes.length > 0) {
-  //           addNewBike(newBikes);
-  //         }    
-  //         setUserBikes(bikes); 
-  //         setBikesToRender(bikes);       
-  //     })
-  //     .catch(err => snackbar.handleSnackbarError(err));
-  // }; 
-
-
+     
   function toggleBikesFilter() {
     setIsBikesFilterChecked(v => !v);
   };
@@ -88,9 +54,11 @@ export default function Garage({userBikes, yearsAtStrava, activities}: GaragePro
     if(isBikesFilterChecked) {
       const trainerBikesToRender = bikes.filter((bike) => {
         return bike.trainer === true;
-    });
-    setBikesToRender(trainerBikesToRender);
+      });
+      setBikesToRender(trainerBikesToRender);
     } else {
+      console.log('AAAAAA');
+      
       setBikesToRender(bikes);
     }
   };
@@ -122,18 +90,31 @@ export default function Garage({userBikes, yearsAtStrava, activities}: GaragePro
       .catch((err) => snackbar.handleSnackbarError(err));    
   };
 
+  function addTrainer(id: string, trainer: any) {
+    appApi.updateBikeInfo(id, trainer)
+      .then(updatedInfo => console.log(updatedInfo))
+      .catch((err) => snackbar.handleSnackbarError(err));    
+  };
+  console.log(isBikesFilterChecked);
+  
+
+  // useEffect(() => {
+    
+  //   setBikesToRender(bikes)
+  // }, [bikes]);
+
   useEffect(() => {
-    filterBikeCardsToRender(bikes);
-  }, [isBikesFilterChecked, bikes]);
+    filterBikeCardsToRender(userBikes);
+  }, [isBikesFilterChecked, userBikes]);
 
   
 
-console.log(userBikes);
 
 
   return (
     <section className='garage'>
-      <BikesTypeFilter toggleBikesFilter={toggleBikesFilter} />
+      <Checkbox text='Показать только велостанки' onChange={toggleBikesFilter} />
+      {/* <input type='checkbox' className='type-filter__checkbox' onChange={toggleBikesFilter}/> */}
       <GarageBikesList
         bikesToRender={bikesToRender}
         openBikePhotoPopup={openBikePhotoPopup}
@@ -143,7 +124,13 @@ console.log(userBikes);
         getBikeId={getBikeId}
       />
       <BikeCardPopup isPopupOpen={isBikePhotoPopupOpen} bikePopupData={bikePopupData} closePopup={closeBikePhotoPopup} />
-      <EditBikeInfoPopup updateInfo={updateBikeCardInfo} bikeId={curentBikeId} isPopupOpen={isEditPopupOpen} closePopup={closeEditBikeInfoPopup} />
+      <EditBikeInfoPopup 
+        bikes={bikesToRender} 
+        bikeId={curentBikeId}  
+        updateInfo={updateBikeCardInfo}
+        isPopupOpen={isEditPopupOpen} 
+        closePopup={closeEditBikeInfoPopup} 
+      />
     </section>
   )
 }
