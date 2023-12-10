@@ -38,13 +38,15 @@ export default function EditBikeInfoPopup({bikes, updateInfo, isPopupOpen, close
   };
 
   const [bikeInfo, setBikeInfo] = useState<BikeInfo>(defaultInputValues);
+    
   
 
   const popupClassName = `bike-popup ${isPopupOpen ? 'bike-popup_on' : ''}`;
 
   function handleInputValue(e: React.ChangeEvent<HTMLInputElement>, value: string | boolean, bikeData: BikeInfo) {
-    setBikeInfo({...bikeData, [e.target.name]: value} );    
+    setBikeInfo({...bikeData, [e.target.name]: value}); 
   };
+
 
   function handleTextInputValue(e: React.ChangeEvent<HTMLInputElement>) {
     handleInputValue(e, e.target.value, bikeInfo);
@@ -57,13 +59,7 @@ export default function EditBikeInfoPopup({bikes, updateInfo, isPopupOpen, close
     handleInputValue(e, checkedValue, bikeInfo)
   };
 
-  
-
-  // function handleInputValue(e: React.ChangeEvent<HTMLInputElement>) {
-  //   setBikeInfo({...bikeInfo, [e.target.name]: e.target.value} );
-  // };
-  
-  
+    
   function isTrainer(savedBikes: Bike[], bikeId: string) {           
     const bike = savedBikes.find((bike) => bike.id === bikeId);    
     return bike?.trainer;        
@@ -83,8 +79,6 @@ export default function EditBikeInfoPopup({bikes, updateInfo, isPopupOpen, close
       closePopup();
     }
   };
-
-
   
 
   useEffect(() => {

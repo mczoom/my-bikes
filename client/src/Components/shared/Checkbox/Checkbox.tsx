@@ -8,10 +8,6 @@ interface CheckboxProps {
 
 export default function Checkbox({name, text, checkboxStatus, onChange}: CheckboxProps) {
 
-  console.log(checkboxStatus);
-
-  
-
   return (
     <div className='type-filter'>
       <label className='type-filter__label'>

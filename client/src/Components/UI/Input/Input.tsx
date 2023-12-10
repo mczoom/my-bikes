@@ -1,13 +1,3 @@
-interface BikeInfo {
-  photo: string
-  bikename: string
-  brand: string  
-  model: string
-  year: string | number
-  weight: string | number
-  trainer?: boolean
-}
-
 interface InputProps {
   name: string
   label: string
