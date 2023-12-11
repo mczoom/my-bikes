@@ -84,7 +84,7 @@ export default function EditBikeInfoPopup({bikes, updateInfo, isPopupOpen, close
   useEffect(() => {
     const trainer = isTrainer(bikes, bikeId)
     setTrainerCheckbox(trainer)
-  }, [bikeId])
+  }, [bikeId, bikes])
 
   
   return (

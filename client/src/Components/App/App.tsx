@@ -213,7 +213,7 @@ export default function App() {
   // };
 
   
-console.log(userBikes);
+console.log(savedBikes);
 
 
 function onAppLoad() {
