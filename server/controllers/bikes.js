@@ -56,7 +56,7 @@ module.exports.getAllBikes = async(req, res, next) => {
   const userID = req.user._id;
   
   Bike.findOne({userID})
-    //.orFail(() => res.send([]))
+    .orFail(() => res.send([]))
     .then((garage) => {
       res.send(garage.bikes);      
     })

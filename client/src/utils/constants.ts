@@ -45,12 +45,12 @@ export function filterRidesByBike(bikeId: string, rides: Activity[]) {
   });
 };
 
-export function isBikeTrainer(rides: Activity[]) {
-  return rides.every((ride) => ride.trainer);
-};
+// export function isBikeTrainer(rides: Activity[]) {
+//   return rides.every((ride) => ride.trainer);
+// };
 
-export function checkIfTrainer(bikeId: string, activities: Activity[]): boolean {
-  const bikeRides = filterRidesByBike(bikeId, activities)
-  const isTrainer = isBikeTrainer(bikeRides)
-  return isTrainer;
-};
+// export function checkIfTrainer(bikeId: string, activities: Activity[]): boolean {
+//   const bikeRides = filterRidesByBike(bikeId, activities)
+//   const isTrainer = isBikeTrainer(bikeRides)
+//   return isTrainer;
+// };

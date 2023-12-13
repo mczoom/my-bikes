@@ -83,8 +83,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const logout = () => {
     localStorage.clear();
     setIsLoggedIn(false);
-    setIsConnectedToStrava(false);
-    
+    setIsConnectedToStrava(false);    
   };
     
   const authData = { isLoggedIn, setIsLoggedIn, isConnectedToStrava, setIsConnectedToStrava, signUp, signIn, logout, checkPermissions };

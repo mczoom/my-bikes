@@ -3,7 +3,7 @@ import { Bike } from "types/Bike";
 import { Profile } from "types/Profile";
 import { getAllBikes } from "utils/appApi";
 
-export default function useBikes() {
+export default function useBikes(userBikes: Bike[]) {
   const [bikes, setBikes] = useState<Bike[]>([]);
   
  async function getSavedBikes() {
@@ -15,7 +15,7 @@ export default function useBikes() {
 
   useEffect(() => {
     getSavedBikes()
-  }, [])
+  }, [userBikes])
 
   console.log(bikes);
   

@@ -14,7 +14,6 @@ import Garage from 'components/Main/Garage/Garage';
 import { Activity } from 'types/Activity';
 import Page404 from 'components/Page404/Page404';
 import Maintenance from 'components/Maintenance/Maintenance';
-import { AthleteStats, RidesTotals } from 'types/AthleteStats';
 import RegPage from 'components/Auth/RegPage/RegPage';
 import LoginPage from 'components/Auth/LoginPage/LoginPage';
 import { Bike } from 'types/Bike';
@@ -24,25 +23,33 @@ import StravaAccessResult from 'components/Auth/StravaAuth/StravaAccessResult';
 import useAuth from 'hooks/useAuth';
 import useSnackbar from 'hooks/useSnackbar';
 import useBikes from 'hooks/useBikes';
-import { checkIfTrainer, currentYear, getYearsAtStrava } from 'utils/constants';
-import { log } from 'console';
+import { currentYear, getYearsAtStrava } from 'utils/constants';
 
 
 
 export default function App() {
+
+  function getAppToken() {
+    return localStorage.getItem('jwt');
+  }
+
+  function updateAppToken(t: string | null) {
+    return localStorage.setItem('jwt', 't');
+  }
 
   const [currentUser, setCurrentUser] = useState<Profile>({} as Profile);
   const [allActivities, setAllActivities] = useState<Activity[]>([]);
   const [storedActivities, setStoredActivities] = useState<Activity[] | null>(null);
   const [hasAllActivitiesLoaded, setHasAllActivitiesLoaded] = useState<boolean>(false)
   const [userBikes, setUserBikes] = useState<Bike[]>([]);
+  const [appToken, setAppToken] = useState<string | null>(getAppToken);
 
   const auth = useAuth();
   const isLoggedIn = auth.isLoggedIn;
   const isStravaConnected = auth.isConnectedToStrava;
   const setIsLoggedIn = auth.setIsLoggedIn;
 
-  const savedBikes = useBikes();
+  const savedBikes = useBikes(userBikes);
   const snackbar = useSnackbar();  
   
   const yearsAtStrava = getYearsAtStrava(currentYear, currentUser.created_at).reverse();
@@ -51,19 +58,22 @@ export default function App() {
   function checkAppToken() {
     const jwt = localStorage.getItem('jwt');
     if(jwt) {
-      appApi.getCurrentUser()
+      return appApi.getCurrentUser()
         .then((userData: {login: string}) => {
           if(userData.login) {            
             setIsLoggedIn(true);
-            localStorage.setItem('logged', 'true')
-        }
+            localStorage.setItem('logged', 'true');
+            return;
+          };
+          return;
       })
       .catch((err) => {
         setIsLoggedIn(false);
         localStorage.setItem('logged', '');
         snackbar.handleSnackbarError(err);
-      });             
-    }
+      });                  
+    };
+    return;
   };
 
 
@@ -73,7 +83,9 @@ export default function App() {
         .then((res: {accessToken: string}) => {
           if(res.accessToken !== token) {
             localStorage.setItem('stravaToken', res.accessToken);
+            return;
           };
+          return;
         })
         .catch((err) => console.log(err));
     }  
@@ -91,14 +103,14 @@ export default function App() {
   // };
 
 
-  function addTrainerPropToBikes(bikes: Bike[], activities: Activity[]) {
+  // function addTrainerPropToBikes(bikes: Bike[], activities: Activity[]) {
     
-    return bikes?.map((bike) => {  
-      const isTrainer = checkIfTrainer(bike.id, activities);
-      return {...bike, trainer: isTrainer};
-    });    
+  //   return bikes?.map((bike) => {  
+  //     const isTrainer = checkIfTrainer(bike.id, activities);
+  //     return {...bike, trainer: isTrainer};
+  //   });    
   
-  };  
+  // };  
 
 
   function updateBikeDistance(bikes: Bike[]) {    
@@ -150,7 +162,6 @@ export default function App() {
             return;
           });
         page++;
-
       } while(response !== 0);
 
       setAllActivities(activities);      
@@ -227,13 +238,18 @@ function onAppLoad() {
   
 
   useEffect(() => {
+    setAppToken(getAppToken)
+  }, [appToken]); 
+
+
+  useEffect(() => {
     checkAppToken();   
   }, []); 
   
 
   useEffect(() => {    
     onAppLoad();    
-  }, [isLoggedIn]);
+  }, [appToken]);
   
   
   console.log(currentUser);   
