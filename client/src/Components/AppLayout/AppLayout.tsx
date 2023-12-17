@@ -14,9 +14,9 @@ export default function AppLayout({setUser}: AppLayoutProps) {
   const snackbar = useSnackbar();    
   
   return (
-    <div className="page">
+    <div>
       <Header setUser={setUser} />
-      <main>
+      <main className="page">
         <Outlet />
       </main>  
       <Footer />

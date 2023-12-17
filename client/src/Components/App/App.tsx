@@ -49,7 +49,7 @@ export default function App() {
   const isStravaConnected = auth.isConnectedToStrava;
   const setIsLoggedIn = auth.setIsLoggedIn;
 
-  const savedBikes = useBikes(userBikes);
+  const savedBikes = useBikes();
   const snackbar = useSnackbar();  
   
   const yearsAtStrava = getYearsAtStrava(currentYear, currentUser.created_at).reverse();
@@ -103,16 +103,6 @@ export default function App() {
   // };
 
 
-  // function addTrainerPropToBikes(bikes: Bike[], activities: Activity[]) {
-    
-  //   return bikes?.map((bike) => {  
-  //     const isTrainer = checkIfTrainer(bike.id, activities);
-  //     return {...bike, trainer: isTrainer};
-  //   });    
-  
-  // };  
-
-
   function updateBikeDistance(bikes: Bike[]) {    
     appApi.updateBikeOdo(bikes)
       .then(() => console.log('Пробег байков успешно обновлён'))
@@ -121,8 +111,7 @@ export default function App() {
 
 
   function handleBikes(user: Profile, bikes: Bike[]) {
-    if(!bikes.length) {
-      //const bikesWithTrainerProp = addTrainerPropToBikes(user.bikes, activities);   
+    if(!bikes.length) {   
       appApi.addAllBikes(user.bikes);
       setUserBikes(user.bikes)
       return;
@@ -132,16 +121,6 @@ export default function App() {
   };  
 
  
-  // function getUserRideStats(user: Profile) {
-  //   getAthlete(user.id)
-  //     .then((res: AthleteStats) => {
-  //       setallRidesTotalData(res.all_ride_totals);
-  //       setAllYTDRidesTotalDist(res.ytd_ride_totals);
-  //     })
-  //     .catch((err) => console.log(err));
-  // };
-
-
   async function getAllActivitiesFromStrava(user: Profile) {    
     //setHasAllActivitiesLoaded(false);
     const dateOfRegAtStrava: string = user.created_at;
@@ -276,8 +255,7 @@ function onAppLoad() {
                 />}
               />          
               <Route path='/garage' 
-                element={<Garage             
-                  userBikes={savedBikes} 
+                element={<Garage 
                   yearsAtStrava={yearsAtStrava} 
                   activities={allActivities}
                 />} 

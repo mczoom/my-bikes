@@ -1,7 +1,6 @@
 import {useEffect, useState} from 'react'
 import { Activity } from 'types/Activity';
 import BikeCardPopup from 'components/shared/BikeCardPopup/BikeCardPopup';
-
 import GarageBikesList from 'components/Main/Garage/GarageBikesList/GarageBikesList';
 import { Bike } from 'types/Bike';
 import  *  as appApi from 'utils/appApi';
@@ -13,7 +12,6 @@ import useBikes from 'hooks/useBikes';
 
 
 interface GarageProps {
-  userBikes: Bike[]
   yearsAtStrava: number[]
   activities: Activity[]
 }
@@ -28,11 +26,10 @@ interface BikeCardInfo {
   trainer?: boolean
 }
 
-export default function Garage({userBikes, yearsAtStrava, activities}: GarageProps) {
+export default function Garage({yearsAtStrava, activities}: GarageProps) {
 
-  const snackbar = useSnackbar();
-  console.log(userBikes);
-  
+  const userBikes = useBikes();
+  const snackbar = useSnackbar();  
 
   const [isBikesFilterChecked, setIsBikesFilterChecked] = useState<boolean>(false);
   const [savedBikes, setSavedBikes] = useState<Bike[]>([]);
@@ -42,9 +39,6 @@ export default function Garage({userBikes, yearsAtStrava, activities}: GaragePro
   const [bikePopupData, setBikePopupData] = useState<UserBike | undefined>({} as UserBike);
   const [curentBikeId, setCurentBikeId] = useState<string>('');
   
-
-  console.log(bikesToRender);
-    
      
   function toggleBikesFilter() {
     setIsBikesFilterChecked(v => !v);
@@ -88,7 +82,7 @@ export default function Garage({userBikes, yearsAtStrava, activities}: GaragePro
       .catch((err) => snackbar.handleSnackbarError(err));    
   };
 
-  
+
   useEffect(() => {
     setSavedBikes(userBikes);
   }, [userBikes]); 
@@ -96,8 +90,7 @@ export default function Garage({userBikes, yearsAtStrava, activities}: GaragePro
   
   useEffect(() => {
     filterBikeCardsToRender(savedBikes);
-  }, [isBikesFilterChecked, savedBikes]);  
-
+  }, [isBikesFilterChecked, savedBikes]);
 
 
   return (
