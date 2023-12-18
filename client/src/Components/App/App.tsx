@@ -24,25 +24,20 @@ import useAuth from 'hooks/useAuth';
 import useSnackbar from 'hooks/useSnackbar';
 import useBikes from 'hooks/useBikes';
 import { currentYear, getYearsAtStrava } from 'utils/constants';
+import { getLocalStorageValue } from 'utils/service';
 
 
 
 export default function App() {
 
-  function getAppToken() {
-    return localStorage.getItem('jwt');
-  }
-
-  function updateAppToken(t: string | null) {
-    return localStorage.setItem('jwt', 't');
-  }
-
+  
+  
   const [currentUser, setCurrentUser] = useState<Profile>({} as Profile);
   const [allActivities, setAllActivities] = useState<Activity[]>([]);
   const [storedActivities, setStoredActivities] = useState<Activity[] | null>(null);
   const [hasAllActivitiesLoaded, setHasAllActivitiesLoaded] = useState<boolean>(false)
   const [userBikes, setUserBikes] = useState<Bike[]>([]);
-  const [appToken, setAppToken] = useState<string | null>(getAppToken);
+  const [stravaToken, setStravaToken] = useState<string | null>(null);
 
   const auth = useAuth();
   const isLoggedIn = auth.isLoggedIn;
@@ -53,6 +48,14 @@ export default function App() {
   const snackbar = useSnackbar();  
   
   const yearsAtStrava = getYearsAtStrava(currentYear, currentUser.created_at).reverse();
+
+  const sToken = getAppToken();
+
+  function getAppToken() {
+    return getLocalStorageValue('stravaToken');
+  };
+
+  
 
   
   function checkAppToken() {
@@ -77,18 +80,19 @@ export default function App() {
   };
 
 
-  async function checkStravaToken(token: string) {
+  function checkStravaToken(token: string) {
     if(token) {
-      await stravaTokenCheck()
-        .then((res: {accessToken: string}) => {
-          if(res.accessToken !== token) {
-            localStorage.setItem('stravaToken', res.accessToken);
+      stravaTokenCheck()
+        .then((accessToken) => {
+          if(accessToken !== token) {
+            localStorage.setItem('stravaToken', accessToken);
             return;
           };
           return;
         })
         .catch((err) => console.log(err));
-    }  
+    };
+    return; 
   }; 
 
   
@@ -201,7 +205,6 @@ export default function App() {
   //   });
   //   return dist;
   // };
-
   
 console.log(savedBikes);
 
@@ -217,8 +220,8 @@ function onAppLoad() {
   
 
   useEffect(() => {
-    setAppToken(getAppToken)
-  }, [appToken]); 
+    setStravaToken(sToken)
+  }, [sToken]); 
 
 
   useEffect(() => {
@@ -228,7 +231,7 @@ function onAppLoad() {
 
   useEffect(() => {    
     onAppLoad();    
-  }, [appToken]);
+  }, [stravaToken]);
   
   
   console.log(currentUser);   
@@ -238,7 +241,7 @@ function onAppLoad() {
       <CurrentUserContext.Provider value={currentUser}> 
       <ActivitiesLoadingState.Provider value={hasAllActivitiesLoaded}>            
         <Routes>
-          <Route path='/' element={<AppLayout setUser={setCurrentUser} />}>
+          <Route path='/' element={<AppLayout setUser={setCurrentUser} setAllActivities={setAllActivities}/>}>
             
             <Route path='/registration' element={!isLoggedIn ? <RegPage /> : <Navigate to='/' replace={true} />} />
             <Route path='/login' element={!isLoggedIn ? <LoginPage /> : <Navigate to='/' replace={true} />} />        

@@ -25,7 +25,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   function setStrTokenToLocalStorage() {
     getStravaToken()
     .then((res) => {
-      setLocalStorage('stravaToken', res);
+      localStorage.setItem('stravaToken', res);
+      //setLocalStorage('stravaToken', res);
       return res;
     })
     .catch((err) => console.log(err)); 

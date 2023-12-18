@@ -6,19 +6,22 @@ import HeaderAuthLinks from 'components/Header/HeaderAuthLinks/HeaderAuthLinks';
 import { Link } from 'react-router-dom';
 import useAuth from 'hooks/useAuth';
 import { Profile as ProfileType } from 'types/Profile';
+import { Activity } from 'types/Activity';
 
 
 interface HeaderProps {
   setUser: React.Dispatch<React.SetStateAction<ProfileType>>
+  setAllActivities: React.Dispatch<React.SetStateAction<Activity[]>>
 }
 
-export default function Header({setUser}: HeaderProps) {
+export default function Header({setUser, setAllActivities}: HeaderProps) {
 
   const auth = useAuth();
 
   function logout() {
     auth.logout();
     setUser({} as ProfileType);
+    setAllActivities([]);
   };
 
   return (
