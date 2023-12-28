@@ -1,18 +1,14 @@
-import {useEffect, useState, useContext} from 'react';
+import {useContext} from 'react';
 import { CurrentUserContext } from 'contexts/CurrentUserContext';
 
 
 export default function Profile() {
 
   const currentUser = useContext(CurrentUserContext);
-  const [avatar, setAvatar] = useState<string>('');
-  const [name, setName] = useState<string>('');
 
-
-  useEffect(() => {
-    setAvatar(currentUser.profile);
-    setName(currentUser.firstname);    
-  }, [currentUser]);
+  const avatar = currentUser.profile;
+  const name = currentUser.firstname;
+  
 
   return (
     <section className='profile'>

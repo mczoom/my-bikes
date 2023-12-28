@@ -98,7 +98,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [isConnectedToStrava]);
 
   useEffect(() => {
-    checkStravaPermissions();
+    let ignore = false;
+    checkStravaPermissions()
+      .then((permits) => { 
+        if(!ignore) {       
+          if(!permits) {
+            throw new Error('Приложение не привязано к аккаунту в Strava')
+          }
+          setIsConnectedToStrava(permits);
+        }
+      })
+      .catch((err) => snackbar.handleSnackbarError(err));
+
+    return () => {
+      ignore = true;
+    };  
   }, []);
     
   return <AuthContext.Provider value={authData}>{children}</AuthContext.Provider>;  

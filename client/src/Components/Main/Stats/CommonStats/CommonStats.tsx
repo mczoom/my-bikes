@@ -14,25 +14,29 @@ import { getAthlete } from 'utils/stravaApi';
 
 export default function CommonStats() {
 
-  const [allRidesTotalData, setallRidesTotalData] = useState<RidesTotals>({} as RidesTotals);
-  const [allYTDRidesTotalData, setAllYTDRidesTotalDist] = useState<RidesTotals>({} as RidesTotals);
-
   const currentUser = useContext(CurrentUserContext);
 
-  function getUserRideStats(user: Profile) {
-    getAthlete(user.id)
-      .then((res: AthleteStats) => {
-        setallRidesTotalData(res.all_ride_totals);
-        setAllYTDRidesTotalDist(res.ytd_ride_totals);
-      })
-      .catch((err) => console.log(err));
-  };
+  const [allRidesTotalData, setallRidesTotalData] = useState<RidesTotals>({} as RidesTotals);
+  const [allYTDRidesTotalData, setAllYTDRidesTotalDist] = useState<RidesTotals>({} as RidesTotals);  
 
   const allRidesDistance: number = convertDistanceToKM(allRidesTotalData.distance);
   const yTDRidesDistance: number = convertDistanceToKM(allYTDRidesTotalData.distance);
+  
 
   useEffect(() => {
-    getUserRideStats(currentUser);
+    let ignore = false;
+    getAthlete(currentUser.id)
+      .then((res: AthleteStats) => {
+        if(!ignore) {
+          setallRidesTotalData(res.all_ride_totals);
+          setAllYTDRidesTotalDist(res.ytd_ride_totals);
+        }
+      })
+      .catch((err) => console.log(err));
+
+    return () => {
+      ignore = true;
+    };
   }, [currentUser])
 
 

@@ -40,12 +40,9 @@ export default function Garage({yearsAtStrava, activities}: GarageProps) {
   const [curentBikeId, setCurentBikeId] = useState<string>('');
   
      
-  function toggleBikesFilter() {
-    setIsBikesFilterChecked(v => !v);
-  };
 
-  function filterBikeCardsToRender(bikes: Bike[]) {
-    if(isBikesFilterChecked) {
+  function filterBikeCardsToRender(bikes: Bike[], filter: boolean) {
+    if(!filter) {
       const trainerBikesToRender = bikes.filter((bike) => {
         return bike.trainer === true;
       });
@@ -54,6 +51,13 @@ export default function Garage({yearsAtStrava, activities}: GarageProps) {
       setBikesToRender(bikes);
     }
   };
+
+
+  function toggleBikesFilter() {
+    setIsBikesFilterChecked(v => !v);    
+    filterBikeCardsToRender(savedBikes, isBikesFilterChecked)
+  };
+  
 
   function openBikePhotoPopup(bikeData: UserBike | undefined) {
     setBikePhotoPopupOpen(true);
@@ -85,12 +89,13 @@ export default function Garage({yearsAtStrava, activities}: GarageProps) {
 
   useEffect(() => {
     setSavedBikes(userBikes);
+    setBikesToRender(userBikes)
   }, [userBikes]); 
   
   
-  useEffect(() => {
-    filterBikeCardsToRender(savedBikes);
-  }, [isBikesFilterChecked, savedBikes]);
+  // useEffect(() => {
+  //   filterBikeCardsToRender(savedBikes);
+  // }, [isBikesFilterChecked, savedBikes]);
 
 
   return (
