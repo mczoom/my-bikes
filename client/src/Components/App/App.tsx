@@ -38,6 +38,7 @@ export default function App() {
   const [hasAllActivitiesLoaded, setHasAllActivitiesLoaded] = useState<boolean>(false)
   const [userBikes, setUserBikes] = useState<Bike[]>([]);
   const [stravaToken, setStravaToken] = useState<string | null>(null);
+  const [appToken, setAppToken] = useState<string | null>(getLocalStorageValue('jwt'));
 
   const auth = useAuth();
   const isLoggedIn = auth.isLoggedIn;
@@ -49,18 +50,21 @@ export default function App() {
   
   const yearsAtStrava = getYearsAtStrava(currentYear, currentUser.created_at).reverse();
 
-  const sToken = getAppToken();
+  const sToken = () => getLocalStorageValue('stravaToken');
 
-  function getAppToken() {
-    return getLocalStorageValue('stravaToken');
-  };
+  // function getSToken() {
+  //   return getLocalStorageValue('stravaToken');
+  // };
+
+  // function getAppToken() {
+  //   return getLocalStorageValue('jwt');
+  // };
 
   
 
   
-  function checkAppToken() {
-    const jwt = localStorage.getItem('jwt');
-    if(jwt) {
+  function checkAppToken(token: string | null) { 
+    if(token) {
       return appApi.getCurrentUser()
         .then((userData: {login: string}) => {
           if(userData.login) {            
@@ -76,8 +80,30 @@ export default function App() {
         snackbar.handleSnackbarError(err);
       });                  
     };
-    return;
+    
   };
+
+
+  // function checkAppToken() {
+  //   const jwt = localStorage.getItem('jwt');
+  //   if(jwt) {
+  //     return appApi.getCurrentUser()
+  //       .then((userData: {login: string}) => {
+  //         if(userData.login) {            
+  //           setIsLoggedIn(true);
+  //           localStorage.setItem('logged', 'true');
+  //           return;
+  //         };
+  //         return;
+  //     })
+  //     .catch((err) => {
+  //       setIsLoggedIn(false);
+  //       localStorage.setItem('logged', '');
+  //       snackbar.handleSnackbarError(err);
+  //     });                  
+  //   };
+  //   return;
+  // };
 
 
   function checkStravaToken(token: string) {
@@ -225,13 +251,13 @@ function onAppLoad() {
 
 
   useEffect(() => {
-    checkAppToken();   
-  }, []); 
+    checkAppToken(appToken);   
+  }, [appToken]); 
   
 
   useEffect(() => {    
     onAppLoad();    
-  }, [stravaToken]);
+  }, [appToken, stravaToken]);
   
   
   console.log(currentUser);   
