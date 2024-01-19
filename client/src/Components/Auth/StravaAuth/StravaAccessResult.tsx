@@ -57,11 +57,11 @@ export default function StravaAccessResult () {
 
   useEffect(() => {    
     setStravaTokenAndPermissionsAfterRegistration(stravaPermissions);
-  }, []);  
+  }, [stravaPermissions]);  
   
 
   return (
-    <div>Page is under construction</div>
+    <div>You are about to be transfered</div>
   )
 }
 

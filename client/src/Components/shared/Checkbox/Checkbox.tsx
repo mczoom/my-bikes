@@ -6,7 +6,7 @@ interface CheckboxProps {
   switchTrainerCheckbox?: () => void
 }
 
-export default function Checkbox({name, text, checkboxStatus, onChange}: CheckboxProps) {
+export default function Checkbox({name, text, checkboxStatus = false, onChange}: CheckboxProps) {
 
   return (
     <div className='type-filter'>

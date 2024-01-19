@@ -27,37 +27,37 @@ interface BikeCardInfo {
 }
 
 export default function Garage({yearsAtStrava, activities}: GarageProps) {
+  
+  
+  const snackbar = useSnackbar(); 
 
-  const userBikes = useBikes();
-  const snackbar = useSnackbar();  
 
-  const [isBikesFilterChecked, setIsBikesFilterChecked] = useState<boolean>(false);
-  const [savedBikes, setSavedBikes] = useState<Bike[]>([]);
-  const [bikesToRender, setBikesToRender] = useState<Bike[]>([]);
+  const [isBikesFilterChecked, setIsBikesFilterChecked] = useState<boolean>(false);  
   const [isBikePhotoPopupOpen, setBikePhotoPopupOpen] = useState<boolean>(false);
   const [isEditPopupOpen, setEditPopupOpen] = useState<boolean>(false);
   const [bikePopupData, setBikePopupData] = useState<UserBike | undefined>({} as UserBike);
   const [curentBikeId, setCurentBikeId] = useState<string>('');
+  const [isUpdated, setIsUpdated] = useState<boolean>(false);
   
-     
+  const userBikes = useBikes(isUpdated);  
+ 
 
-  function filterBikeCardsToRender(bikes: Bike[], filter: boolean) {
-    if(!filter) {
-      const trainerBikesToRender = bikes.filter((bike) => {
+  function filterBikeCardsToRender(bikes: Bike[], filter: boolean) {    
+    const filteredBikes = bikes.filter((bike) => {
+      if(filter) {
         return bike.trainer === true;
-      });
-      setBikesToRender(trainerBikesToRender);
-    } else {
-      setBikesToRender(bikes);
-    }
+      } else {
+        return bike;
+      }
+    })
+    return filteredBikes;
   };
 
+  const bikesToRender = filterBikeCardsToRender(userBikes, isBikesFilterChecked)
 
   function toggleBikesFilter() {
-    setIsBikesFilterChecked(v => !v);    
-    filterBikeCardsToRender(savedBikes, isBikesFilterChecked)
-  };
-  
+    setIsBikesFilterChecked(v => !v);
+  };  
 
   function openBikePhotoPopup(bikeData: UserBike | undefined) {
     setBikePhotoPopupOpen(true);
@@ -82,25 +82,14 @@ export default function Garage({yearsAtStrava, activities}: GarageProps) {
 
   function updateBikeCardInfo(id: string, specs: BikeCardInfo) {
     appApi.updateBikeInfo(id, specs)
-      .then(updatedInfo => setSavedBikes(updatedInfo))
+      .then(() => setIsUpdated(v => !v))
       .catch((err) => snackbar.handleSnackbarError(err));    
   };
 
 
-  useEffect(() => {
-    setSavedBikes(userBikes);
-    setBikesToRender(userBikes)
-  }, [userBikes]); 
-  
-  
-  // useEffect(() => {
-  //   filterBikeCardsToRender(savedBikes);
-  // }, [isBikesFilterChecked, savedBikes]);
-
-
   return (
     <section className='garage'>
-      <Checkbox text='Показать только велостанки' onChange={toggleBikesFilter} />
+      <Checkbox text='Показать только велостанки' checkboxStatus={isBikesFilterChecked} onChange={toggleBikesFilter} />
       <GarageBikesList
         bikesToRender={bikesToRender}
         openBikePhotoPopup={openBikePhotoPopup}
