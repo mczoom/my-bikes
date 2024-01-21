@@ -2,7 +2,7 @@ interface CheckboxProps {
   name?: string
   text: string
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  checkboxStatus?: boolean
+  checkboxStatus: boolean
   switchTrainerCheckbox?: () => void
 }
 

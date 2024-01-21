@@ -1,17 +1,18 @@
+import { Bike } from 'types/Bike';
 import { UserBike } from 'types/UserBike';
 
 interface EditButtonProps {
   openPopup: () => void
   bike: UserBike
-  getBikeId: (id: string) => void
+  getEditingBike: (bike: Bike) => void
 }
 
 
-export default function EditButton({openPopup, bike, getBikeId}: EditButtonProps) {
+export default function EditButton({openPopup, bike, getEditingBike}: EditButtonProps) {
 
   function handleClick() {
     openPopup();
-    getBikeId(bike.id);    
+    getEditingBike(bike);    
   };
 
   return (

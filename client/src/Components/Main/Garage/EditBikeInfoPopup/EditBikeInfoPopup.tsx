@@ -6,11 +6,10 @@ import { Bike } from 'types/Bike';
 
 
 interface EditBikeInfoPopupProps {
-  bikes: Bike[]
   updateInfo: (id: string, specs: BikeInfo) => void
   isPopupOpen: boolean  
   closePopup: () => void
-  bikeId: string
+  bike: Bike
 }
 
 interface BikeInfo {
@@ -23,10 +22,12 @@ interface BikeInfo {
   trainer?: boolean
 }
 
-export default function EditBikeInfoPopup({bikes, updateInfo, isPopupOpen, closePopup, bikeId}: EditBikeInfoPopupProps) {
+export default function EditBikeInfoPopup({bike, updateInfo, isPopupOpen, closePopup}: EditBikeInfoPopupProps) {
 
-  const [trainerCheckbox, setTrainerCheckbox] = useState<any>(false);
+  const isTrainer = bike.trainer;  
 
+  const [trainerCheckbox, setTrainerCheckbox] = useState<boolean>(isTrainer);
+  
   const defaultInputValues: BikeInfo = {
     photo: '',
     bikename: '',
@@ -37,9 +38,7 @@ export default function EditBikeInfoPopup({bikes, updateInfo, isPopupOpen, close
     trainer: trainerCheckbox
   };
 
-  const [bikeInfo, setBikeInfo] = useState<BikeInfo>(defaultInputValues);
-    
-  
+  const [bikeInfo, setBikeInfo] = useState<BikeInfo>(defaultInputValues);  
 
   const popupClassName = `bike-popup ${isPopupOpen ? 'bike-popup_on' : ''}`;
 
@@ -53,22 +52,15 @@ export default function EditBikeInfoPopup({bikes, updateInfo, isPopupOpen, close
   };
 
 
-  function switchTrainerCheckbox(e: React.ChangeEvent<HTMLInputElement>) {
-    const checkedValue = e.target.checked;
-    setTrainerCheckbox(checkedValue);
-    handleInputValue(e, checkedValue, bikeInfo)
+  function switchTrainerCheckbox(e: React.ChangeEvent<HTMLInputElement>) {    
+    setTrainerCheckbox(v => !v);
+    handleInputValue(e, !trainerCheckbox, bikeInfo)
   };
 
     
-  function isTrainer(savedBikes: Bike[], bikeId: string) {           
-    const bike = savedBikes.find((bike) => bike.id === bikeId);    
-    return bike?.trainer;        
-  };  
-
-  
   function submitHandler(e: React.SyntheticEvent) {
     e.preventDefault();    
-    updateInfo(bikeId, bikeInfo);
+    updateInfo(bike.id, bikeInfo);
     closePopup();
     setBikeInfo(defaultInputValues);
   };
@@ -81,10 +73,9 @@ export default function EditBikeInfoPopup({bikes, updateInfo, isPopupOpen, close
   };
   
 
-  useEffect(() => {
-    const trainer = isTrainer(bikes, bikeId)
-    setTrainerCheckbox(trainer)
-  }, [bikeId, bikes])
+  // useEffect(() => {    
+  //   setTrainerCheckbox(isTrainer)
+  // }, [isTrainer])
 
   
   return (

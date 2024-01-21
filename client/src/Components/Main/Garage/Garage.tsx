@@ -26,17 +26,15 @@ interface BikeCardInfo {
   trainer?: boolean
 }
 
-export default function Garage({yearsAtStrava, activities}: GarageProps) {
-  
+export default function Garage({yearsAtStrava, activities}: GarageProps) {  
   
   const snackbar = useSnackbar(); 
-
 
   const [isBikesFilterChecked, setIsBikesFilterChecked] = useState<boolean>(false);  
   const [isBikePhotoPopupOpen, setBikePhotoPopupOpen] = useState<boolean>(false);
   const [isEditPopupOpen, setEditPopupOpen] = useState<boolean>(false);
   const [bikePopupData, setBikePopupData] = useState<UserBike | undefined>({} as UserBike);
-  const [curentBikeId, setCurentBikeId] = useState<string>('');
+  const [bikeToEdit, setBikeToEdit] = useState<Bike>({} as Bike);
   const [isUpdated, setIsUpdated] = useState<boolean>(false);
   
   const userBikes = useBikes(isUpdated);  
@@ -76,8 +74,8 @@ export default function Garage({yearsAtStrava, activities}: GarageProps) {
     setEditPopupOpen(false);
   };
 
-  function getBikeId(id: string) {
-    setCurentBikeId(id)
+  function getEditingBike(bike: Bike) {
+    setBikeToEdit(bike)
   };
 
   function updateBikeCardInfo(id: string, specs: BikeCardInfo) {
@@ -96,16 +94,15 @@ export default function Garage({yearsAtStrava, activities}: GarageProps) {
         openEditInfoPopup={openEditBikeInfoPopup}
         yearsAtStrava={yearsAtStrava}
         activities={activities}
-        getBikeId={getBikeId}
+        getEditingBike={getEditingBike}
       />
       <BikeCardPopup 
         isPopupOpen={isBikePhotoPopupOpen} 
         bikePopupData={bikePopupData} 
         closePopup={closeBikePhotoPopup} 
       />
-      <EditBikeInfoPopup 
-        bikes={bikesToRender} 
-        bikeId={curentBikeId}  
+      <EditBikeInfoPopup        
+        bike={bikeToEdit}  
         updateInfo={updateBikeCardInfo}
         isPopupOpen={isEditPopupOpen} 
         closePopup={closeEditBikeInfoPopup} 

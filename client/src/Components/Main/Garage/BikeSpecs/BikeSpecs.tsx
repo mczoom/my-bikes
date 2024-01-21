@@ -3,16 +3,16 @@ import { UserBike } from 'types/UserBike';
 import EditButton from 'ui/EditButton/EditButton';
 import { ActivitiesLoadingState } from 'contexts/ActivitiesLoadingState';
 import { Preloader } from 'ui/Preloader/Preloader';
-import { convertDistanceToKM } from 'utils/constants';
+import { Bike } from 'types/Bike';
 
 
 interface BikeSpecsProps {
   bike: UserBike  
   openEditInfoPopup: () => void
-  getBikeId: (id: string) => void
+  getEditingBike: (bike: Bike) => void
 }
 
-export default function BikeSpecs({bike, openEditInfoPopup, getBikeId}: BikeSpecsProps) {
+export default function BikeSpecs({bike, openEditInfoPopup, getEditingBike}: BikeSpecsProps) {
 
   const hasAllActivitiesLoaded = useContext(ActivitiesLoadingState);
   const totalDist = Math.round(bike.converted_distance);
@@ -52,7 +52,7 @@ export default function BikeSpecs({bike, openEditInfoPopup, getBikeId}: BikeSpec
           )}         
         </li>
       </ul>
-      <EditButton bike={bike} getBikeId={getBikeId} openPopup={openEditInfoPopup}/>
+      <EditButton bike={bike} getEditingBike={getEditingBike} openPopup={openEditInfoPopup}/>
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import BikeSpecs from 'components/Main/Garage/BikeSpecs/BikeSpecs';
 import DistancePerYearList from 'components/Main/Garage/DistancePerYearList/DistancePerYearList';
 import { Activity } from 'types/Activity';
+import { Bike } from 'types/Bike';
 import { UserBike } from 'types/UserBike';
 import { convertDistanceToKM } from 'utils/constants';
 
@@ -11,11 +12,11 @@ interface BikeCardProps {
   openEditInfoPopup: () => void
   yearsAtStrava: number[]
   activities: Activity[]
-  getBikeId: (id: string) => void
+  getEditingBike: (bike: Bike) => void
 }
 
 
-export default function GarageBikeCard({bike, openBikePhotoPopup, openEditInfoPopup, yearsAtStrava, activities, getBikeId}: BikeCardProps) {
+export default function GarageBikeCard({bike, openBikePhotoPopup, openEditInfoPopup, yearsAtStrava, activities, getEditingBike}: BikeCardProps) {
 
   function openPhotoPopup() {
     openBikePhotoPopup(bike);
@@ -39,7 +40,7 @@ export default function GarageBikeCard({bike, openBikePhotoPopup, openEditInfoPo
         <div className='bike-card__image-wrap'>        
           <img src={bike?.photo} className='bike-card__image' onClick={openPhotoPopup}></img>
         </div>  
-        <BikeSpecs bike={bike} getBikeId={getBikeId} openEditInfoPopup={openEditInfoPopup} />
+        <BikeSpecs bike={bike} getEditingBike={getEditingBike} openEditInfoPopup={openEditInfoPopup} />
         <DistancePerYearList yearsAtStrava={yearsAtStrava} distancePerYear={getDistancePerYear} />
       </div>
     </div>

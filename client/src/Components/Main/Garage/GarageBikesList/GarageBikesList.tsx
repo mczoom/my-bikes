@@ -11,18 +11,18 @@ interface GarageBikesListProps {
   yearsAtStrava: number[]
   activities: Activity[]
   bikesToRender: Bike[]
-  getBikeId: (id: string) => void
+  getEditingBike: (bike: Bike) => void
 }
 
 
-export default function GarageBikesList({bikesToRender, openBikePhotoPopup, openEditInfoPopup, yearsAtStrava, activities, getBikeId}: GarageBikesListProps) {
+export default function GarageBikesList({bikesToRender, openBikePhotoPopup, openEditInfoPopup, yearsAtStrava, activities, getEditingBike}: GarageBikesListProps) {
   
   return (
     <ul className='bike-cards-list'>
       {bikesToRender.length ? 
         bikesToRender.map((bike) => (
           <li key={bike.id} className='bike-cards-list__item'>
-            <GarageBikeCard bike={bike} openBikePhotoPopup={openBikePhotoPopup} openEditInfoPopup={openEditInfoPopup} yearsAtStrava={yearsAtStrava} activities={activities} getBikeId={getBikeId} />
+            <GarageBikeCard bike={bike} openBikePhotoPopup={openBikePhotoPopup} openEditInfoPopup={openEditInfoPopup} yearsAtStrava={yearsAtStrava} activities={activities} getEditingBike={getEditingBike} />
           </li>
         ))
         :
