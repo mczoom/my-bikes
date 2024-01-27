@@ -7,17 +7,17 @@ import useSnackbar from "hooks/useSnackbar";
 import { Activity } from "types/Activity";
 
 interface AppLayoutProps {
-  setUser: React.Dispatch<React.SetStateAction<Profile>>
-  setAllActivities: React.Dispatch<React.SetStateAction<Activity[]>>
+  setUser: (user: Profile) => void
+  setAllActivities: (activities: Activity[]) => void
 }
 
-export default function AppLayout({setUser, setAllActivities}: AppLayoutProps) {
+export default function AppLayout(props: AppLayoutProps) {
 
   const snackbar = useSnackbar();    
   
   return (
     <div>
-      <Header setUser={setUser} setAllActivities={setAllActivities}/>
+      <Header {...props}/>
       <main className="page">
         <Outlet />
       </main>  

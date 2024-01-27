@@ -10,8 +10,8 @@ import { Activity } from 'types/Activity';
 
 
 interface HeaderProps {
-  setUser: React.Dispatch<React.SetStateAction<ProfileType>>
-  setAllActivities: React.Dispatch<React.SetStateAction<Activity[]>>
+  setUser: (user: ProfileType) => void
+  setAllActivities: (activities: Activity[]) => void
 }
 
 export default function Header({setUser, setAllActivities}: HeaderProps) {
@@ -21,7 +21,7 @@ export default function Header({setUser, setAllActivities}: HeaderProps) {
   function logout() {
     auth.logout();
     setUser({} as ProfileType);
-    setAllActivities([]);
+    setAllActivities([] as Activity[]);
   };
 
   return (

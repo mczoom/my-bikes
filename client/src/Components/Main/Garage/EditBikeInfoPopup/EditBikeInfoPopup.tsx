@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Input from 'ui/Input/Input';
 import PopupWithForm from 'components/shared/PopupWithForm/PopupWithForm';
 import Checkbox from 'components/shared/Checkbox/Checkbox';
@@ -72,11 +72,6 @@ export default function EditBikeInfoPopup({bike, updateInfo, isPopupOpen, closeP
     }
   };
   
-
-  // useEffect(() => {    
-  //   setTrainerCheckbox(isTrainer)
-  // }, [isTrainer])
-
   
   return (
     <div className={popupClassName} onClick={closePopupByOverlayClick}>

@@ -4,6 +4,7 @@ import { Bike } from 'types/Bike';
 import {BASE_URL} from 'utils/constants';
 
 
+const token = () => localStorage.getItem('jwt')
 
 const handleErrorResponse = (error: any) => {
   console.log(error)
@@ -41,7 +42,7 @@ export const getCurrentUser = () => {
   return axios.get(`${BASE_URL}/user`, 
     { headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+        "Authorization": `Bearer ${token()}`,
       }
     })
     .then((res) => res.data)    
@@ -54,7 +55,7 @@ export const addAllActivities = (activities: Activity[]) => {
     { activities },
     { headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+        "Authorization": `Bearer ${token()}`,
       },      
     })
   .then((res) => res.data)    
@@ -66,7 +67,7 @@ export const getAllActivities = () => {
   return axios.get(`${BASE_URL}/activities`, {
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+      "Authorization": `Bearer ${token()}`,
     }
   })
   .then((res) => res.data)    
@@ -79,7 +80,7 @@ export const updateAllActivities = (activities: Activity[]) => {
     { activities },
     { headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+        "Authorization": `Bearer ${token()}`,
       },
     })
     .then((res) => res.data)    
@@ -92,7 +93,7 @@ export const addAllBikes = (bikes: Bike[] | undefined) => {
     { bikes },
     { headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+        "Authorization": `Bearer ${token()}`,
       },      
     })
   .then((res) => res.data)    
@@ -105,7 +106,7 @@ export const addBike = (newBike: Bike | Bike[]) => {
     { bike: newBike },
     { headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+        "Authorization": `Bearer ${token()}`,
       },
     })
     .then((res) => res.data)    
@@ -133,7 +134,7 @@ export const updateBikeInfo = (bikeId: any, updatedInfo: any) => {
     { bikeId, updatedInfo },
     { headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+        "Authorization": `Bearer ${token()}`,
       },
     })
     .then((res) => res.data)    
@@ -146,7 +147,7 @@ export const updateBikeOdo = (bikes: Bike[]) => {
     { bikes },
     { headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+        "Authorization": `Bearer ${token()}`,
       },
     })
     .then((res) => res.data)    
@@ -159,7 +160,7 @@ export const addTrainer = (bikeId: string, updatedInfo: any) => {
     { bikeId, updatedInfo },
     { headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+        "Authorization": `Bearer ${token()}`,
       },
     })
     .then((res) => res.data)    
@@ -171,7 +172,7 @@ export const getAllBikes = () => {
   return axios.get(`${BASE_URL}/bikes`, {
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+      "Authorization": `Bearer ${token()}`,
     }
   })
   .then((res) => res.data)    

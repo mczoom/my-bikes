@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import { useState } from 'react'
 import { Activity } from 'types/Activity';
 import BikeCardPopup from 'components/shared/BikeCardPopup/BikeCardPopup';
 import GarageBikesList from 'components/Main/Garage/GarageBikesList/GarageBikesList';

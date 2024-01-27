@@ -79,7 +79,7 @@ module.exports.getUser = (req, res, next) => {
   User.findOne({_id: userID})
     .orFail(() => new NotFoundError('Пользователь не найден'))
     .then((user) => {
-      res.send({login: user.login});      
+      res.send(user);      
     })
     .catch(next);
 };

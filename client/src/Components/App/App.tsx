@@ -43,7 +43,6 @@ export default function App() {
   const auth = useAuth();
   const isLoggedIn = auth.isLoggedIn;
   const isStravaConnected = auth.isConnectedToStrava;
-  const setIsLoggedIn = auth.setIsLoggedIn;
 
   const savedBikes = useBikes();
   const snackbar = useSnackbar();  
@@ -60,52 +59,15 @@ export default function App() {
   //   return getLocalStorageValue('jwt');
   // };
 
-  
-
-  
-  function checkAppToken(token: string | null) { 
-    if(token) {
-      return appApi.getCurrentUser()
-        .then((userData: {login: string}) => {
-          if(userData.login) {            
-            setIsLoggedIn(true);
-            localStorage.setItem('logged', 'true');
-            return;
-          };
-          return;
-      })
-      .catch((err) => {
-        setIsLoggedIn(false);
-        localStorage.setItem('logged', '');
-        snackbar.handleSnackbarError(err);
-      });                  
-    };
-    
+  function setActivities(activities: Activity[]) {
+    setAllActivities(activities)
   };
 
+  function setUser(user: Profile) {
+    setCurrentUser(user)
+  };
 
-  // function checkAppToken() {
-  //   const jwt = localStorage.getItem('jwt');
-  //   if(jwt) {
-  //     return appApi.getCurrentUser()
-  //       .then((userData: {login: string}) => {
-  //         if(userData.login) {            
-  //           setIsLoggedIn(true);
-  //           localStorage.setItem('logged', 'true');
-  //           return;
-  //         };
-  //         return;
-  //     })
-  //     .catch((err) => {
-  //       setIsLoggedIn(false);
-  //       localStorage.setItem('logged', '');
-  //       snackbar.handleSnackbarError(err);
-  //     });                  
-  //   };
-  //   return;
-  // };
-
-
+    
   function checkStravaToken(token: string) {
     if(token) {
       stravaTokenCheck()
@@ -250,24 +212,20 @@ function onAppLoad() {
   }, [sToken]); 
 
 
-  useEffect(() => {
-    checkAppToken(appToken);   
-  }, [appToken]); 
-  
-
   useEffect(() => {    
     onAppLoad();    
   }, [appToken, stravaToken]);
   
   
   console.log(currentUser);   
+  console.log(isStravaConnected);   
   
   
     return (      
       <CurrentUserContext.Provider value={currentUser}> 
       <ActivitiesLoadingState.Provider value={hasAllActivitiesLoaded}>            
         <Routes>
-          <Route path='/' element={<AppLayout setUser={setCurrentUser} setAllActivities={setAllActivities}/>}>
+          <Route path='/' element={<AppLayout setUser={setUser} setAllActivities={setActivities}/>}>
             
             <Route path='/registration' element={!isLoggedIn ? <RegPage /> : <Navigate to='/' replace={true} />} />
             <Route path='/login' element={!isLoggedIn ? <LoginPage /> : <Navigate to='/' replace={true} />} />        

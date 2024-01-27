@@ -2,15 +2,10 @@ import { useEffect, useState } from 'react';
 import { useContext } from 'react';
 import { CurrentUserContext } from 'contexts/CurrentUserContext';
 import { AthleteStats, RidesTotals } from 'types/AthleteStats';
-import { Profile } from 'types/Profile';
 import { convertDistanceToKM, currentYear } from 'utils/constants';
 import { getAthlete } from 'utils/stravaApi';
 
 
-// interface CommonStatsProps {
-//   allRidesTotalData: RidesTotals
-//   allYTDRidesTotalData: RidesTotals
-// }
 
 export default function CommonStats() {
 

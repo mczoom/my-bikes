@@ -1,19 +1,21 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import useAuth from 'hooks/useAuth';
+import { useState } from 'react';
 
 
 export default function ProtectedRoute() {
 
-  const auth = useAuth();
-  const isConnected = auth.isConnectedToStrava;
-  const isLogged = auth.isLoggedIn; 
+  const auth = useAuth();  
+  const hasAccess = auth.isConnectedToStrava;
+  const isLoggedIn = auth.isLoggedIn; 
  
+  console.log(hasAccess); 
      
   return (
     <div>
-      {isConnected 
+      {hasAccess 
         ? <Outlet /> 
-        : isLogged 
+        : isLoggedIn 
           ? <Navigate to="/access" /> 
           : <Navigate to="/login" />}
     </div>
