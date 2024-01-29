@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {BASE_URL} from 'utils/constants';
+import { getLocalStorageParsedValue, setLocalStorage } from './service';
 
 
 const handleErrorResponse = (error: any) => {
@@ -19,7 +20,7 @@ export function exchangeToken() {
     { token: accessToken },
     { headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem('jwt')}`
+        "Authorization": `Bearer ${getLocalStorageParsedValue('jwt')}`
       },
     })
     .then(res => res.data)
@@ -32,24 +33,24 @@ export function refreshToken() {
   return axios.get(`${BASE_URL}/strtokenrefresh`, {
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${localStorage.getItem('jwt')}`
+      "Authorization": `Bearer ${getLocalStorageParsedValue('jwt')}`
     }
   })  
   .then((res: any) => {
     const tokenData = res.data.token
     if (tokenData) {
-      localStorage.setItem('stravaToken', tokenData.accessToken);
+      setLocalStorage('stravaToken', tokenData.accessToken);
     }
   })
   .catch((err) => handleErrorResponse(err))
 };
 
 
-export const getStravaToken = () => {
+export const getStravaToken = (t: string) => {
   return axios.get(`${BASE_URL}/strtoken`, {    
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
+      "Authorization": `Bearer ${t}`,
     },    
   })
   .then((res) => res.data)
@@ -61,7 +62,7 @@ export function stravaTokenCheck() {
   return axios.get(`${BASE_URL}/tokencheck`, {    
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${localStorage.getItem('jwt')}`
+      "Authorization": `Bearer ${getLocalStorageParsedValue('jwt')}`
     },
   })
   .then((res) => res.data)
@@ -74,7 +75,7 @@ export function addStravaPermissions(scope: string[] | undefined) {
     { scope },
     { headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem('jwt')}`
+        "Authorization": `Bearer ${getLocalStorageParsedValue('jwt')}`
       },
     })
     .then(res => res.data)
@@ -86,7 +87,7 @@ export function checkStravaPermissions() {
   return axios.get(`${BASE_URL}/strava-permissions`, {    
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${localStorage.getItem('jwt')}`
+      "Authorization": `Bearer ${getLocalStorageParsedValue('jwt')}`
     },
   })
   .then((res) => res.data)

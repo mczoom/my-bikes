@@ -2,9 +2,10 @@ import axios from 'axios';
 import { Activity } from 'types/Activity';
 import { Bike } from 'types/Bike';
 import {BASE_URL} from 'utils/constants';
+import { getLocalStorageParsedValue } from './service';
 
 
-const token = () => localStorage.getItem('jwt')
+const token = () => getLocalStorageParsedValue('jwt')
 
 const handleErrorResponse = (error: any) => {
   console.log(error)

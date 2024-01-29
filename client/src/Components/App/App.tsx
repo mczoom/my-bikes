@@ -5,8 +5,8 @@ import {Route, Navigate, Routes } from 'react-router-dom';
 import * as appApi from 'utils/appApi';
 import Main from 'components/Main/Main';
 import Stats from 'components/Main/Stats/Stats';
-import { getStravaToken, stravaTokenCheck } from 'utils/stravaAuthApi';
-import {getCurrentAthlete, getActivities, getAthlete} from 'utils/stravaApi'; 
+import { stravaTokenCheck } from 'utils/stravaAuthApi';
+import {getCurrentAthlete, getActivities} from 'utils/stravaApi'; 
 import {Profile} from 'types/Profile';
 import StravaAccessPage from 'components/Auth/StravaAuth/StravaAccessPage';
 import ProtectedRoute from 'components/ProtectedRoute/ProtectedRoute';
@@ -24,41 +24,27 @@ import useAuth from 'hooks/useAuth';
 import useSnackbar from 'hooks/useSnackbar';
 import useBikes from 'hooks/useBikes';
 import { currentYear, getYearsAtStrava } from 'utils/constants';
-import { getLocalStorageValue } from 'utils/service';
 
 
 
-export default function App() {
-
-  
+export default function App() {  
   
   const [currentUser, setCurrentUser] = useState<Profile>({} as Profile);
   const [allActivities, setAllActivities] = useState<Activity[]>([]);
   const [storedActivities, setStoredActivities] = useState<Activity[] | null>(null);
   const [hasAllActivitiesLoaded, setHasAllActivitiesLoaded] = useState<boolean>(false)
   const [userBikes, setUserBikes] = useState<Bike[]>([]);
-  const [stravaToken, setStravaToken] = useState<string | null>(null);
-  const [appToken, setAppToken] = useState<string | null>(getLocalStorageValue('jwt'));
-
-  const auth = useAuth();
-  const isLoggedIn = auth.isLoggedIn;
-  const isStravaConnected = auth.isConnectedToStrava;
 
   const savedBikes = useBikes();
-  const snackbar = useSnackbar();  
+  const snackbar = useSnackbar();
+  const auth = useAuth();
+  const appToken = auth.appToken;
+  const stravaToken = auth.stravaToken;
+  const setStravaToken = auth.setStravaToken;    
   
   const yearsAtStrava = getYearsAtStrava(currentYear, currentUser.created_at).reverse();
 
-  const sToken = () => getLocalStorageValue('stravaToken');
-
-  // function getSToken() {
-  //   return getLocalStorageValue('stravaToken');
-  // };
-
-  // function getAppToken() {
-  //   return getLocalStorageValue('jwt');
-  // };
-
+    
   function setActivities(activities: Activity[]) {
     setAllActivities(activities)
   };
@@ -68,19 +54,16 @@ export default function App() {
   };
 
     
-  function checkStravaToken(token: string) {
-    if(token) {
+  function checkIfStravaTokenExpired(sToken: string) {
+    if(sToken) {
       stravaTokenCheck()
         .then((accessToken) => {
-          if(accessToken !== token) {
-            localStorage.setItem('stravaToken', accessToken);
-            return;
+          if(accessToken !== sToken) {
+            setStravaToken(accessToken);
           };
-          return;
         })
         .catch((err) => console.log(err));
     };
-    return; 
   }; 
 
   
@@ -170,8 +153,8 @@ export default function App() {
       setHasAllActivitiesLoaded(true);
   };
   
-  async function getCurrentUserData() { 
-    getCurrentAthlete()
+  function getCurrentUserData(sToken: string) { 
+    getCurrentAthlete(sToken)
       .then((user: Profile) => {
         setCurrentUser(user);
         return user;       
@@ -197,28 +180,21 @@ export default function App() {
 console.log(savedBikes);
 
 
-function onAppLoad() {
-  getStravaToken()
-    .then((strToken: string) => {        
-      return checkStravaToken(strToken);
-    })
-    .then(() => getCurrentUserData())
-    .catch((err) => snackbar.handleSnackbarError(err));
+function onAppLoad(sToken: string) {
+  if(appToken && stravaToken) {
+    checkIfStravaTokenExpired(sToken)
+    getCurrentUserData(sToken)
+  }
 };
   
 
-  useEffect(() => {
-    setStravaToken(sToken)
-  }, [sToken]); 
-
-
-  useEffect(() => {    
-    onAppLoad();    
+  useEffect(() => {       
+    onAppLoad(stravaToken);    
   }, [appToken, stravaToken]);
   
   
-  console.log(currentUser);   
-  console.log(isStravaConnected);   
+  console.log(stravaToken);   
+  console.log(appToken);   
   
   
     return (      
@@ -227,13 +203,13 @@ function onAppLoad() {
         <Routes>
           <Route path='/' element={<AppLayout setUser={setUser} setAllActivities={setActivities}/>}>
             
-            <Route path='/registration' element={!isLoggedIn ? <RegPage /> : <Navigate to='/' replace={true} />} />
-            <Route path='/login' element={!isLoggedIn ? <LoginPage /> : <Navigate to='/' replace={true} />} />        
+            <Route path='/registration' element={!appToken ? <RegPage /> : <Navigate to='/' replace={true} />} />
+            <Route path='/login' element={!appToken ? <LoginPage /> : <Navigate to='/' replace={true} />} />        
             
-            <Route path='/access' element={!isStravaConnected ? <StravaAccessPage /> : <Navigate to='/' replace={true} />} />
+            <Route path='/access' element={!stravaToken ? <StravaAccessPage /> : <Navigate to='/' replace={true} />} />
             <Route path='/access-result' element={<StravaAccessResult />} />
       
-            <Route path='/' element={<ProtectedRoute />}>
+            <Route path='/' element={<ProtectedRoute isLoggedIn={appToken} isStravaConnected={stravaToken} />}>
               <Route index element={<Main />}  />                
               <Route path='/stats' 
                 element={<Stats

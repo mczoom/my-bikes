@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { stravaApiUrl } from 'utils/constants';
-import { getLocalStorageValue } from './service';
+import { getLocalStorageParsedValue } from './service';
 
-const stravaToken = () => getLocalStorageValue('stravaToken');
+const stravaToken = () => getLocalStorageParsedValue('stravaToken');
 
 export interface ActivitiesRequest {
   fromDate: number
@@ -18,11 +18,11 @@ const handleStravaErrResponse = (err: any) => {
 };
 
 
-export const getCurrentAthlete = () => {
+export const getCurrentAthlete = (sToken: any) => {
   return axios.get(`${stravaApiUrl}/athlete`, {
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${stravaToken()}`,
+      "Authorization": `Bearer ${sToken}`,
     }
   })
   .then((res) => res.data)

@@ -1,12 +1,13 @@
 import { createContext } from "react";
 
 interface AuthContextType {
-  isLoggedIn: boolean  
-  isConnectedToStrava: boolean | null 
+  appToken: string  
+  stravaToken: string 
+  setStravaToken: React.Dispatch<string>
   signIn: (login: string, password: string) => void
   signUp: (login: string, password: string) => void
   logout: () => void
-  checkPermissions: ()=> void
+  checkPermissions?: ()=> void
 };
   
 

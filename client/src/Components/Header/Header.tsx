@@ -17,6 +17,9 @@ interface HeaderProps {
 export default function Header({setUser, setAllActivities}: HeaderProps) {
 
   const auth = useAuth();
+const isLoggedIn = auth.appToken;
+const hasAccessToStrava = auth.stravaToken;
+
 
   function logout() {
     auth.logout();
@@ -32,7 +35,7 @@ export default function Header({setUser, setAllActivities}: HeaderProps) {
         </Link>  
         <Profile />       
       </div> 
-      {auth.isLoggedIn && auth.isConnectedToStrava ? (     
+      {isLoggedIn && hasAccessToStrava ? (     
       <div className='header__nav-wrapper'>        
         <Navigation />     
         <div className='header__auth-buttons'>          

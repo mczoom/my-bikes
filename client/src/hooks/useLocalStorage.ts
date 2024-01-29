@@ -1,18 +1,16 @@
 import { useEffect, useState } from "react";
+import { getLocalStorageParsedValue, setLocalStorage } from "utils/service";
 
-interface useLocalStorageProps {
-  initialValue: string
-  key: string 
-}
 
-export default function useLocalStorage({initialValue, key}: useLocalStorageProps ) {
+export default function useLocalStorage(key: string, initialValue: string ) {
   const [localState, setLocalState] = useState(() => {
-    const currentLocalValue = localStorage.getItem(key);
-    return currentLocalValue !== null ? JSON.parse(currentLocalValue) : initialValue;
+    const currentLocalValue = getLocalStorageParsedValue(key);
+    return currentLocalValue !== null ? currentLocalValue : initialValue;
   });
   
+  
   useEffect(() => {    
-    localStorage.setItem(key, JSON.stringify(localState))
+    setLocalStorage(key, localState)
   }, [key, localState])
 
   return [localState, setLocalState];

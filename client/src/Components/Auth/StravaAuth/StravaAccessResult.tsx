@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { addStravaPermissions, exchangeToken } from 'utils/stravaAuthApi';
 import { mandatoryStravaPermissions } from 'utils/constants';
 import useAuth from 'hooks/useAuth';
+import { setLocalStorage } from 'utils/service';
 
 
 interface stravaToken {
@@ -35,7 +36,7 @@ export default function StravaAccessResult () {
   async function setStrTokenToLocalStorageAfterRegistration() {    
     exchangeToken()
       .then((token: stravaToken) => {          
-        localStorage.setItem('stravaToken', token.strToken);
+        setLocalStorage('stravaToken', token.strToken);
       })      
       .catch((err) => console.log(err));      
   };
@@ -45,7 +46,7 @@ export default function StravaAccessResult () {
     addStravaPermissions(permissions)
       .then(async () => {
         await setStrTokenToLocalStorageAfterRegistration();
-        auth.checkPermissions();
+        //auth.checkPermissions();
         navigate('/');
       })
       .catch((err) => {        
