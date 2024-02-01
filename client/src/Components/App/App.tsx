@@ -35,7 +35,7 @@ export default function App() {
   const [hasAllActivitiesLoaded, setHasAllActivitiesLoaded] = useState<boolean>(false)
   const [userBikes, setUserBikes] = useState<Bike[]>([]);
 
-  const savedBikes = useBikes();
+  const [savedBikes, setSavedBikes] = useBikes();
   const snackbar = useSnackbar();
   const auth = useAuth();
   const appToken = auth.appToken;
@@ -44,6 +44,7 @@ export default function App() {
   
   const yearsAtStrava = getYearsAtStrava(currentYear, currentUser.created_at).reverse();
 
+    console.log(savedBikes);
     
   function setActivities(activities: Activity[]) {
     setAllActivities(activities)
@@ -85,15 +86,16 @@ export default function App() {
   };
 
 
-  function handleBikes(user: Profile, bikes: Bike[]) {
-    if(!bikes.length) {   
-      appApi.addAllBikes(user.bikes);
-      setUserBikes(user.bikes)
-      return;
-    };
-    updateBikeDistance(user.bikes)
-    setUserBikes(bikes)    
-  };  
+  // async function handleBikes(user: Profile, bikes: Bike[]) {
+    
+  //   // if(!bikes.length) { 
+  //   //   await appApi.addAllBikes(user.bikes);
+  //   //   setUserBikes(user.bikes)
+  //   //   return;
+  //   // };
+  //   // updateBikeDistance(user.bikes)
+  //   // setSavedBikes(bikes)    
+  // };  
 
  
   async function getAllActivitiesFromStrava(user: Profile) {    
@@ -161,7 +163,7 @@ export default function App() {
       })      
       .then((currentUser) => {             
         handleActivities(currentUser);
-        handleBikes(currentUser, savedBikes); 
+        //handleBikes(currentUser, savedBikes); 
       })      
       .catch((err) => snackbar.handleSnackbarError(err));    
   };
@@ -180,8 +182,8 @@ export default function App() {
 console.log(savedBikes);
 
 
-function onAppLoad(sToken: string) {
-  if(appToken && stravaToken) {
+function onAppLoad(token: string, sToken: string) {
+  if(token && sToken) {
     checkIfStravaTokenExpired(sToken)
     getCurrentUserData(sToken)
   }
@@ -189,12 +191,32 @@ function onAppLoad(sToken: string) {
   
 
   useEffect(() => {       
-    onAppLoad(stravaToken);    
+    onAppLoad(appToken, stravaToken);    
   }, [appToken, stravaToken]);
+
+
+  useEffect(() => { 
+    let ignore = false;      
+    appApi.getAllBikes()
+      .then((res) => {  
+        if(!ignore) {      
+          if(!res.length) { 
+              appApi.addAllBikes(currentUser.bikes);
+              setSavedBikes(currentUser.bikes);
+              return;
+            };    
+          updateBikeDistance(currentUser.bikes);
+          setSavedBikes(res);
+        }   
+      })
+      .catch((err) => console.log(err)); 
+      
+      return () => {
+        ignore = true;
+      };
+  }, [currentUser]);
   
   
-  console.log(stravaToken);   
-  console.log(appToken);   
   
   
     return (      
@@ -219,6 +241,8 @@ function onAppLoad(sToken: string) {
               />          
               <Route path='/garage' 
                 element={<Garage 
+                  savedBikes={savedBikes}
+                  setSavedBikes={setSavedBikes}
                   yearsAtStrava={yearsAtStrava} 
                   activities={allActivities}
                 />} 

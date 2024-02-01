@@ -12,6 +12,8 @@ import useBikes from 'hooks/useBikes';
 
 
 interface GarageProps {
+  savedBikes: Bike[]
+  setSavedBikes: React.Dispatch<React.SetStateAction<Bike[]>>
   yearsAtStrava: number[]
   activities: Activity[]
 }
@@ -26,7 +28,7 @@ interface BikeCardInfo {
   trainer?: boolean
 }
 
-export default function Garage({yearsAtStrava, activities}: GarageProps) {  
+export default function Garage({savedBikes, setSavedBikes, yearsAtStrava, activities}: GarageProps) {  
   
   const snackbar = useSnackbar(); 
 
@@ -35,9 +37,9 @@ export default function Garage({yearsAtStrava, activities}: GarageProps) {
   const [isEditPopupOpen, setEditPopupOpen] = useState<boolean>(false);
   const [bikePopupData, setBikePopupData] = useState<UserBike | undefined>({} as UserBike);
   const [bikeToEdit, setBikeToEdit] = useState<Bike>({} as Bike);
-  const [isUpdated, setIsUpdated] = useState<boolean>(false);
+  //const [isUpdated, setIsUpdated] = useState<boolean>(false);
   
-  const userBikes = useBikes(isUpdated);  
+  //const userBikes = useBikes(isUpdated);  
  
 
   function filterBikeCardsToRender(bikes: Bike[], filter: boolean) {    
@@ -51,7 +53,7 @@ export default function Garage({yearsAtStrava, activities}: GarageProps) {
     return filteredBikes;
   };
 
-  const bikesToRender = filterBikeCardsToRender(userBikes, isBikesFilterChecked)
+  const bikesToRender = filterBikeCardsToRender(savedBikes, isBikesFilterChecked)
 
   function toggleBikesFilter() {
     setIsBikesFilterChecked(v => !v);
@@ -80,7 +82,8 @@ export default function Garage({yearsAtStrava, activities}: GarageProps) {
 
   function updateBikeCardInfo(id: string, specs: BikeCardInfo) {
     appApi.updateBikeInfo(id, specs)
-      .then(() => setIsUpdated(v => !v))
+      .then((res) => setSavedBikes(res))
+      //.then(() => setIsUpdated(v => !v))
       .catch((err) => snackbar.handleSnackbarError(err));    
   };
 
@@ -95,6 +98,7 @@ export default function Garage({yearsAtStrava, activities}: GarageProps) {
         yearsAtStrava={yearsAtStrava}
         activities={activities}
         getEditingBike={getEditingBike}
+        bikes={savedBikes}
       />
       <BikeCardPopup 
         isPopupOpen={isBikePhotoPopupOpen} 

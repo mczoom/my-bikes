@@ -1,4 +1,3 @@
-import { currentYear } from 'utils/constants';
 import StatsYearCard from 'components/Main/Stats/StatsYearCard/StatsYearCard';
 
 

@@ -12,10 +12,12 @@ interface GarageBikesListProps {
   activities: Activity[]
   bikesToRender: Bike[]
   getEditingBike: (bike: Bike) => void
+  bikes: Bike[]
 }
 
 
-export default function GarageBikesList({bikesToRender, openBikePhotoPopup, openEditInfoPopup, yearsAtStrava, activities, getEditingBike}: GarageBikesListProps) {
+export default function GarageBikesList({bikes, bikesToRender, openBikePhotoPopup, openEditInfoPopup, yearsAtStrava, activities, getEditingBike}: GarageBikesListProps) {
+  console.log(bikes.length);
   
   return (
     <ul className='bike-cards-list'>

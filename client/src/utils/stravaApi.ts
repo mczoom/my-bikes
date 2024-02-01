@@ -18,7 +18,7 @@ const handleStravaErrResponse = (err: any) => {
 };
 
 
-export const getCurrentAthlete = (sToken: any) => {
+export const getCurrentAthlete = (sToken: string) => {
   return axios.get(`${stravaApiUrl}/athlete`, {
     headers: {
       "Content-Type": "application/json",

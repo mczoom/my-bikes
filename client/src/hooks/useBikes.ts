@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { Bike } from "types/Bike";
 import { getAllBikes } from "utils/appApi";
 
-export default function useBikes(isUpdated?: boolean) {
-  const [bikes, setBikes] = useState<Bike[]>([]);
+export default function useBikes() {
+  const [bikes, setBikes] = useState<any>([]);
+  console.log(bikes);
+  
   
   useEffect(() => {
     let ignore = false;
@@ -18,7 +20,7 @@ export default function useBikes(isUpdated?: boolean) {
     return () => {
       ignore = true;
     };
-  }, [isUpdated])
+  }, [])
 
-  return bikes;
+  return [bikes, setBikes];
 }
