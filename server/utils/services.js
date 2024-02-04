@@ -22,10 +22,12 @@ module.exports.updateStravaToken = async (tokenInfo, id) => {
 
 
 module.exports.updateBikeOdo = async(storedData, actualData) => {
-  storedData.bikes.forEach(async (storedBike) => {    
-    const actualDataBike = await actualData.find(actualBike => actualBike.id === storedBike.id);
-    if(actualDataBike.converted_distance !== storedBike.converted_distance) {
-      storedBike.converted_distance = actualDataBike.converted_distance;
-    }
-  });  
+  if(actualData) {
+    storedData.bikes.forEach(async (storedBike) => {    
+      const actualDataBike = await actualData.find(actualBike => actualBike.id === storedBike.id);
+      if(actualDataBike.converted_distance !== storedBike.converted_distance) {
+        storedBike.converted_distance = actualDataBike.converted_distance;
+      }
+    });  
+  }
 };

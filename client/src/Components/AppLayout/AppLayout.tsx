@@ -7,8 +7,7 @@ import useSnackbar from "hooks/useSnackbar";
 import { Activity } from "types/Activity";
 
 interface AppLayoutProps {
-  setUser: (user: Profile) => void
-  setAllActivities: (activities: Activity[]) => void
+  handleReset: () => void
 }
 
 export default function AppLayout(props: AppLayoutProps) {

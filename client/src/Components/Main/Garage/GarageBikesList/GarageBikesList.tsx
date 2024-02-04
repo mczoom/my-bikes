@@ -17,8 +17,7 @@ interface GarageBikesListProps {
 
 
 export default function GarageBikesList({bikes, bikesToRender, openBikePhotoPopup, openEditInfoPopup, yearsAtStrava, activities, getEditingBike}: GarageBikesListProps) {
-  console.log(bikes.length);
-  
+    
   return (
     <ul className='bike-cards-list'>
       {bikesToRender.length ? 

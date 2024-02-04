@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Input from 'ui/Input/Input';
 import PopupWithForm from 'components/shared/PopupWithForm/PopupWithForm';
 import Checkbox from 'components/shared/Checkbox/Checkbox';
@@ -26,7 +26,7 @@ export default function EditBikeInfoPopup({bike, updateInfo, isPopupOpen, closeP
 
   const isTrainer = bike.trainer;  
 
-  const [trainerCheckbox, setTrainerCheckbox] = useState<boolean>(isTrainer);
+  const [trainerCheckbox, setTrainerCheckbox] = useState<boolean>(bike.trainer);
   
   const defaultInputValues: BikeInfo = {
     photo: '',
@@ -35,7 +35,7 @@ export default function EditBikeInfoPopup({bike, updateInfo, isPopupOpen, closeP
     model: '',
     year: '',
     weight: '',
-    trainer: trainerCheckbox
+    trainer: isTrainer
   };
 
   const [bikeInfo, setBikeInfo] = useState<BikeInfo>(defaultInputValues);  
@@ -53,7 +53,7 @@ export default function EditBikeInfoPopup({bike, updateInfo, isPopupOpen, closeP
 
 
   function switchTrainerCheckbox(e: React.ChangeEvent<HTMLInputElement>) {    
-    setTrainerCheckbox(v => !v);
+    //setTrainerCheckbox(v => !v);
     handleInputValue(e, !trainerCheckbox, bikeInfo)
   };
 
@@ -71,6 +71,11 @@ export default function EditBikeInfoPopup({bike, updateInfo, isPopupOpen, closeP
       closePopup();
     }
   };
+  
+
+  useEffect(() => {
+    setTrainerCheckbox(isTrainer)
+  }, [isTrainer])
   
   
   return (

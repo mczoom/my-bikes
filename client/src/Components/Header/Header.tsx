@@ -10,21 +10,19 @@ import { Activity } from 'types/Activity';
 
 
 interface HeaderProps {
-  setUser: (user: ProfileType) => void
-  setAllActivities: (activities: Activity[]) => void
+  handleReset: () => void  
 }
 
-export default function Header({setUser, setAllActivities}: HeaderProps) {
+export default function Header({handleReset}: HeaderProps) {
 
   const auth = useAuth();
-const isLoggedIn = auth.appToken;
-const hasAccessToStrava = auth.stravaToken;
+  const isLoggedIn = auth.appToken;
+  const hasAccessToStrava = auth.stravaToken;
 
 
   function logout() {
     auth.logout();
-    setUser({} as ProfileType);
-    setAllActivities([] as Activity[]);
+    handleReset();    
   };
 
   return (

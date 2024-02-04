@@ -7,6 +7,7 @@ interface CheckboxProps {
 }
 
 export default function Checkbox({name, text, checkboxStatus = false, onChange}: CheckboxProps) {
+console.log(checkboxStatus);
 
   return (
     <div className='type-filter'>

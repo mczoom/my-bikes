@@ -74,10 +74,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
   };
 
 
-  const logout = () => {
-    localStorage.clear();
+  const logout = () => {    
     setAppToken('');
-    setStravaToken('');    
+    setStravaToken('');
+    localStorage.clear();   
   };
     
   const authData = { appToken, stravaToken, setStravaToken, signUp, signIn, logout };  
