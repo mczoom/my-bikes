@@ -62,17 +62,6 @@ export default function App() {
   }; 
 
   
-  // function storeAllUserBikesToDB(currentUser: Profile) {
-  //   if(currentUser.bikes.length && hasAllActivitiesLoaded === true) {
-  //     const userBikesFromStrava: Bike[] = currentUser.bikes.map((bike: Bike) => {  
-  //       const isTrainer = checkIfTrainer(bike.id, allActivities);
-  //       return {...bike, trainer: isTrainer};
-  //     });      
-  //     appApi.addAllBikes(userBikesFromStrava);    
-  //   };
-  // };
-
-
   function updateBikeDistance(bikes: Bike[]) {    
     appApi.updateBikeOdo(bikes)
       .then(() => console.log('Пробег байков успешно обновлён'))
@@ -80,9 +69,8 @@ export default function App() {
   };
 
 
-  
   async function getAllActivitiesFromStrava(user: Profile) {    
-    //setHasAllActivitiesLoaded(false);
+    setHasAllActivitiesLoaded(false);
     const dateOfRegAtStrava: string = user.created_at;
     const fromDate: number = Date.parse(dateOfRegAtStrava) / 1000;
     const tillDate: number = Math.round(Date.now() / 1000);
@@ -105,7 +93,7 @@ export default function App() {
 
       setAllActivities(activities);      
     }
-    //setHasAllActivitiesLoaded(true);
+    setHasAllActivitiesLoaded(true);
     return activities;
   };
 
@@ -165,9 +153,7 @@ console.log(savedBikes);
 
   useEffect(() => { 
     let ignore = false; 
-    if(appToken && stravaToken) {     
-      setHasAllActivitiesLoaded(false);
-
+    if(appToken && stravaToken) { 
       Promise.all([getAllActivitiesFromStrava(currentUser), appApi.getAllActivities()])
         .then(([activitiesFromStrava, activitiesFromDB]) => {
           if(!ignore) {
@@ -179,7 +165,6 @@ console.log(savedBikes);
           }
         })
         .catch((err) => console.log(err))
-        setHasAllActivitiesLoaded(true);
     }  
       return () => {
         ignore = true;
@@ -240,7 +225,8 @@ console.log(savedBikes);
                   activities={allActivities}
                 />} 
               />
-              <Route path='/maintenance' element={<Maintenance />} />
+              <Route path='/maintenance/*' element={<Maintenance />} />
+
             </Route>
             <Route path='/*' element={<Page404 />} />
           </Route>        

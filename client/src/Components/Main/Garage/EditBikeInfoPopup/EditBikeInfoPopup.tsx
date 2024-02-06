@@ -53,7 +53,7 @@ export default function EditBikeInfoPopup({bike, updateInfo, isPopupOpen, closeP
 
 
   function switchTrainerCheckbox(e: React.ChangeEvent<HTMLInputElement>) {    
-    //setTrainerCheckbox(v => !v);
+    setTrainerCheckbox(v => !v);
     handleInputValue(e, !trainerCheckbox, bikeInfo)
   };
 

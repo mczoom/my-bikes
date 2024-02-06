@@ -83,7 +83,6 @@ export default function Garage({savedBikes, setSavedBikes, yearsAtStrava, activi
   function updateBikeCardInfo(id: string, specs: BikeCardInfo) {
     appApi.updateBikeInfo(id, specs)
       .then((res) => setSavedBikes(res))
-      //.then(() => setIsUpdated(v => !v))
       .catch((err) => snackbar.handleSnackbarError(err));    
   };
 
