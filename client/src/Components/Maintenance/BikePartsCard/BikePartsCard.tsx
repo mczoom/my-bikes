@@ -1,8 +1,9 @@
-
-export default function BikePartsCard({part}: any) {
+export default function BikePartsCard({ part }: any) {
   return (
     <div>
-      <p>{part.title} {part.name}</p>
+      <p>
+        {part.title} {part.name}
+      </p>
     </div>
-  )
+  );
 }

@@ -4,93 +4,111 @@ import PopupWithForm from 'components/shared/PopupWithForm/PopupWithForm';
 import Checkbox from 'components/shared/Checkbox/Checkbox';
 import { Bike } from 'types/Bike';
 
-
 interface EditBikeInfoPopupProps {
-  updateInfo: (id: string, specs: BikeInfo) => void
-  isPopupOpen: boolean  
-  closePopup: () => void
-  bike: Bike
+  updateInfo: (id: string, specs: BikeInfo) => void;
+  closePopup: () => void;
+  bike: Bike;
+  isPopupOpen: boolean;
 }
 
 interface BikeInfo {
-  photo: string
-  bikename: string
-  brand: string  
-  model: string
-  year: string | number
-  weight: string | number
-  trainer?: boolean
+  photo: string;
+  bikename: string;
+  brand: string;
+  model: string;
+  year: string | number;
+  weight: string | number;
+  trainer?: boolean;
 }
 
-export default function EditBikeInfoPopup({bike, updateInfo, isPopupOpen, closePopup}: EditBikeInfoPopupProps) {
-
-  const isTrainer = bike.trainer;  
+export default function EditBikeInfoPopup({ bike, updateInfo, isPopupOpen, closePopup }: EditBikeInfoPopupProps) {
+  const isTrainer = bike.trainer;
 
   const [trainerCheckbox, setTrainerCheckbox] = useState<boolean>(bike.trainer);
-  
+
   const defaultInputValues: BikeInfo = {
     photo: '',
     bikename: '',
-    brand: '',  
+    brand: '',
     model: '',
     year: '',
     weight: '',
     trainer: isTrainer
   };
 
-  const [bikeInfo, setBikeInfo] = useState<BikeInfo>(defaultInputValues);  
-
-  const popupClassName = `bike-popup ${isPopupOpen ? 'bike-popup_on' : ''}`;
+  const [bikeInfo, setBikeInfo] = useState<BikeInfo>(defaultInputValues);
 
   function handleInputValue(e: React.ChangeEvent<HTMLInputElement>, value: string | boolean, bikeData: BikeInfo) {
-    setBikeInfo({...bikeData, [e.target.name]: value}); 
-  };
-
+    setBikeInfo({ ...bikeData, [e.target.name]: value });
+  }
 
   function handleTextInputValue(e: React.ChangeEvent<HTMLInputElement>) {
     handleInputValue(e, e.target.value, bikeInfo);
-  };
+  }
 
+  function switchTrainerCheckbox(e: React.ChangeEvent<HTMLInputElement>) {
+    setTrainerCheckbox((v) => !v);
+    handleInputValue(e, !trainerCheckbox, bikeInfo);
+  }
 
-  function switchTrainerCheckbox(e: React.ChangeEvent<HTMLInputElement>) {    
-    setTrainerCheckbox(v => !v);
-    handleInputValue(e, !trainerCheckbox, bikeInfo)
-  };
-
-    
   function submitHandler(e: React.SyntheticEvent) {
-    e.preventDefault();    
+    e.preventDefault();
     updateInfo(bike.id, bikeInfo);
     closePopup();
     setBikeInfo(defaultInputValues);
-  };
-  
-
-  function closePopupByOverlayClick(e:React.MouseEvent) {
-    if(e.currentTarget === e.target) {
-      closePopup();
-    }
-  };
-  
+  }
 
   useEffect(() => {
-    setTrainerCheckbox(isTrainer)
-  }, [isTrainer])
-  
-  
+    setTrainerCheckbox(isTrainer);
+  }, [isTrainer]);
+
   return (
-    <div className={popupClassName} onClick={closePopupByOverlayClick}>
-      <div className='bike-popup__container'>
-        <button type='button' className='bike-popup__close-btn' onClick={closePopup}></button>        
-        <PopupWithForm name='edit-bike-photo' title='Редактирование данных велосипеда' btnText='Сохранить' submitHandler={submitHandler}>
-          <Input name='photo' value={bikeInfo.photo} label='Ссылка на фото' inputType='text' getInputValue={handleTextInputValue} />
-          <Input name='brand' value={bikeInfo.brand} label='Производитель' inputType='text' getInputValue={handleTextInputValue} /> 
-          <Input name='model' value={bikeInfo.model} label='Модель' inputType='text' getInputValue={handleTextInputValue} /> 
-          <Input name='year'  value={bikeInfo.year} label='Модельный год' inputType='text' getInputValue={handleTextInputValue} /> 
-          <Input name='weight' value={bikeInfo.weight} label='Вес' inputType='text' getInputValue={handleTextInputValue} /> 
-          <Checkbox name='trainer' text='Станок' checkboxStatus={trainerCheckbox} onChange={switchTrainerCheckbox}/>
-        </PopupWithForm>            
-      </div>
-    </div>
-  )
+    <>
+      <PopupWithForm
+        name="edit-bike-photo"
+        title="Редактирование данных велосипеда"
+        btnText="Сохранить"
+        submitHandler={submitHandler}
+        isPopupOpen={isPopupOpen}
+        onClose={closePopup}
+      >
+        <Input
+          name="photo"
+          value={bikeInfo.photo}
+          label="Ссылка на фото"
+          inputType="text"
+          getInputValue={handleTextInputValue}
+        />
+        <Input
+          name="brand"
+          value={bikeInfo.brand}
+          label="Производитель"
+          inputType="text"
+          getInputValue={handleTextInputValue}
+        />
+        <Input
+          name="model"
+          value={bikeInfo.model}
+          label="Модель"
+          inputType="text"
+          getInputValue={handleTextInputValue}
+        />
+        <Input
+          name="year"
+          value={bikeInfo.year}
+          label="Модельный год"
+          inputType="text"
+          getInputValue={handleTextInputValue}
+        />
+        <Input
+          name="weight"
+          value={bikeInfo.weight}
+          label="Вес"
+          inputType="text"
+          getInputValue={handleTextInputValue}
+        />
+        <Checkbox name="trainer" text="Станок" checkboxStatus={trainerCheckbox} onChange={switchTrainerCheckbox} />
+      </PopupWithForm>
+    </>
+  );
 }

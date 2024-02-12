@@ -3,6 +3,7 @@ import { Activity } from 'types/Activity';
 import { Bike } from 'types/Bike';
 import {BASE_URL} from 'utils/constants';
 import { getLocalStorageParsedValue } from './service';
+import { BikePart } from 'types/BikePart';
 
 
 const token = () => getLocalStorageParsedValue('jwt')
@@ -115,21 +116,6 @@ export const addBike = (newBike: Bike | Bike[]) => {
 };
 
 
-// export const addBike = (bike: Bike | Bike[]) => {
-//   return fetch(`${BASE_URL}/addbike`, {
-//     method: 'POST',
-        
-//     headers: {
-//       "Content-Type": "application/json",
-//       "Authorization": `Bearer ${localStorage.getItem('jwt')}`,
-//     },
-//     body: JSON.stringify({bike}),
-//   })
-//   .then((res) => res.json())    
-//   .catch((err) => handleErrorResponse(err))
-// };
-
-
 export const updateBikeInfo = (bikeId: any, updatedInfo: any) => {
   return axios.patch(`${BASE_URL}/bikeinfo`, 
     { bikeId, updatedInfo },
@@ -178,4 +164,17 @@ export const getAllBikes = () => {
   })
   .then((res) => res.data)    
   .catch((err) => handleErrorResponse(err))
+};
+
+
+export const addPart = (newPart: BikePart) => {
+  return axios.post(`${BASE_URL}/addpart`, 
+    { part: newPart },
+    { headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token()}`,
+      },
+    })
+    .then((res) => res.data)    
+    .catch((err) => handleErrorResponse(err))
 };

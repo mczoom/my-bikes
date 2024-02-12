@@ -1,8 +1,7 @@
-import { Link } from "react-router-dom"
+import { Link } from 'react-router-dom';
 
 export default function BikePartsCategories() {
-
-const parts = [
+  const parts = [
     {
       title: 'Рамы',
       url: 'frames'
@@ -46,17 +45,18 @@ const parts = [
     {
       title: 'Тросики / рубашки',
       url: 'cables'
-    },
-    
-]
+    }
+  ];
 
   return (
-    <div>      
-      <ul >
-        {parts.map((part) => (
-          <li style={{marginBottom: '10px'}}><Link to={part.url}>{part.title}</Link></li>
+    <div>
+      <ul>
+        {parts.map((part, i) => (
+          <li key={i} style={{ marginBottom: '10px' }}>
+            <Link to={part.url}>{part.title}</Link>
+          </li>
         ))}
       </ul>
-  </div>
-  )
+    </div>
+  );
 }
