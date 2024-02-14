@@ -1,17 +1,15 @@
-import spinner from 'assets/images/spinner-wheel.png'
+import spinner from 'assets/images/spinner-wheel.png';
 
 interface PreloaderProps {
-  isLoading: boolean
+  isLoading: boolean;
 }
 
-
-export const Preloader = ({isLoading}: PreloaderProps) => {
-
+export const Preloader = ({ isLoading }: PreloaderProps) => {
   const preloaderClassName = `preloader ${isLoading ? '' : 'preloader_off'}`;
 
   return (
     <div className={preloaderClassName}>
       <img src={spinner} className="preloader__spinner" />
     </div>
-  )
+  );
 };

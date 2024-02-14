@@ -1,18 +1,14 @@
-import { Link } from "react-router-dom"
+import { Link } from 'react-router-dom';
 
 interface AuthLinkProps {
-  link: string  
-  text: string
+  link: string;
+  text: string;
 }
 
-
-export default function AuthLink({link, text}: AuthLinkProps) {
-
-  return(    
+export default function AuthLink({ link, text }: AuthLinkProps) {
+  return (
     <Link to={link}>
-      <p className="auth-link">
-        {text}
-      </p>
-    </Link>    
-  )
+      <p className="auth-link">{text}</p>
+    </Link>
+  );
 }

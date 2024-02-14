@@ -3,11 +3,16 @@ const mongoose = require('mongoose');
 
 const partInfoSchema = new mongoose.Schema({
   id: {
-    type: String,
-    //required: true,    
+    type: String,   
   },
   bikeId: {
     type: String,    
+  },
+  bikeOdoAtInstal: {
+    type: Number,    
+  },
+  bikeOdoCurrent: {
+    type: Number,    
   },
   category: {
     type: String,
@@ -15,11 +20,9 @@ const partInfoSchema = new mongoose.Schema({
   },
   brand: {
     type: String,
-    default: '',
   },  
   model: {
     type: String,
-    default: '',
   },
   year: {
     type: String,
@@ -45,7 +48,7 @@ const partInfoSchema = new mongoose.Schema({
 
 
 const partSchema = new mongoose.Schema({
-  part: partInfoSchema,
+  parts: [partInfoSchema],
   userID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user',

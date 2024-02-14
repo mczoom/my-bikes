@@ -8,7 +8,6 @@ import { UserBike } from 'types/UserBike';
 import EditBikeInfoPopup from 'components/Main/Garage/EditBikeInfoPopup/EditBikeInfoPopup';
 import useSnackbar from 'hooks/useSnackbar';
 import Checkbox from 'components/shared/Checkbox/Checkbox';
-import useBikes from 'hooks/useBikes';
 
 interface GarageProps {
   savedBikes: Bike[];
@@ -35,9 +34,6 @@ export default function Garage({ savedBikes, setSavedBikes, yearsAtStrava, activ
   const [isEditPopupOpen, setEditPopupOpen] = useState<boolean>(false);
   const [bikePopupData, setBikePopupData] = useState<UserBike | undefined>({} as UserBike);
   const [bikeToEdit, setBikeToEdit] = useState<Bike>({} as Bike);
-  //const [isUpdated, setIsUpdated] = useState<boolean>(false);
-
-  //const userBikes = useBikes(isUpdated);
 
   function filterBikeCardsToRender(bikes: Bike[], filter: boolean) {
     const filteredBikes = bikes.filter((bike) => {
@@ -83,8 +79,6 @@ export default function Garage({ savedBikes, setSavedBikes, yearsAtStrava, activ
       .then((res) => setSavedBikes(res))
       .catch((err) => snackbar.handleSnackbarError(err));
   }
-
-  const popupClassName = `bike-popup ${isEditPopupOpen ? 'bike-popup_on' : ''}`;
 
   return (
     <section className="garage">

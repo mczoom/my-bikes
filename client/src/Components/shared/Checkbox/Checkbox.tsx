@@ -1,19 +1,24 @@
 interface CheckboxProps {
-  name?: string
-  text: string
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  checkboxStatus: boolean
-  switchTrainerCheckbox?: () => void
+  name?: string;
+  text: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  checkboxStatus: boolean;
+  switchTrainerCheckbox?: () => void;
 }
 
-export default function Checkbox({name, text, checkboxStatus = false, onChange}: CheckboxProps) {
-
+export default function Checkbox({ name, text, checkboxStatus = false, onChange }: CheckboxProps) {
   return (
-    <div className='type-filter'>
-      <label className='type-filter__label'>
+    <div className="type-filter">
+      <label className="type-filter__label">
         {text}
-        <input type='checkbox' name={name} className='type-filter__checkbox' checked={checkboxStatus} onChange={onChange}/>
+        <input
+          type="checkbox"
+          name={name}
+          className="type-filter__checkbox"
+          checked={checkboxStatus}
+          onChange={onChange}
+        />
       </label>
     </div>
-  )
+  );
 }

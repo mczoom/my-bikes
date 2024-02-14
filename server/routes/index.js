@@ -6,7 +6,7 @@ const { exchangeStrToken, refreshStrToken, getStrToken } = require('../controlle
 const { checkStravaToken } = require('../middlewares/stravaAuth');
 const { updateBikeInfoValidation } = require('../middlewares/validation');
 const { addAllActivities, getAllActivities, updateActivities } = require('../controllers/activities');
-const { addPart } = require('../controllers/parts');
+const { addPart, getAllParts } = require('../controllers/parts');
 
 
 
@@ -36,6 +36,7 @@ router.patch('/bikeinfo', auth, checkStravaToken, updateBikeInfoValidation, upda
 router.patch('/trainer', auth, checkStravaToken, updateBikeInfo);
 
 router.post('/addpart', auth, checkStravaToken, addPart);
+router.get('/parts', auth, checkStravaToken, getAllParts);
 
 router.use('*', () => {
   throw new Error('Страница не найдена');

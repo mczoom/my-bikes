@@ -1,11 +1,7 @@
 interface EmptyListMessageProps {
-  text: string
+  text: string;
 }
 
-
-export default function EmptyListMessage({text}: EmptyListMessageProps) {
-    
-  return(
-    <p className='empty-list-msg'>{text}</p>
-  )
+export default function EmptyListMessage({ text }: EmptyListMessageProps) {
+  return <p className="empty-list-msg">{text}</p>;
 }

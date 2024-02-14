@@ -1,4 +1,4 @@
 export interface FeatureInterface {
-    text: string
-    img: string
-  }
+  text: string;
+  img: string;
+}

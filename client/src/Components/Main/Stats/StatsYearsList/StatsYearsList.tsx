@@ -1,30 +1,36 @@
 import StatsYearCard from 'components/Main/Stats/StatsYearCard/StatsYearCard';
 
-
-interface StatsYearsListProps {  
-  yearsAtStrava: number[]
-  totalDistance: (y: number) => number
-  totalTime: (y: number) => number
-  totalTrainings: (y: number) => number
-  yearLongestDistance: (y: number) => number
-  totalOverHundredRides: (y: number) => number
+interface StatsYearsListProps {
+  yearsAtStrava: number[];
+  totalDistance: (y: number) => number;
+  totalTime: (y: number) => number;
+  totalTrainings: (y: number) => number;
+  yearLongestDistance: (y: number) => number;
+  totalOverHundredRides: (y: number) => number;
 }
 
-export default function StatsYearsList({yearsAtStrava, totalDistance, totalTime, totalTrainings, yearLongestDistance, totalOverHundredRides}: StatsYearsListProps) {
+export default function StatsYearsList({
+  yearsAtStrava,
+  totalDistance,
+  totalTime,
+  totalTrainings,
+  yearLongestDistance,
+  totalOverHundredRides
+}: StatsYearsListProps) {
   return (
-    <ul className='years-list'>
+    <ul className="years-list">
       {yearsAtStrava.map((year: number, i: number) => (
-          <li key={i}>
-            <StatsYearCard
-              year={year}
-              totalDistance={totalDistance}
-              totalTime={totalTime}
-              totalTrainings={totalTrainings}
-              yearLongestDistance={yearLongestDistance}
-              totalOverHundredRides={totalOverHundredRides}
-            />
-          </li>
-        ))}
+        <li key={i}>
+          <StatsYearCard
+            year={year}
+            totalDistance={totalDistance}
+            totalTime={totalTime}
+            totalTrainings={totalTrainings}
+            yearLongestDistance={yearLongestDistance}
+            totalOverHundredRides={totalOverHundredRides}
+          />
+        </li>
+      ))}
     </ul>
-  )
+  );
 }

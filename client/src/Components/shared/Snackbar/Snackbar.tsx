@@ -1,19 +1,17 @@
 interface ErrorMessagePopupProps {
-  errMsg: string[]
+  errMsg: string[];
 }
-  
-   
-export default function ErrorMessagePopup({errMsg}: ErrorMessagePopupProps) {
 
+export default function ErrorMessagePopup({ errMsg }: ErrorMessagePopupProps) {
   const errPopupClassName = `err-popup ${errMsg ? 'err-popup_on' : ''}`;
-    
-  return (      
+
+  return (
     <ul className={errPopupClassName}>
       {errMsg.map((message, i) => (
         <li key={i}>
           <p className="err-popup__message">{message}</p>
         </li>
       ))}
-    </ul>    
-  )
+    </ul>
+  );
 }

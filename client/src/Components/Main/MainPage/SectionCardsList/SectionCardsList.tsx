@@ -7,10 +7,7 @@ import workshop from 'assets/images/workshop.jpeg';
 import bikes from 'assets/images/bikes.jpg';
 import rides from 'assets/images/rides.jpg';
 
-
-
 export default function SectionCardsList() {
-
   const cardsContent: Card[] = [
     {
       title: 'Заезды',
@@ -37,18 +34,17 @@ export default function SectionCardsList() {
       text: 'Не забывай заглядывать сюда, чтобы не пропустить замену очередного расходника или сделать отметку о проведённом ТО',
       path: '/maintenance'
     }
-  ]
-
+  ];
 
   return (
-    <section className='section-cards-list'>
+    <section className="section-cards-list">
       <ul>
         {cardsContent.map((card: Card, i: number) => (
-          <li key={i} className='section-cards-list__card'>
+          <li key={i} className="section-cards-list__card">
             <SectionCard card={card} />
           </li>
         ))}
       </ul>
     </section>
-  )
+  );
 }

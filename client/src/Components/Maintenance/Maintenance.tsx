@@ -3,13 +3,14 @@ import BikePartsCategories from './BikePartsCategories/BikePartsCategories';
 import BikePartsList from './BikePartsList/BikePartsList';
 import PopupWithForm from 'components/shared/PopupWithForm/PopupWithForm';
 import Input from 'components/UI/Input/Input';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BikePart } from 'types/BikePart';
-import { addPart } from 'utils/appApi';
+import { addPart, getAllParts } from 'utils/appApi';
 import useSnackbar from 'hooks/useSnackbar';
 
 export default function Maintenance() {
   const [isAddPartPopupOpen, setIsAddPartPopupOpen] = useState<boolean>(false);
+  const [allParts, setAllParts] = useState<BikePart[]>([]);
   const [partInfo, setPartInfo] = useState<BikePart>({} as BikePart);
 
   const snackbar = useSnackbar();
@@ -22,45 +23,9 @@ export default function Maintenance() {
     price: ''
   };
 
-  const chains = [
-    {
-      title: 'цепь',
-      name: 'ZX10',
-      id: 1
-    },
-    {
-      title: 'цепь',
-      name: 'Shimano',
-      id: 2
-    },
-    {
-      title: 'цепь',
-      name: 'Sram',
-      id: 3
-    }
-  ];
-
-  const frames = [
-    {
-      title: 'рама',
-      name: 'Deli',
-      id: 1
-    },
-    {
-      title: 'рама',
-      name: 'BXT',
-      id: 2
-    },
-    {
-      title: 'рама',
-      name: 'NS',
-      id: 3
-    }
-  ];
-
   function addNewPart(specs: BikePart) {
     addPart(specs)
-      //.then((res) => setSavedBikes(res))
+      .then((res) => setAllParts(res))
       .catch((err) => snackbar.handleSnackbarError(err));
   }
 
@@ -91,6 +56,18 @@ export default function Maintenance() {
     setPartInfo(defaultInputValues);
   }
 
+  useEffect(() => {
+    let ignore = false;
+    getAllParts().then((parts) => {
+      if (!ignore) {
+        setAllParts(parts);
+      }
+    });
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
   return (
     <section className="maintenance">
       <h1 className="maintenance__header">
@@ -102,12 +79,12 @@ export default function Maintenance() {
         </div>
         <div className="maintenance__parts-list">
           <Routes>
-            <Route path="chains" element={<BikePartsList parts={chains} />} />
-            <Route path="wheels" element={<BikePartsList />} />
-            <Route path="frames" element={<BikePartsList parts={frames} />} />
-            <Route path="tires" element={<BikePartsList />} />
-            <Route path="bb" element={<BikePartsList />} />
-            <Route path="chainrings" element={<BikePartsList />} />
+            <Route path="chains" element={<BikePartsList parts={allParts} />} />
+            <Route path="wheels" element={<BikePartsList parts={allParts} />} />
+            <Route path="frames" element={<BikePartsList parts={allParts} />} />
+            <Route path="tires" element={<BikePartsList parts={allParts} />} />
+            <Route path="bb" element={<BikePartsList parts={allParts} />} />
+            <Route path="chainrings" element={<BikePartsList parts={allParts} />} />
           </Routes>
         </div>
         <PopupWithForm

@@ -1,8 +1,14 @@
-export default function BikePartsCard({ part }: any) {
+import { BikePart } from 'types/BikePart';
+
+interface BikePartsCardProps {
+  part: BikePart;
+}
+
+export default function BikePartsCard({ part }: BikePartsCardProps) {
   return (
     <div>
       <p>
-        {part.title} {part.name}
+        {part.brand} {part.model} ({part.distance} км)
       </p>
     </div>
   );
