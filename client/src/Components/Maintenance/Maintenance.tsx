@@ -10,7 +10,7 @@ import useSnackbar from 'hooks/useSnackbar';
 
 export default function Maintenance() {
   const [isAddPartPopupOpen, setIsAddPartPopupOpen] = useState<boolean>(false);
-  const [allParts, setAllParts] = useState<BikePart[]>([]);
+  const [allParts, setAllParts] = useState<BikePart[]>([] as BikePart[]);
   const [partInfo, setPartInfo] = useState<BikePart>({} as BikePart);
 
   const snackbar = useSnackbar();
@@ -19,8 +19,8 @@ export default function Maintenance() {
     brand: '',
     model: '',
     year: '',
-    weight: '',
-    price: ''
+    weight: 0,
+    price: 0
   };
 
   function addNewPart(specs: BikePart) {

@@ -29,7 +29,7 @@ const partInfoSchema = new mongoose.Schema({
     default: '',
   },
   weight: {
-    type: String,
+    type: Number,
     default: 0,
   },
   price: {
