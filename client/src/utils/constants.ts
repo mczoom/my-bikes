@@ -1,3 +1,4 @@
+import { customAlphabet } from 'nanoid';
 import { Activity } from 'types/Activity';
 
 export const BASE_URL = 'http://localhost:3001';
@@ -5,6 +6,10 @@ export const BASE_URL = 'http://localhost:3001';
 export const clientId = 98790;
 export const stravaAuthUrl = 'https://www.strava.com/oauth/token';
 export const stravaApiUrl = 'https://www.strava.com/api/v3';
+
+export const idAlphabet = '0123456789ABCDEFGHXYZabcdefghxyz';
+export const idSize = 7;
+export const partId = customAlphabet(idAlphabet, idSize);
 
 export const mandatoryStravaPermissions = ['read', 'activity:read_all', 'profile:read_all', 'read_all'];
 

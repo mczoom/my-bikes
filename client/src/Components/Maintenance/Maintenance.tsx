@@ -7,11 +7,13 @@ import { useEffect, useState } from 'react';
 import { BikePart } from 'types/BikePart';
 import { addPart, getAllParts } from 'utils/appApi';
 import useSnackbar from 'hooks/useSnackbar';
+import { partId } from 'utils/constants';
 
 export default function Maintenance() {
   const [isAddPartPopupOpen, setIsAddPartPopupOpen] = useState<boolean>(false);
   const [allParts, setAllParts] = useState<BikePart[]>([] as BikePart[]);
   const [partInfo, setPartInfo] = useState<BikePart>({} as BikePart);
+  const [category, setCategory] = useState<string>('');
 
   const snackbar = useSnackbar();
 
@@ -41,8 +43,9 @@ export default function Maintenance() {
     handleInputValue(e, e.target.value, partInfo);
   }
 
-  function openAddPartPopup() {
+  function openAddPartPopup(cat: string) {
     setIsAddPartPopupOpen(true);
+    setCategory(cat);
   }
 
   function closeAddPartPopup() {
@@ -51,7 +54,9 @@ export default function Maintenance() {
 
   function submitHandler(e: React.SyntheticEvent) {
     e.preventDefault();
-    addNewPart(partInfo);
+    const id = partId();
+    const newPart = { ...partInfo, id, category };
+    addNewPart(newPart);
     closeAddPartPopup();
     setPartInfo(defaultInputValues);
   }
@@ -79,12 +84,29 @@ export default function Maintenance() {
         </div>
         <div className="maintenance__parts-list">
           <Routes>
-            <Route path="chains" element={<BikePartsList parts={allParts} />} />
-            <Route path="wheels" element={<BikePartsList parts={allParts} />} />
-            <Route path="frames" element={<BikePartsList parts={allParts} />} />
-            <Route path="tires" element={<BikePartsList parts={allParts} />} />
-            <Route path="bb" element={<BikePartsList parts={allParts} />} />
-            <Route path="chainrings" element={<BikePartsList parts={allParts} />} />
+            <Route path="chains" element={<BikePartsList cat={'chain'} parts={allParts} onOpen={openAddPartPopup} />} />
+            <Route path="wheels" element={<BikePartsList cat={'wheel'} parts={allParts} onOpen={openAddPartPopup} />} />
+            <Route
+              path="brakepads"
+              element={<BikePartsList cat={'brakepad'} parts={allParts} onOpen={openAddPartPopup} />}
+            />
+            <Route
+              path="saddles"
+              element={<BikePartsList cat={'saddle'} parts={allParts} onOpen={openAddPartPopup} />}
+            />
+            <Route path="frames" element={<BikePartsList cat={'frame'} parts={allParts} onOpen={openAddPartPopup} />} />
+            <Route path="tires" element={<BikePartsList cat={'tire'} parts={allParts} onOpen={openAddPartPopup} />} />
+            <Route path="bb" element={<BikePartsList cat={'bb'} parts={allParts} onOpen={openAddPartPopup} />} />
+            <Route
+              path="cassetes"
+              element={<BikePartsList cat={'casset'} parts={allParts} onOpen={openAddPartPopup} />}
+            />
+            <Route
+              path="chainrings"
+              element={<BikePartsList cat={'chainring'} parts={allParts} onOpen={openAddPartPopup} />}
+            />
+            <Route path="pedals" element={<BikePartsList cat={'pedal'} parts={allParts} onOpen={openAddPartPopup} />} />
+            <Route path="cables" element={<BikePartsList cat={'cable'} parts={allParts} onOpen={openAddPartPopup} />} />
           </Routes>
         </div>
         <PopupWithForm
@@ -132,7 +154,6 @@ export default function Maintenance() {
           />
         </PopupWithForm>
       </div>
-      <button onClick={openAddPartPopup}>+ Добавить компонент</button>
     </section>
   );
 }
