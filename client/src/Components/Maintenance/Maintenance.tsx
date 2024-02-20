@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
+import * as appApi from 'utils/appApi';
 import BikePartsCategories from './BikePartsCategories/BikePartsCategories';
 import BikePartsList from './BikePartsList/BikePartsList';
 import PopupWithForm from 'components/shared/PopupWithForm/PopupWithForm';
@@ -8,16 +9,39 @@ import { BikePart } from 'types/BikePart';
 import { addPart, getAllParts } from 'utils/appApi';
 import useSnackbar from 'hooks/useSnackbar';
 import { partId } from 'utils/constants';
+import EditItemInfoPopup from './EditPartInfoPopup/EditPartInfoPopup';
+import { PartInfo } from 'types/PartInfo';
+import EditPartInfoPopup from './EditPartInfoPopup/EditPartInfoPopup';
+
+interface SavedBikeParts {
+  chainrings: BikePart[];
+  bbs: BikePart[];
+  cassettes: BikePart[];
+  wheels: BikePart[];
+  pedals: BikePart[];
+  tires: BikePart[];
+  frames: BikePart[];
+  saddles: BikePart[];
+  brakepads: BikePart[];
+  cables: BikePart[];
+  chains: BikePart[];
+}
 
 export default function Maintenance() {
-  const [isAddPartPopupOpen, setIsAddPartPopupOpen] = useState<boolean>(false);
-  const [allParts, setAllParts] = useState<BikePart[]>([] as BikePart[]);
+  const [allParts, setAllParts] = useState<SavedBikeParts>({} as SavedBikeParts);
   const [partInfo, setPartInfo] = useState<BikePart>({} as BikePart);
+  // const [partEditInfo, setPartEditInfo] = useState<BikePart>({} as BikePart);
   const [category, setCategory] = useState<string>('');
+  const [partToEdit, setPartToEdit] = useState<BikePart>({} as BikePart);
+  const [isAddPartPopupOpen, setIsAddPartPopupOpen] = useState<boolean>(false);
+  const [isEditPartPopupOpen, setIsEditPartPopupOpen] = useState<boolean>(false);
 
   const snackbar = useSnackbar();
+  console.log(allParts);
 
   const defaultInputValues: BikePart = {
+    id: '',
+    category: '',
     brand: '',
     model: '',
     year: '',
@@ -43,13 +67,28 @@ export default function Maintenance() {
     handleInputValue(e, e.target.value, partInfo);
   }
 
-  function openAddPartPopup(cat: string) {
+  function openAddPartPopup() {
     setIsAddPartPopupOpen(true);
+  }
+
+  function getAddingPartCategory(cat: string) {
     setCategory(cat);
+  }
+
+  function openEditPartPopup() {
+    setIsEditPartPopupOpen(true);
+  }
+
+  function getEditingPart(part: BikePart) {
+    setPartToEdit(part);
   }
 
   function closeAddPartPopup() {
     setIsAddPartPopupOpen(false);
+  }
+
+  function closeEditPartPopup() {
+    setIsEditPartPopupOpen(false);
   }
 
   function submitHandler(e: React.SyntheticEvent) {
@@ -59,6 +98,13 @@ export default function Maintenance() {
     addNewPart(newPart);
     closeAddPartPopup();
     setPartInfo(defaultInputValues);
+  }
+
+  function updatePartInfo(id: string, cat: string, specs: PartInfo) {
+    appApi
+      .updatePartInfo(id, cat, specs)
+      .then((res) => setAllParts(res))
+      .catch((err) => snackbar.handleSnackbarError(err));
   }
 
   useEffect(() => {
@@ -84,29 +130,149 @@ export default function Maintenance() {
         </div>
         <div className="maintenance__parts-list">
           <Routes>
-            <Route path="chains" element={<BikePartsList cat={'chain'} parts={allParts} onOpen={openAddPartPopup} />} />
-            <Route path="wheels" element={<BikePartsList cat={'wheel'} parts={allParts} onOpen={openAddPartPopup} />} />
             <Route
-              path="brakepads"
-              element={<BikePartsList cat={'brakepad'} parts={allParts} onOpen={openAddPartPopup} />}
+              path="chainrings"
+              element={
+                <BikePartsList
+                  cat={'chainrings'}
+                  parts={allParts.chainrings}
+                  onOpen={openAddPartPopup}
+                  onOpenEdit={openEditPartPopup}
+                  getCategory={getAddingPartCategory}
+                  getEditingPart={getEditingPart}
+                />
+              }
+            />
+            <Route
+              path="bbs"
+              element={
+                <BikePartsList
+                  cat={'bbs'}
+                  parts={allParts.bbs}
+                  onOpen={openAddPartPopup}
+                  onOpenEdit={openEditPartPopup}
+                  getCategory={getAddingPartCategory}
+                  getEditingPart={getEditingPart}
+                />
+              }
+            />
+            <Route
+              path="cassettes"
+              element={
+                <BikePartsList
+                  cat={'cassettes'}
+                  parts={allParts.cassettes}
+                  onOpen={openAddPartPopup}
+                  onOpenEdit={openEditPartPopup}
+                  getCategory={getAddingPartCategory}
+                  getEditingPart={getEditingPart}
+                />
+              }
+            />
+            <Route
+              path="wheels"
+              element={
+                <BikePartsList
+                  cat={'wheels'}
+                  parts={allParts.wheels}
+                  onOpen={openAddPartPopup}
+                  onOpenEdit={openEditPartPopup}
+                  getCategory={getAddingPartCategory}
+                  getEditingPart={getEditingPart}
+                />
+              }
+            />
+            <Route
+              path="pedals"
+              element={
+                <BikePartsList
+                  cat={'pedals'}
+                  parts={allParts.pedals}
+                  onOpen={openAddPartPopup}
+                  onOpenEdit={openEditPartPopup}
+                  getCategory={getAddingPartCategory}
+                  getEditingPart={getEditingPart}
+                />
+              }
+            />
+            <Route
+              path="tires"
+              element={
+                <BikePartsList
+                  cat={'tires'}
+                  parts={allParts.tires}
+                  onOpen={openAddPartPopup}
+                  onOpenEdit={openEditPartPopup}
+                  getCategory={getAddingPartCategory}
+                  getEditingPart={getEditingPart}
+                />
+              }
+            />
+            <Route
+              path="frames"
+              element={
+                <BikePartsList
+                  cat={'frames'}
+                  parts={allParts.frames}
+                  onOpen={openAddPartPopup}
+                  onOpenEdit={openEditPartPopup}
+                  getCategory={getAddingPartCategory}
+                  getEditingPart={getEditingPart}
+                />
+              }
             />
             <Route
               path="saddles"
-              element={<BikePartsList cat={'saddle'} parts={allParts} onOpen={openAddPartPopup} />}
+              element={
+                <BikePartsList
+                  cat={'saddles'}
+                  parts={allParts.saddles}
+                  onOpen={openAddPartPopup}
+                  onOpenEdit={openEditPartPopup}
+                  getCategory={getAddingPartCategory}
+                  getEditingPart={getEditingPart}
+                />
+              }
             />
-            <Route path="frames" element={<BikePartsList cat={'frame'} parts={allParts} onOpen={openAddPartPopup} />} />
-            <Route path="tires" element={<BikePartsList cat={'tire'} parts={allParts} onOpen={openAddPartPopup} />} />
-            <Route path="bb" element={<BikePartsList cat={'bb'} parts={allParts} onOpen={openAddPartPopup} />} />
             <Route
-              path="cassetes"
-              element={<BikePartsList cat={'casset'} parts={allParts} onOpen={openAddPartPopup} />}
+              path="brakepads"
+              element={
+                <BikePartsList
+                  cat={'brakepads'}
+                  parts={allParts.brakepads}
+                  onOpen={openAddPartPopup}
+                  onOpenEdit={openEditPartPopup}
+                  getCategory={getAddingPartCategory}
+                  getEditingPart={getEditingPart}
+                />
+              }
             />
             <Route
-              path="chainrings"
-              element={<BikePartsList cat={'chainring'} parts={allParts} onOpen={openAddPartPopup} />}
+              path="cables"
+              element={
+                <BikePartsList
+                  cat={'cables'}
+                  parts={allParts.cables}
+                  onOpen={openAddPartPopup}
+                  onOpenEdit={openEditPartPopup}
+                  getCategory={getAddingPartCategory}
+                  getEditingPart={getEditingPart}
+                />
+              }
             />
-            <Route path="pedals" element={<BikePartsList cat={'pedal'} parts={allParts} onOpen={openAddPartPopup} />} />
-            <Route path="cables" element={<BikePartsList cat={'cable'} parts={allParts} onOpen={openAddPartPopup} />} />
+            <Route
+              path="chains"
+              element={
+                <BikePartsList
+                  cat={'chains'}
+                  parts={allParts.chains}
+                  onOpen={openAddPartPopup}
+                  onOpenEdit={openEditPartPopup}
+                  getCategory={getAddingPartCategory}
+                  getEditingPart={getEditingPart}
+                />
+              }
+            />
           </Routes>
         </div>
         <PopupWithForm
@@ -153,6 +319,12 @@ export default function Maintenance() {
             getInputValue={handleTextInputValue}
           />
         </PopupWithForm>
+        <EditPartInfoPopup
+          item={partToEdit}
+          closePopup={closeEditPartPopup}
+          isPopupOpen={isEditPartPopupOpen}
+          updateInfo={updatePartInfo}
+        />
       </div>
     </section>
   );

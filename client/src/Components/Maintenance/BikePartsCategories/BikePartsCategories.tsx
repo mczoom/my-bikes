@@ -3,48 +3,48 @@ import { Link } from 'react-router-dom';
 export default function BikePartsCategories() {
   const parts = [
     {
-      title: 'Рамы',
-      url: 'frames'
+      title: 'Звёзды',
+      url: 'chainrings'
     },
     {
-      title: 'Колёса',
-      url: 'wheels'
-    },
-    {
-      title: 'Покрышки',
-      url: 'tires'
+      title: 'Каретки',
+      url: 'bbs'
     },
     {
       title: 'Кассеты',
       url: 'cassettes'
     },
     {
-      title: 'Звёзды',
-      url: 'chainrings'
-    },
-    {
-      title: 'Цепи',
-      url: 'chains'
-    },
-    {
-      title: 'Тормозные колодки',
-      url: 'brakepads'
-    },
-    {
-      title: 'Каретки',
-      url: 'bb'
-    },
-    {
-      title: 'Сёдла',
-      url: 'saddles'
+      title: 'Колёса',
+      url: 'wheels'
     },
     {
       title: 'Педали',
       url: 'pedals'
     },
     {
+      title: 'Покрышки',
+      url: 'tires'
+    },
+    {
+      title: 'Рамы',
+      url: 'frames'
+    },
+    {
+      title: 'Сёдла',
+      url: 'saddles'
+    },
+    {
+      title: 'Тормозные колодки',
+      url: 'brakepads'
+    },
+    {
       title: 'Тросики / рубашки',
       url: 'cables'
+    },
+    {
+      title: 'Цепи',
+      url: 'chains'
     }
   ];
 

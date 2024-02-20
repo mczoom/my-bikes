@@ -8,7 +8,7 @@ import { Bike } from 'types/Bike';
 interface BikeSpecsProps {
   bike: UserBike;
   openEditInfoPopup: () => void;
-  getEditingBike: (bike: Bike) => void;
+  getEditingBike: (item: Bike) => void;
 }
 
 export default function BikeSpecs({ bike, openEditInfoPopup, getEditingBike }: BikeSpecsProps) {
@@ -57,7 +57,7 @@ export default function BikeSpecs({ bike, openEditInfoPopup, getEditingBike }: B
           )}
         </li>
       </ul>
-      <EditButton bike={bike} getEditingBike={getEditingBike} openPopup={openEditInfoPopup} />
+      <EditButton item={bike} getEditingItem={getEditingBike} openPopup={openEditInfoPopup} />
     </div>
   );
 }

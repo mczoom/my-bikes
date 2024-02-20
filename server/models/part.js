@@ -47,13 +47,27 @@ const partInfoSchema = new mongoose.Schema({
 });
 
 
+
 const partSchema = new mongoose.Schema({
-  parts: [partInfoSchema],
+  parts: { 
+    chainrings: [partInfoSchema],    
+    bbs: [partInfoSchema],       
+    cassettes: [partInfoSchema],
+    wheels: [partInfoSchema],
+    pedals: [partInfoSchema],
+    tires: [partInfoSchema],
+    frames: [partInfoSchema],
+    saddles: [partInfoSchema],
+    brakepads: [partInfoSchema],
+    cables: [partInfoSchema],
+    chains: [partInfoSchema],     
+  },
   userID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user',
     required: true,
   }
+
 });
 
 

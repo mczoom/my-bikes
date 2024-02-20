@@ -180,6 +180,8 @@ export default function App() {
     };
   }, [currentUser]);
 
+  console.log(currentUser);
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <ActivitiesLoadingState.Provider value={hasAllActivitiesLoaded}>

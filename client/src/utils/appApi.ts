@@ -4,6 +4,7 @@ import { Bike } from 'types/Bike';
 import { BASE_URL } from 'utils/constants';
 import { getLocalStorageParsedValue } from './service';
 import { BikePart } from 'types/BikePart';
+import { PartInfo } from 'types/PartInfo';
 
 const token = () => getLocalStorageParsedValue('jwt');
 
@@ -134,7 +135,7 @@ export const addBike = (newBike: Bike | Bike[]) => {
     .catch((err) => handleErrorResponse(err));
 };
 
-export const updateBikeInfo = (bikeId: any, updatedInfo: any) => {
+export const updateBikeInfo = (bikeId: string, updatedInfo: any) => {
   return axios
     .patch(
       `${BASE_URL}/bikeinfo`,
@@ -218,6 +219,22 @@ export const getAllParts = () => {
         Authorization: `Bearer ${token()}`
       }
     })
+    .then((res) => res.data)
+    .catch((err) => handleErrorResponse(err));
+};
+
+export const updatePartInfo = (partId: string, cat: string, updatedInfo: PartInfo) => {
+  return axios
+    .patch(
+      `${BASE_URL}/partinfo`,
+      { partId, cat, updatedInfo },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token()}`
+        }
+      }
+    )
     .then((res) => res.data)
     .catch((err) => handleErrorResponse(err));
 };
