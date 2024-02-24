@@ -15,11 +15,27 @@ module.exports.addPart = async(req, res, next) => {
 };
 
 
+
+
 module.exports.updatePartInfo = async(req, res, next) => {
   const {partId, cat, updatedInfo} = req.body;
   const id = req.user._id;
   try {
-    const partsToUpdate = await Part.findOne({userID: id})//, {$push: {['parts.' + cat]: part}}, {new: true, upsert: true})
+    const partsToUpdate = await Part.findOne({userID: id})
+    const partsToUpdate2 = partsToUpdate.parts[cat]
+    const partsToUpdate3 = partsToUpdate2.find(part => part.id === partId)
+    Object.keys(updatedInfo).forEach((spec) => {
+        partsToUpdate3[spec] = updatedInfo[spec];  
+      
+    }); 
+       await partsToUpdate.save()
+
+
+
+
+    //partsToUpdate.aggregate()
+    //const partsToUpdate = await Part.findOneAndUpdate({userID: id},{$set: {['parts.'+cat+'.$[elem]']: updatedInfo}}, {arrayFilters: [ { 'elem.$': { $eq: updatedInfo } } ], new: true, upsert: true})
+    //const partsToUpdate = await Part.findOneAndUpdate({userID: id},{$set: {['parts.'+cat+'.$[elem].price']: pr}}, {arrayFilters: [ { 'elem.id': { $eq: partId } } ], new: true, upsert: true})
   //   const partsDoc = await Bike.findOne({userID});
   //   const bikeToUpdate = partsDoc.parts.find(bike => bike.id === bikeId);
 
@@ -28,9 +44,10 @@ module.exports.updatePartInfo = async(req, res, next) => {
   //       bikeToUpdate[spec] = updatedInfo[spec];  
   //     }
   //   });    
-  //   await partsDoc.save();
-  //   res.send(partsDoc.parts);
-  console.log(partsToUpdate);
+  //   
+  res.send(partsToUpdate.parts);
+  //console.log(partsToUpdate);
+  //console.log(['parts.'+cat+'.$.'+ partId+'price']);
   } catch (err) {
     next(err);
   }

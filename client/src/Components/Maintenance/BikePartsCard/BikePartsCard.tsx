@@ -11,7 +11,7 @@ export default function BikePartsCard({ part, onOpenEdit, getEditingPart }: Bike
   return (
     <div>
       <p>
-        {part.brand} {part.model} ({part.distance} км)
+        {part.brand} {part.model} ({part.distance} км, {part.price} $)
       </p>
       <EditButton item={part} openPopup={onOpenEdit} getEditingItem={getEditingPart} />
     </div>

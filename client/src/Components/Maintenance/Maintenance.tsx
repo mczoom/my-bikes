@@ -12,6 +12,7 @@ import { partId } from 'utils/constants';
 import EditItemInfoPopup from './EditPartInfoPopup/EditPartInfoPopup';
 import { PartInfo } from 'types/PartInfo';
 import EditPartInfoPopup from './EditPartInfoPopup/EditPartInfoPopup';
+import { Bike } from 'types/Bike';
 
 interface SavedBikeParts {
   chainrings: BikePart[];
@@ -27,7 +28,11 @@ interface SavedBikeParts {
   chains: BikePart[];
 }
 
-export default function Maintenance() {
+interface MaintenanceProps {
+  bikes: Bike[];
+}
+
+export default function Maintenance({ bikes }: MaintenanceProps) {
   const [allParts, setAllParts] = useState<SavedBikeParts>({} as SavedBikeParts);
   const [partInfo, setPartInfo] = useState<BikePart>({} as BikePart);
   // const [partEditInfo, setPartEditInfo] = useState<BikePart>({} as BikePart);
@@ -324,6 +329,7 @@ export default function Maintenance() {
           closePopup={closeEditPartPopup}
           isPopupOpen={isEditPartPopupOpen}
           updateInfo={updatePartInfo}
+          bikes={bikes}
         />
       </div>
     </section>

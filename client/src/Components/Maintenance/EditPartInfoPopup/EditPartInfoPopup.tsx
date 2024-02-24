@@ -3,31 +3,66 @@ import Input from 'ui/Input/Input';
 import PopupWithForm from 'components/shared/PopupWithForm/PopupWithForm';
 import { BikePart } from 'types/BikePart';
 import { PartInfo } from 'types/PartInfo';
+import { Bike } from 'types/Bike';
+import Select from 'components/UI/Select/Select';
 
 interface EditPartInfoPopupProps {
   updateInfo: (id: string, cat: string, specs: PartInfo) => void;
   closePopup: () => void;
   item: BikePart;
   isPopupOpen: boolean;
+  bikes: Bike[];
 }
 
-export default function EditPartInfoPopup({ item, updateInfo, isPopupOpen, closePopup }: EditPartInfoPopupProps) {
+export default function EditPartInfoPopup({
+  item,
+  updateInfo,
+  isPopupOpen,
+  closePopup,
+  bikes
+}: EditPartInfoPopupProps) {
   const defaultInputValues: PartInfo = {
-    category: '',
-    brand: '',
-    model: '',
-    weight: 0,
-    price: 0
+    category: undefined,
+    brand: undefined,
+    model: undefined,
+    weight: undefined,
+    price: undefined,
+    bikeSelect: undefined
   };
 
   const [partInfo, setPartInfo] = useState<PartInfo>(defaultInputValues);
 
-  function handleInputValue(e: React.ChangeEvent<HTMLInputElement>, value: string | boolean, partData: PartInfo) {
+  function handleTextValue(e: React.ChangeEvent<HTMLInputElement>, value: string | boolean, partData: PartInfo) {
+    if (!value) {
+      return;
+    }
     setPartInfo({ ...partData, [e.target.name]: value });
   }
 
+  function handleNumberValue(e: React.ChangeEvent<HTMLInputElement>, value: string, partData: PartInfo) {
+    if (!value) {
+      return;
+    }
+    setPartInfo({ ...partData, [e.target.name]: parseInt(value) });
+  }
+
   function handleTextInputValue(e: React.ChangeEvent<HTMLInputElement>) {
-    handleInputValue(e, e.target.value, partInfo);
+    handleTextValue(e, e.target.value, partInfo);
+  }
+
+  function handleSelectValue(e: React.ChangeEvent<HTMLSelectElement>, value: string, partData: PartInfo) {
+    if (!value) {
+      return;
+    }
+    setPartInfo({ ...partData, [e.target.name]: value });
+  }
+
+  function handleSelectInputValue(e: React.ChangeEvent<HTMLSelectElement>) {
+    handleSelectValue(e, e.target.value, partInfo);
+  }
+
+  function handleNumberInputValue(e: React.ChangeEvent<HTMLInputElement>) {
+    handleNumberValue(e, e.target.value, partInfo);
   }
 
   function submitHandler(e: React.SyntheticEvent) {
@@ -70,10 +105,22 @@ export default function EditPartInfoPopup({ item, updateInfo, isPopupOpen, close
           name="weight"
           value={partInfo.weight}
           label="Вес"
-          inputType="text"
-          getInputValue={handleTextInputValue}
+          inputType="number"
+          getInputValue={handleNumberInputValue}
         />
-        <Input name="price" value={partInfo.price} label="Цена" inputType="text" getInputValue={handleTextInputValue} />
+        <Input
+          name="price"
+          value={partInfo.price}
+          label="Цена"
+          inputType="number"
+          getInputValue={handleNumberInputValue}
+        />
+        <Select
+          name={'bikeSelect'}
+          items={bikes}
+          defaultValue={'-- Выберите байк --'}
+          getInputValue={handleSelectInputValue}
+        />
       </PopupWithForm>
     </>
   );

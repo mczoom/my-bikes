@@ -1,7 +1,8 @@
 export interface PartInfo {
-  category: string;
-  brand: string;
-  model: string;
-  weight: number;
-  price: number;
+  category: string | undefined;
+  brand: string | undefined;
+  model: string | undefined;
+  weight: number | undefined;
+  price: number | undefined;
+  bikeSelect: number | undefined;
 }

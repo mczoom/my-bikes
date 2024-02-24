@@ -207,7 +207,7 @@ export default function App() {
                   />
                 }
               />
-              <Route path="/maintenance/*" element={<Maintenance />} />
+              <Route path="/maintenance/*" element={<Maintenance bikes={savedBikes} />} />
             </Route>
             <Route path="/*" element={<Page404 />} />
           </Route>
