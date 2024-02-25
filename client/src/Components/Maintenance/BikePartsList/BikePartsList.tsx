@@ -18,25 +18,30 @@ export default function BikePartsList({
   getEditingPart,
   getCategory
 }: BikePartsListProps) {
-  function handleClick() {
+  function filterParts() {
+    return parts.filter((part) => part.category === cat);
+  }
+
+  const filteredParts = filterParts();
+
+  function handleAddClick() {
     if (getCategory) {
       getCategory(cat);
     }
-
     onOpen();
   }
 
   return (
     <>
       <ul>
-        {parts &&
-          parts.map((item: BikePart) => (
+        {filteredParts &&
+          filteredParts.map((item: BikePart) => (
             <li key={item.id}>
               <BikePartsCard part={item} getEditingPart={getEditingPart} onOpenEdit={onOpenEdit} />
             </li>
           ))}
       </ul>
-      <button onClick={() => handleClick()}>+ Добавить компонент</button>
+      <button onClick={() => handleAddClick()}>+ Добавить компонент</button>
     </>
   );
 }

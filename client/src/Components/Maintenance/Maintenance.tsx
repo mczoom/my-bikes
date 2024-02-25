@@ -9,31 +9,16 @@ import { BikePart } from 'types/BikePart';
 import { addPart, getAllParts } from 'utils/appApi';
 import useSnackbar from 'hooks/useSnackbar';
 import { partId } from 'utils/constants';
-import EditItemInfoPopup from './EditPartInfoPopup/EditPartInfoPopup';
 import { PartInfo } from 'types/PartInfo';
 import EditPartInfoPopup from './EditPartInfoPopup/EditPartInfoPopup';
 import { Bike } from 'types/Bike';
-
-interface SavedBikeParts {
-  chainrings: BikePart[];
-  bbs: BikePart[];
-  cassettes: BikePart[];
-  wheels: BikePart[];
-  pedals: BikePart[];
-  tires: BikePart[];
-  frames: BikePart[];
-  saddles: BikePart[];
-  brakepads: BikePart[];
-  cables: BikePart[];
-  chains: BikePart[];
-}
 
 interface MaintenanceProps {
   bikes: Bike[];
 }
 
 export default function Maintenance({ bikes }: MaintenanceProps) {
-  const [allParts, setAllParts] = useState<SavedBikeParts>({} as SavedBikeParts);
+  const [allParts, setAllParts] = useState<BikePart[]>([] as BikePart[]);
   const [partInfo, setPartInfo] = useState<BikePart>({} as BikePart);
   // const [partEditInfo, setPartEditInfo] = useState<BikePart>({} as BikePart);
   const [category, setCategory] = useState<string>('');
@@ -105,9 +90,9 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
     setPartInfo(defaultInputValues);
   }
 
-  function updatePartInfo(id: string, cat: string, specs: PartInfo) {
+  function updatePartInfo(id: string, specs: PartInfo) {
     appApi
-      .updatePartInfo(id, cat, specs)
+      .updatePartInfo(id, specs)
       .then((res) => setAllParts(res))
       .catch((err) => snackbar.handleSnackbarError(err));
   }
@@ -140,7 +125,7 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
               element={
                 <BikePartsList
                   cat={'chainrings'}
-                  parts={allParts.chainrings}
+                  parts={allParts}
                   onOpen={openAddPartPopup}
                   onOpenEdit={openEditPartPopup}
                   getCategory={getAddingPartCategory}
@@ -153,7 +138,7 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
               element={
                 <BikePartsList
                   cat={'bbs'}
-                  parts={allParts.bbs}
+                  parts={allParts}
                   onOpen={openAddPartPopup}
                   onOpenEdit={openEditPartPopup}
                   getCategory={getAddingPartCategory}
@@ -166,7 +151,7 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
               element={
                 <BikePartsList
                   cat={'cassettes'}
-                  parts={allParts.cassettes}
+                  parts={allParts}
                   onOpen={openAddPartPopup}
                   onOpenEdit={openEditPartPopup}
                   getCategory={getAddingPartCategory}
@@ -179,7 +164,7 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
               element={
                 <BikePartsList
                   cat={'wheels'}
-                  parts={allParts.wheels}
+                  parts={allParts}
                   onOpen={openAddPartPopup}
                   onOpenEdit={openEditPartPopup}
                   getCategory={getAddingPartCategory}
@@ -192,7 +177,7 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
               element={
                 <BikePartsList
                   cat={'pedals'}
-                  parts={allParts.pedals}
+                  parts={allParts}
                   onOpen={openAddPartPopup}
                   onOpenEdit={openEditPartPopup}
                   getCategory={getAddingPartCategory}
@@ -205,7 +190,7 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
               element={
                 <BikePartsList
                   cat={'tires'}
-                  parts={allParts.tires}
+                  parts={allParts}
                   onOpen={openAddPartPopup}
                   onOpenEdit={openEditPartPopup}
                   getCategory={getAddingPartCategory}
@@ -218,7 +203,7 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
               element={
                 <BikePartsList
                   cat={'frames'}
-                  parts={allParts.frames}
+                  parts={allParts}
                   onOpen={openAddPartPopup}
                   onOpenEdit={openEditPartPopup}
                   getCategory={getAddingPartCategory}
@@ -231,7 +216,7 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
               element={
                 <BikePartsList
                   cat={'saddles'}
-                  parts={allParts.saddles}
+                  parts={allParts}
                   onOpen={openAddPartPopup}
                   onOpenEdit={openEditPartPopup}
                   getCategory={getAddingPartCategory}
@@ -244,7 +229,7 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
               element={
                 <BikePartsList
                   cat={'brakepads'}
-                  parts={allParts.brakepads}
+                  parts={allParts}
                   onOpen={openAddPartPopup}
                   onOpenEdit={openEditPartPopup}
                   getCategory={getAddingPartCategory}
@@ -257,7 +242,7 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
               element={
                 <BikePartsList
                   cat={'cables'}
-                  parts={allParts.cables}
+                  parts={allParts}
                   onOpen={openAddPartPopup}
                   onOpenEdit={openEditPartPopup}
                   getCategory={getAddingPartCategory}
@@ -270,7 +255,7 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
               element={
                 <BikePartsList
                   cat={'chains'}
-                  parts={allParts.chains}
+                  parts={allParts}
                   onOpen={openAddPartPopup}
                   onOpenEdit={openEditPartPopup}
                   getCategory={getAddingPartCategory}

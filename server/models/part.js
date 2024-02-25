@@ -1,11 +1,16 @@
 const mongoose = require('mongoose');
 
 
-const partInfoSchema = new mongoose.Schema({
+const partSchema = new mongoose.Schema({
+  userID: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
+    required: true,
+  },
   id: {
     type: String,   
   },
-  bikeId: {
+  bikeSelect: {
     type: String,    
   },
   bikeOdoAtInstal: {
@@ -43,32 +48,24 @@ const partInfoSchema = new mongoose.Schema({
   retired: {
     type: Boolean,
     default: false,
-  },
-});
-
-
-
-const partSchema = new mongoose.Schema({
-  parts: { 
-    chainrings: [partInfoSchema],    
-    bbs: [partInfoSchema],       
-    cassettes: [partInfoSchema],
-    wheels: [partInfoSchema],
-    pedals: [partInfoSchema],
-    tires: [partInfoSchema],
-    frames: [partInfoSchema],
-    saddles: [partInfoSchema],
-    brakepads: [partInfoSchema],
-    cables: [partInfoSchema],
-    chains: [partInfoSchema],     
-  },
-  userID: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'user',
-    required: true,
+  }, 
+  __v: {
+    type: Number,
+    select: false,
   }
-
 });
+
+
+
+// const partSchema = new mongoose.Schema({
+//   parts: [partInfoSchema],
+//   userID: {
+//     type: mongoose.Schema.Types.ObjectId,
+//     ref: 'user',
+//     required: true,
+//   }
+
+// });
 
 
 module.exports = mongoose.model('part', partSchema);

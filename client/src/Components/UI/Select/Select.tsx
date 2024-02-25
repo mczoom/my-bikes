@@ -1,13 +1,13 @@
-interface SelectProps<Item> {
+interface SelectProps {
   name: string;
-  items: Item[];
+  items: any;
   defaultValue: string;
   getInputValue: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
-export default function Select<Item>({ name, items, defaultValue, getInputValue }: SelectProps<Item>) {
-  function selectOptions(items: Item[]) {
-    return items.map((item) => (
+export default function Select({ name, items, defaultValue, getInputValue }: SelectProps) {
+  function selectOptions(items: any) {
+    return items.map((item: any) => (
       <option key={item.id} value={item.id}>
         {item.name}
       </option>

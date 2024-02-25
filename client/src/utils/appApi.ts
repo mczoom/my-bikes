@@ -223,11 +223,11 @@ export const getAllParts = () => {
     .catch((err) => handleErrorResponse(err));
 };
 
-export const updatePartInfo = (partId: string, cat: string, updatedInfo: PartInfo) => {
+export const updatePartInfo = (partId: string, updatedInfo: PartInfo) => {
   return axios
     .patch(
       `${BASE_URL}/partinfo`,
-      { partId, cat, updatedInfo },
+      { partId, updatedInfo },
       {
         headers: {
           'Content-Type': 'application/json',

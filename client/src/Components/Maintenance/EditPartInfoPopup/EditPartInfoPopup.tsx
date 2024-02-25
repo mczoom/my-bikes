@@ -7,7 +7,7 @@ import { Bike } from 'types/Bike';
 import Select from 'components/UI/Select/Select';
 
 interface EditPartInfoPopupProps {
-  updateInfo: (id: string, cat: string, specs: PartInfo) => void;
+  updateInfo: (id: string, specs: PartInfo) => void;
   closePopup: () => void;
   item: BikePart;
   isPopupOpen: boolean;
@@ -67,14 +67,10 @@ export default function EditPartInfoPopup({
 
   function submitHandler(e: React.SyntheticEvent) {
     e.preventDefault();
-    updateInfo(item.id, item.category, partInfo);
+    updateInfo(item.id, partInfo);
     closePopup();
     setPartInfo(defaultInputValues);
   }
-
-  // useEffect(() => {
-  //   setTrainerCheckbox(isTrainer);
-  // }, [isTrainer]);
 
   return (
     <>
