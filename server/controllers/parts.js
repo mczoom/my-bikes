@@ -17,18 +17,18 @@ module.exports.addPart = async(req, res, next) => {
 };
 
 
-
 module.exports.updatePartInfo = async(req, res, next) => {
-  const {partId, updatedInfo} = req.body;
+  const {partId, updatedInfo} = req.body;  
+  const userid = req.user._id;
+
   try {
-    await Part.findOneAndUpdate({id: partId}, updatedInfo, {new: true});
+    await Part.findOneAndUpdate({userID: userid, id: partId}, updatedInfo, {new: true});
     const allParts = await Part.find({});    
     res.send(allParts);  
   } catch (err) {
     next(err);
   }
 };
-
 
 
 module.exports.getAllParts = async(req, res, next) => {

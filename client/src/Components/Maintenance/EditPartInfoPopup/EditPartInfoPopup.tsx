@@ -14,6 +14,11 @@ interface EditPartInfoPopupProps {
   bikes: Bike[];
 }
 
+interface SelectData {
+  bikeSelect: string | undefined;
+  bikeOdoAtInstal: number | undefined;
+}
+
 export default function EditPartInfoPopup({
   item,
   updateInfo,
@@ -27,7 +32,8 @@ export default function EditPartInfoPopup({
     model: undefined,
     weight: undefined,
     price: undefined,
-    bikeSelect: undefined
+    bikeSelect: undefined,
+    bikeOdoAtInstal: undefined
   };
 
   const [partInfo, setPartInfo] = useState<PartInfo>(defaultInputValues);
@@ -50,15 +56,21 @@ export default function EditPartInfoPopup({
     handleTextValue(e, e.target.value, partInfo);
   }
 
-  function handleSelectValue(e: React.ChangeEvent<HTMLSelectElement>, value: string, partData: PartInfo) {
+  function handleSelectValue(
+    e: React.ChangeEvent<HTMLSelectElement>,
+    value: SelectData | undefined,
+    partData: PartInfo
+  ) {
     if (!value) {
       return;
     }
-    setPartInfo({ ...partData, [e.target.name]: value });
+    setPartInfo({ ...partData, ...value });
   }
 
   function handleSelectInputValue(e: React.ChangeEvent<HTMLSelectElement>) {
-    handleSelectValue(e, e.target.value, partInfo);
+    const selectedBike = bikes.find((bike) => bike.id === e.target.value);
+    const selectedBikeData = { bikeSelect: selectedBike?.id, bikeOdoAtInstal: selectedBike?.converted_distance };
+    handleSelectValue(e, selectedBikeData, partInfo);
   }
 
   function handleNumberInputValue(e: React.ChangeEvent<HTMLInputElement>) {
@@ -76,7 +88,7 @@ export default function EditPartInfoPopup({
     <>
       <PopupWithForm
         name="edit-part"
-        title="Редактирование данных компонента"
+        title="Редактирование компонента"
         btnText="Сохранить"
         submitHandler={submitHandler}
         isPopupOpen={isPopupOpen}

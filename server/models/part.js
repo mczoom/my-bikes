@@ -1,3 +1,4 @@
+const { Decimal128 } = require('mongodb');
 const mongoose = require('mongoose');
 
 
@@ -14,7 +15,7 @@ const partSchema = new mongoose.Schema({
     type: String,    
   },
   bikeOdoAtInstal: {
-    type: Number,    
+    type: Decimal128 || Number,    
   },
   bikeOdoCurrent: {
     type: Number,    

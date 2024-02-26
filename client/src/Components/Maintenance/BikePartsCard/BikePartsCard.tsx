@@ -10,9 +10,9 @@ interface BikePartsCardProps {
 export default function BikePartsCard({ part, onOpenEdit, getEditingPart }: BikePartsCardProps) {
   return (
     <div>
-      <p>
+      <div>
         {part.brand} {part.model} ({part.distance} км, {part.price} $)
-      </p>
+      </div>
       <EditButton item={part} openPopup={onOpenEdit} getEditingItem={getEditingPart} />
     </div>
   );

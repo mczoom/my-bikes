@@ -29,7 +29,7 @@ module.exports.addBike = async(req, res, next) => {
   const userID = req.user._id;
   
   try {
-    await Bike.findOneAndUpdate({userID}, {$push: {"bikes": newBike}}, {new: true});    
+    await Bike.create(newBike);    
     res.send('Велосипед успешно добавлен');
   } catch(err) {
     next(err);
@@ -53,12 +53,12 @@ module.exports.updateOdo = async(req, res, next) => {
 
 
 module.exports.getAllBikes = async(req, res, next) => {
-  const userID = req.user._id;
+  const id = req.user._id;
   
-  Bike.findOne({userID})
+  Bike.find({userID: id})
     .orFail(() => res.send([]))
-    .then((garage) => {
-      res.send(garage.bikes);      
+    .then((bikes) => {
+      res.send(bikes);      
     })
     .catch(next);
 };

@@ -1,3 +1,4 @@
+const { Decimal128 } = require('mongodb');
 const mongoose = require('mongoose');
 
 
@@ -29,7 +30,7 @@ const bikeSchema = new mongoose.Schema({
     default: '--',
   },
   converted_distance: {
-    type: Number,
+    type: Decimal128 || Number,
     //required: true,
   },
   retired: {
@@ -43,19 +44,17 @@ const bikeSchema = new mongoose.Schema({
   trainer: {
     type: Boolean,
     default: false,
-  }
-});
-
-
-
-const gearSchema = new mongoose.Schema({
-  bikes: [bikeSchema],
+  },
   userID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user',
     required: true,
+  },
+  __v: {
+    type: Number,
+    select: false,
   }
 });
 
 
-module.exports = mongoose.model('bike', gearSchema);
+module.exports = mongoose.model('bike', bikeSchema);
