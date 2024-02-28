@@ -9,4 +9,5 @@ export interface Bike {
   retired: boolean;
   photo?: string;
   trainer: boolean;
+  userID?: string;
 }

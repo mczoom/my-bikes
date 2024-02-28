@@ -1,5 +1,6 @@
 const { Decimal128 } = require('mongodb');
 const mongoose = require('mongoose');
+const { getDistanceAsNumber } = require('../utils/services');
 
 
 const partSchema = new mongoose.Schema({
@@ -15,10 +16,12 @@ const partSchema = new mongoose.Schema({
     type: String,    
   },
   bikeOdoAtInstal: {
-    type: Decimal128 || Number,    
+    type: Decimal128,  
+    get: getDistanceAsNumber  
   },
   bikeOdoCurrent: {
-    type: Number,    
+    type: Decimal128, 
+    get: getDistanceAsNumber   
   },
   category: {
     type: String,
@@ -43,7 +46,9 @@ const partSchema = new mongoose.Schema({
     default: 0,
   },
   distance: {
-    type: Number,
+    type: Number || Decimal128,
+    //type: Decimal128,
+    //get: getDistanceAsNumber,
     default: 0,
   },
   retired: {
@@ -54,19 +59,8 @@ const partSchema = new mongoose.Schema({
     type: Number,
     select: false,
   }
-});
+}, {toJSON: {getters: true}});
 
-
-
-// const partSchema = new mongoose.Schema({
-//   parts: [partInfoSchema],
-//   userID: {
-//     type: mongoose.Schema.Types.ObjectId,
-//     ref: 'user',
-//     required: true,
-//   }
-
-// });
 
 
 module.exports = mongoose.model('part', partSchema);

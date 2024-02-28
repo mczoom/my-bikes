@@ -1,5 +1,6 @@
 const { Decimal128 } = require('mongodb');
 const mongoose = require('mongoose');
+const { getDistanceAsNumber } = require('../utils/services');
 
 
 const bikeSchema = new mongoose.Schema({
@@ -30,7 +31,8 @@ const bikeSchema = new mongoose.Schema({
     default: '--',
   },
   converted_distance: {
-    type: Decimal128 || Number,
+    type: Decimal128,
+    get: getDistanceAsNumber
     //required: true,
   },
   retired: {
@@ -45,16 +47,19 @@ const bikeSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  installedParts: {
+    type: [String]
+  },
   userID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user',
     required: true,
-  },
+  },  
   __v: {
     type: Number,
     select: false,
   }
-});
+}, {toJSON: {getters: true}});
 
 
 module.exports = mongoose.model('bike', bikeSchema);

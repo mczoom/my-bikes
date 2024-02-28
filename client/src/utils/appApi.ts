@@ -123,7 +123,7 @@ export const addBike = (newBike: Bike | Bike[]) => {
   return axios
     .post(
       `${BASE_URL}/addbike`,
-      { bike: newBike },
+      { newBike },
       {
         headers: {
           'Content-Type': 'application/json',
@@ -228,6 +228,22 @@ export const updatePartInfo = (partId: string, updatedInfo: PartInfo) => {
     .patch(
       `${BASE_URL}/partinfo`,
       { partId, updatedInfo },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token()}`
+        }
+      }
+    )
+    .then((res) => res.data)
+    .catch((err) => handleErrorResponse(err));
+};
+
+export const updatePartOdo = (bikes: Bike[]) => {
+  return axios
+    .patch(
+      `${BASE_URL}/partodo`,
+      { bikes },
       {
         headers: {
           'Content-Type': 'application/json',

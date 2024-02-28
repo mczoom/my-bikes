@@ -31,3 +31,24 @@ module.exports.updateBikeOdo = async(storedData, actualData) => {
     });  
   }
 };
+
+
+module.exports.getBikesId = (bikes) => {
+  let idArr = [];
+  bikes.forEach(bike => idArr.push(bike.id))    
+  return idArr
+};
+
+module.exports.getBikesUpdatedOdo = (bikes) => {
+  let odoArr = [];
+  bikes.forEach(bike => odoArr.push(bike.converted_distance))    
+  return odoArr
+};
+
+
+module.exports.getDistanceAsNumber = (value) => {
+  if (typeof value !== 'undefined') {
+     return parseFloat(value.toString());
+  }
+  return value;
+};

@@ -56,12 +56,12 @@ export default function App() {
     }
   }
 
-  function updateBikeDistance(bikes: Bike[]) {
-    appApi
-      .updateBikeOdo(bikes)
-      .then(() => console.log('Пробег байков успешно обновлён'))
-      .catch(() => snackbar.handleSnackbarError('Не удалось обновить пробег байков'));
-  }
+  // function updateBikeDistance(bikes: Bike[]) {
+  //   appApi
+  //     .updateBikeOdo(bikes)
+  //     .then(() => console.log('Пробег байков успешно обновлён'))
+  //     .catch(() => snackbar.handleSnackbarError('Не удалось обновить пробег байков'));
+  // }
 
   async function getAllActivitiesFromStrava(user: Profile) {
     setHasAllActivitiesLoaded(false);
@@ -115,6 +115,20 @@ export default function App() {
   //   return dist;
   // };
 
+  function compareBikesOdo(stravaBikes: Bike[], savedBikes: Bike[]) {
+    let bikesToUpdate: Bike[] = [];
+
+    stravaBikes.map((bike) => {
+      savedBikes.forEach((savedBike) => {
+        if (savedBike.id === bike.id && savedBike.converted_distance !== bike.converted_distance) {
+          bikesToUpdate.push(bike);
+        }
+      });
+    });
+
+    return bikesToUpdate;
+  }
+
   console.log(savedBikes);
 
   useEffect(() => {
@@ -165,11 +179,16 @@ export default function App() {
       .then((res) => {
         if (!ignore) {
           if (!res.length) {
-            appApi.addAllBikes(currentUser.bikes);
+            appApi.addBike(currentUser.bikes);
             setSavedBikes(currentUser.bikes);
             return;
           }
-          updateBikeDistance(currentUser?.bikes);
+          const bikesToUpdate = compareBikesOdo(currentUser.bikes, savedBikes);
+          if (bikesToUpdate.length > 0) {
+            console.log(bikesToUpdate);
+            appApi.updateBikeOdo(bikesToUpdate);
+            appApi.updatePartOdo(bikesToUpdate);
+          }
           setSavedBikes(res);
         }
       })
