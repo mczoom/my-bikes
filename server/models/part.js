@@ -16,12 +16,14 @@ const partSchema = new mongoose.Schema({
     type: String,    
   },
   bikeOdoAtInstal: {
-    type: Decimal128,  
-    get: getDistanceAsNumber  
+    type: Number,  
+    //get: getDistanceAsNumber,
+    //set: v => new Number(v.toFixed(1)),  
   },
-  bikeOdoCurrent: {
-    type: Decimal128, 
-    get: getDistanceAsNumber   
+  bikeOdoAtLastUpdate: {
+    type: Number,  
+    //get: getDistanceAsNumber,
+    //set: v => new Number(v.toFixed(1)),  
   },
   category: {
     type: String,
@@ -46,9 +48,9 @@ const partSchema = new mongoose.Schema({
     default: 0,
   },
   distance: {
-    type: Number || Decimal128,
-    //type: Decimal128,
+    type: Number,
     //get: getDistanceAsNumber,
+    set: v => new Number(v.toFixed(1)),
     default: 0,
   },
   retired: {
@@ -59,7 +61,7 @@ const partSchema = new mongoose.Schema({
     type: Number,
     select: false,
   }
-}, {toJSON: {getters: true}});
+}, { toJSON: { getters: true } });
 
 
 

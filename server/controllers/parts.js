@@ -1,6 +1,6 @@
 const Part = require('../models/part');
 const Bike = require('../models/bike');
-
+const { convertNumToString } = require('../utils/services');
 
 module.exports.addPart = async(req, res, next) => {
   const part = req.body.part;
@@ -20,11 +20,17 @@ module.exports.addPart = async(req, res, next) => {
 
 module.exports.updatePartInfo = async(req, res, next) => {
   const {partId, updatedInfo} = req.body;
+  const bikeOdo = updatedInfo.bikeOdo;
   const bikeId = updatedInfo.bikeSelect;
+  const uninstalled = updatedInfo.uninstalled;
   const userid = req.user._id;
+  const update = {...updatedInfo, userID: userid, bikeOdoAtInstal: bikeOdo, bikeOdoAtLastUpdate: bikeOdo}
 
   try {
-    await Part.findOneAndUpdate({userID: userid, id: partId}, updatedInfo, {new: true});
+    await Part.findOneAndUpdate({userID: userid, id: partId}, update, {new: true});
+    if(uninstalled) {
+     await Bike.findOneAndUpdate({userID: userid, id: bikeId}, {$pull:{"installedParts": partId}}, {new: true})
+    }
     if(bikeId) {
      await Bike.findOneAndUpdate({userID: userid, id: bikeId}, {$push:{"installedParts": partId}}, {new: true})
     }
@@ -43,15 +49,17 @@ module.exports.updatePartOdo = async(req, res, next) => {
   try {
     bikes.forEach(async(b) => {
       const bike = await Bike.findOne({userID: userid, id: b.id})
-      bike.installedParts.forEach(async(part) => {
-        //const distDiff = b.converted_distance - part.bikeOdoAtInstal;
-        //await Part.findOneAndUpdate({userID: userid, id: part}, {distance: b.converted_distance - bikeOdoAtInstal}, {new: true});
-       const p = await Part.findOne({userID: userid, id: part});
-       const distDiff = parseFloat(b.converted_distance) - parseFloat(p.bikeOdoAtInstal);
-       p.distance = distDiff;
-       p.save();
-      })
-      
+      bike.installedParts.forEach(async(partId) => {
+        const part = await Part.findOne({userID: userid, id: partId}); 
+        if(b.converted_distance !== part.bikeOdoAtLastUpdate) {      
+          if(part.bikeOdoAtLastUpdate) { //УБРАТЬ КОСТЫЛЬ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+          const distDiff = b.converted_distance - part.bikeOdoAtLastUpdate;
+          part.$inc('distance', distDiff);
+          part.bikeOdoAtLastUpdate = b.converted_distance;
+          part.save();
+          }
+        }
+      })      
     });
     const allParts = await Part.find({});    
     res.send(allParts);  

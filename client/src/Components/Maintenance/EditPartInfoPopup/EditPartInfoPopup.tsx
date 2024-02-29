@@ -15,8 +15,9 @@ interface EditPartInfoPopupProps {
 }
 
 interface SelectData {
-  bikeSelect: string | undefined;
-  bikeOdoAtInstal: number | undefined;
+  bikeSelect?: string | undefined;
+  bikeOdo?: number | undefined;
+  uninstalled?: boolean;
 }
 
 export default function EditPartInfoPopup({
@@ -33,7 +34,8 @@ export default function EditPartInfoPopup({
     weight: undefined,
     price: undefined,
     bikeSelect: undefined,
-    bikeOdoAtInstal: undefined
+    bikeOdo: undefined,
+    uninstalled: false
   };
 
   const [partInfo, setPartInfo] = useState<PartInfo>(defaultInputValues);
@@ -56,11 +58,7 @@ export default function EditPartInfoPopup({
     handleTextValue(e, e.target.value, partInfo);
   }
 
-  function handleSelectValue(
-    e: React.ChangeEvent<HTMLSelectElement>,
-    value: SelectData | undefined,
-    partData: PartInfo
-  ) {
+  function handleSelectValue(value: SelectData | undefined, partData: PartInfo) {
     if (!value) {
       return;
     }
@@ -68,9 +66,14 @@ export default function EditPartInfoPopup({
   }
 
   function handleSelectInputValue(e: React.ChangeEvent<HTMLSelectElement>) {
-    const selectedBike = bikes.find((bike) => bike.id === e.target.value);
-    const selectedBikeData = { bikeSelect: selectedBike?.id, bikeOdoAtInstal: selectedBike?.converted_distance };
-    handleSelectValue(e, selectedBikeData, partInfo);
+    if (e.target.value === 'uninstall') {
+      const selectedBikeData = { uninstalled: true };
+      handleSelectValue(selectedBikeData, partInfo);
+    } else {
+      const selectedBike = bikes.find((bike) => bike.id === e.target.value);
+      const selectedBikeData = { bikeSelect: selectedBike?.id, bikeOdo: selectedBike?.converted_distance };
+      handleSelectValue(selectedBikeData, partInfo);
+    }
   }
 
   function handleNumberInputValue(e: React.ChangeEvent<HTMLInputElement>) {
@@ -126,6 +129,7 @@ export default function EditPartInfoPopup({
         <Select
           name={'bikeSelect'}
           items={bikes}
+          removeOption={'Снять с велосипеда'}
           defaultValue={'-- Выберите байк --'}
           getInputValue={handleSelectInputValue}
         />

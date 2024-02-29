@@ -20,7 +20,6 @@ interface MaintenanceProps {
 export default function Maintenance({ bikes }: MaintenanceProps) {
   const [allParts, setAllParts] = useState<BikePart[]>([] as BikePart[]);
   const [partInfo, setPartInfo] = useState<BikePart>({} as BikePart);
-  // const [partEditInfo, setPartEditInfo] = useState<BikePart>({} as BikePart);
   const [category, setCategory] = useState<string>('');
   const [partToEdit, setPartToEdit] = useState<BikePart>({} as BikePart);
   const [isAddPartPopupOpen, setIsAddPartPopupOpen] = useState<boolean>(false);

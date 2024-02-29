@@ -21,29 +21,29 @@ module.exports.updateStravaToken = async (tokenInfo, id) => {
 };
 
 
-module.exports.updateBikeOdo = async(storedData, actualData) => {
-  if(actualData) {
-    storedData.bikes.forEach(async (storedBike) => {    
-      const actualDataBike = await actualData.find(actualBike => actualBike.id === storedBike.id);
-      if(actualDataBike.converted_distance !== storedBike.converted_distance) {
-        storedBike.converted_distance = actualDataBike.converted_distance;
-      }
-    });  
-  }
-};
+// module.exports.updateBikeOdo = async(storedData, actualData) => {
+//   if(actualData) {
+//     storedData.bikes.forEach(async (storedBike) => {    
+//       const actualDataBike = await actualData.find(actualBike => actualBike.id === storedBike.id);
+//       if(actualDataBike.converted_distance !== storedBike.converted_distance) {
+//         storedBike.converted_distance = actualDataBike.converted_distance;
+//       }
+//     });  
+//   }
+// };
 
 
-module.exports.getBikesId = (bikes) => {
-  let idArr = [];
-  bikes.forEach(bike => idArr.push(bike.id))    
-  return idArr
-};
+// module.exports.getBikesId = (bikes) => {
+//   let idArr = [];
+//   bikes.forEach(bike => idArr.push(bike.id))    
+//   return idArr
+// };
 
-module.exports.getBikesUpdatedOdo = (bikes) => {
-  let odoArr = [];
-  bikes.forEach(bike => odoArr.push(bike.converted_distance))    
-  return odoArr
-};
+// module.exports.getBikesUpdatedOdo = (bikes) => {
+//   let odoArr = [];
+//   bikes.forEach(bike => odoArr.push(bike.converted_distance))    
+//   return odoArr
+// };
 
 
 module.exports.getDistanceAsNumber = (value) => {
@@ -51,4 +51,9 @@ module.exports.getDistanceAsNumber = (value) => {
      return parseFloat(value.toString());
   }
   return value;
+};
+
+
+module.exports.convertNumToString = (num) => {
+  return new Intl.NumberFormat(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(num)
 };

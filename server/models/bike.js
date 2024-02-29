@@ -31,8 +31,9 @@ const bikeSchema = new mongoose.Schema({
     default: '--',
   },
   converted_distance: {
-    type: Decimal128,
-    get: getDistanceAsNumber
+    type: Number,  
+    //get: getDistanceAsNumber,
+    set: v => new Number(v.toFixed(1)),
     //required: true,
   },
   retired: {
@@ -59,7 +60,7 @@ const bikeSchema = new mongoose.Schema({
     type: Number,
     select: false,
   }
-}, {toJSON: {getters: true}});
+}, { toJSON: { getters: true } });
 
 
 module.exports = mongoose.model('bike', bikeSchema);

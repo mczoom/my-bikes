@@ -1,11 +1,12 @@
 interface SelectProps {
   name: string;
   items: any;
+  removeOption: string;
   defaultValue: string;
   getInputValue: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
-export default function Select({ name, items, defaultValue, getInputValue }: SelectProps) {
+export default function Select({ name, items, removeOption, defaultValue, getInputValue }: SelectProps) {
   function selectOptions(items: any) {
     return items.map((item: any) => (
       <option key={item.id} value={item.id}>
@@ -20,6 +21,7 @@ export default function Select({ name, items, defaultValue, getInputValue }: Sel
         {defaultValue}
       </option>
       {selectOptions(items)}
+      <option value={'uninstall'}>{removeOption}</option>
     </select>
   );
 }

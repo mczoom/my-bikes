@@ -7,5 +7,6 @@ export interface PartInfo {
   weight: number | undefined;
   price: number | undefined;
   bikeSelect: string | undefined;
-  bikeOdoAtInstal: number | undefined;
+  bikeOdo: number | undefined;
+  uninstalled: boolean | undefined;
 }
