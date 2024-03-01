@@ -254,3 +254,18 @@ export const updatePartOdo = (bikes: Bike[]) => {
     .then((res) => res.data)
     .catch((err) => handleErrorResponse(err));
 };
+
+export const deletePart = (partId: string) => {
+  return axios
+    .delete(`${BASE_URL}/deletepart`, {
+      data: {
+        partId
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token()}`
+      }
+    })
+    .then((res) => res.data)
+    .catch((err) => handleErrorResponse(err));
+};

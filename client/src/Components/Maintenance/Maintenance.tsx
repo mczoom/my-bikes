@@ -96,13 +96,22 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
       .catch((err) => snackbar.handleSnackbarError(err));
   }
 
+  function deletePart(partId: string) {
+    appApi
+      .deletePart(partId)
+      .then((res) => setAllParts(res))
+      .catch((err) => snackbar.handleSnackbarError(err));
+  }
+
   useEffect(() => {
     let ignore = false;
-    getAllParts().then((parts) => {
-      if (!ignore) {
-        setAllParts(parts);
-      }
-    });
+    getAllParts()
+      .then((parts) => {
+        if (!ignore) {
+          setAllParts(parts);
+        }
+      })
+      .catch((err) => console.log(err));
     return () => {
       ignore = true;
     };
@@ -129,6 +138,7 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
                   onOpenEdit={openEditPartPopup}
                   getCategory={getAddingPartCategory}
                   getEditingPart={getEditingPart}
+                  onDelete={deletePart}
                 />
               }
             />
@@ -142,6 +152,7 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
                   onOpenEdit={openEditPartPopup}
                   getCategory={getAddingPartCategory}
                   getEditingPart={getEditingPart}
+                  onDelete={deletePart}
                 />
               }
             />
@@ -155,6 +166,7 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
                   onOpenEdit={openEditPartPopup}
                   getCategory={getAddingPartCategory}
                   getEditingPart={getEditingPart}
+                  onDelete={deletePart}
                 />
               }
             />
@@ -168,6 +180,7 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
                   onOpenEdit={openEditPartPopup}
                   getCategory={getAddingPartCategory}
                   getEditingPart={getEditingPart}
+                  onDelete={deletePart}
                 />
               }
             />
@@ -181,6 +194,7 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
                   onOpenEdit={openEditPartPopup}
                   getCategory={getAddingPartCategory}
                   getEditingPart={getEditingPart}
+                  onDelete={deletePart}
                 />
               }
             />
@@ -194,6 +208,7 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
                   onOpenEdit={openEditPartPopup}
                   getCategory={getAddingPartCategory}
                   getEditingPart={getEditingPart}
+                  onDelete={deletePart}
                 />
               }
             />
@@ -207,6 +222,7 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
                   onOpenEdit={openEditPartPopup}
                   getCategory={getAddingPartCategory}
                   getEditingPart={getEditingPart}
+                  onDelete={deletePart}
                 />
               }
             />
@@ -220,6 +236,7 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
                   onOpenEdit={openEditPartPopup}
                   getCategory={getAddingPartCategory}
                   getEditingPart={getEditingPart}
+                  onDelete={deletePart}
                 />
               }
             />
@@ -233,6 +250,7 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
                   onOpenEdit={openEditPartPopup}
                   getCategory={getAddingPartCategory}
                   getEditingPart={getEditingPart}
+                  onDelete={deletePart}
                 />
               }
             />
@@ -246,6 +264,7 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
                   onOpenEdit={openEditPartPopup}
                   getCategory={getAddingPartCategory}
                   getEditingPart={getEditingPart}
+                  onDelete={deletePart}
                 />
               }
             />
@@ -259,6 +278,7 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
                   onOpenEdit={openEditPartPopup}
                   getCategory={getAddingPartCategory}
                   getEditingPart={getEditingPart}
+                  onDelete={deletePart}
                 />
               }
             />

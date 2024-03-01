@@ -53,6 +53,10 @@ const partSchema = new mongoose.Schema({
     set: v => new Number(v.toFixed(1)),
     default: 0,
   },
+  installed: {
+    type: Boolean,
+    default: false,
+  }, 
   retired: {
     type: Boolean,
     default: false,
