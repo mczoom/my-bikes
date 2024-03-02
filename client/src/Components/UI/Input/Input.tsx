@@ -6,7 +6,7 @@ interface InputProps {
   getInputValue?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   getLoginInputValue?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   getPasswordInputValue?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  value?: string | number;
+  value?: string | number | undefined;
 }
 
 export default function Input({ name, label, inputType, placeholder, getInputValue, value }: InputProps) {

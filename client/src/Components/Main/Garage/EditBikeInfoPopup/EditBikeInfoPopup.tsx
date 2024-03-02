@@ -12,12 +12,12 @@ interface EditBikeInfoPopupProps {
 }
 
 interface BikeInfo {
-  photo: string;
-  bikename: string;
-  brand: string;
-  model: string;
-  year: string | number;
-  weight: string | number;
+  photo: string | undefined;
+  bikename: string | undefined;
+  brand: string | undefined;
+  model: string | undefined;
+  year: string | number | undefined;
+  weight: string | number | undefined;
   trainer?: boolean;
 }
 
@@ -27,23 +27,32 @@ export default function EditBikeInfoPopup({ bike, updateInfo, isPopupOpen, close
   const [trainerCheckbox, setTrainerCheckbox] = useState<boolean>(bike.trainer);
 
   const defaultInputValues: BikeInfo = {
-    photo: '',
-    bikename: '',
-    brand: '',
-    model: '',
-    year: '',
-    weight: '',
+    photo: undefined,
+    bikename: undefined,
+    brand: undefined,
+    model: undefined,
+    year: undefined,
+    weight: undefined,
     trainer: isTrainer
   };
 
-  const [bikeInfo, setBikeInfo] = useState<BikeInfo>(defaultInputValues);
+  const [bikeInfo, setBikeInfo] = useState<BikeInfo>({} as BikeInfo);
+
+  function onClose() {
+    setBikeInfo(defaultInputValues);
+    closePopup();
+  }
 
   function handleInputValue(e: React.ChangeEvent<HTMLInputElement>, value: string | boolean, bikeData: BikeInfo) {
     setBikeInfo({ ...bikeData, [e.target.name]: value });
   }
 
   function handleTextInputValue(e: React.ChangeEvent<HTMLInputElement>) {
-    handleInputValue(e, e.target.value, bikeInfo);
+    if (e.target.value) {
+      if (typeof e.target.value === 'string' && e.target.value.trim() !== '') {
+        handleInputValue(e, e.target.value, bikeInfo);
+      }
+    }
   }
 
   function switchTrainerCheckbox(e: React.ChangeEvent<HTMLInputElement>) {
@@ -54,9 +63,11 @@ export default function EditBikeInfoPopup({ bike, updateInfo, isPopupOpen, close
   function submitHandler(e: React.SyntheticEvent) {
     e.preventDefault();
     updateInfo(bike.id, bikeInfo);
-    closePopup();
     setBikeInfo(defaultInputValues);
+    closePopup();
   }
+
+  console.log(bikeInfo);
 
   useEffect(() => {
     setTrainerCheckbox(isTrainer);
@@ -70,43 +81,13 @@ export default function EditBikeInfoPopup({ bike, updateInfo, isPopupOpen, close
         btnText="Сохранить"
         submitHandler={submitHandler}
         isPopupOpen={isPopupOpen}
-        onClose={closePopup}
+        onClose={onClose}
       >
-        <Input
-          name="photo"
-          value={bikeInfo.photo}
-          label="Ссылка на фото"
-          inputType="text"
-          getInputValue={handleTextInputValue}
-        />
-        <Input
-          name="brand"
-          value={bikeInfo.brand}
-          label="Производитель"
-          inputType="text"
-          getInputValue={handleTextInputValue}
-        />
-        <Input
-          name="model"
-          value={bikeInfo.model}
-          label="Модель"
-          inputType="text"
-          getInputValue={handleTextInputValue}
-        />
-        <Input
-          name="year"
-          value={bikeInfo.year}
-          label="Модельный год"
-          inputType="text"
-          getInputValue={handleTextInputValue}
-        />
-        <Input
-          name="weight"
-          value={bikeInfo.weight}
-          label="Вес"
-          inputType="text"
-          getInputValue={handleTextInputValue}
-        />
+        <Input name="photo" label="Ссылка на фото" inputType="text" getInputValue={handleTextInputValue} />
+        <Input name="brand" label="Производитель" inputType="text" getInputValue={handleTextInputValue} />
+        <Input name="model" label="Модель" inputType="text" getInputValue={handleTextInputValue} />
+        <Input name="year" label="Модельный год" inputType="text" getInputValue={handleTextInputValue} />
+        <Input name="weight" label="Вес" inputType="text" getInputValue={handleTextInputValue} />
         <Checkbox name="trainer" text="Станок" checkboxStatus={trainerCheckbox} onChange={switchTrainerCheckbox} />
       </PopupWithForm>
     </>

@@ -17,12 +17,12 @@ interface GarageProps {
 }
 
 interface BikeCardInfo {
-  photo: string;
-  bikename: string;
-  brand: string;
-  model: string;
-  year: string | number;
-  weight: string | number;
+  photo: string | undefined;
+  bikename: string | undefined;
+  brand: string | undefined;
+  model: string | undefined;
+  year: string | number | undefined;
+  weight: string | number | undefined;
   trainer?: boolean;
 }
 
@@ -98,6 +98,7 @@ export default function Garage({ savedBikes, setSavedBikes, yearsAtStrava, activ
         closePopup={closeBikePhotoPopup}
       />
       <EditBikeInfoPopup
+        key={bikeToEdit.id}
         bike={bikeToEdit}
         updateInfo={updateBikeCardInfo}
         isPopupOpen={isEditPopupOpen}
