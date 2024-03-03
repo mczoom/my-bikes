@@ -12,6 +12,7 @@ import { partId } from 'utils/constants';
 import { PartInfo } from 'types/PartInfo';
 import EditPartInfoPopup from './EditPartInfoPopup/EditPartInfoPopup';
 import { Bike } from 'types/Bike';
+import ConfirmationPopup from 'components/shared/ConfirmationPopup/ConfirmationPopup';
 
 interface MaintenanceProps {
   bikes: Bike[];
@@ -24,6 +25,7 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
   const [partToEdit, setPartToEdit] = useState<BikePart>({} as BikePart);
   const [isAddPartPopupOpen, setIsAddPartPopupOpen] = useState<boolean>(false);
   const [isEditPartPopupOpen, setIsEditPartPopupOpen] = useState<boolean>(false);
+  const [isDeletePartPopupOpen, setIsDeletePartPopupOpen] = useState<boolean>(false);
 
   const snackbar = useSnackbar();
   console.log(allParts);
@@ -68,6 +70,10 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
     setIsEditPartPopupOpen(true);
   }
 
+  function openDeletePartPopup() {
+    setIsDeletePartPopupOpen(true);
+  }
+
   function getEditingPart(part: BikePart) {
     setPartToEdit(part);
   }
@@ -78,6 +84,10 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
 
   function closeEditPartPopup() {
     setIsEditPartPopupOpen(false);
+  }
+
+  function closeDeletePartPopup() {
+    setIsDeletePartPopupOpen(false);
   }
 
   function submitHandler(e: React.SyntheticEvent) {
@@ -96,9 +106,9 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
       .catch((err) => snackbar.handleSnackbarError(err));
   }
 
-  function deletePart(partId: string) {
+  function deletePart(id: string) {
     appApi
-      .deletePart(partId)
+      .deletePart(id)
       .then((res) => setAllParts(res))
       .catch((err) => snackbar.handleSnackbarError(err));
   }
@@ -136,9 +146,9 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
                   parts={allParts}
                   onOpen={openAddPartPopup}
                   onOpenEdit={openEditPartPopup}
+                  onOpenDelete={openDeletePartPopup}
                   getCategory={getAddingPartCategory}
                   getEditingPart={getEditingPart}
-                  onDelete={deletePart}
                 />
               }
             />
@@ -150,9 +160,9 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
                   parts={allParts}
                   onOpen={openAddPartPopup}
                   onOpenEdit={openEditPartPopup}
+                  onOpenDelete={openDeletePartPopup}
                   getCategory={getAddingPartCategory}
                   getEditingPart={getEditingPart}
-                  onDelete={deletePart}
                 />
               }
             />
@@ -164,9 +174,9 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
                   parts={allParts}
                   onOpen={openAddPartPopup}
                   onOpenEdit={openEditPartPopup}
+                  onOpenDelete={openDeletePartPopup}
                   getCategory={getAddingPartCategory}
                   getEditingPart={getEditingPart}
-                  onDelete={deletePart}
                 />
               }
             />
@@ -178,9 +188,9 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
                   parts={allParts}
                   onOpen={openAddPartPopup}
                   onOpenEdit={openEditPartPopup}
+                  onOpenDelete={openDeletePartPopup}
                   getCategory={getAddingPartCategory}
                   getEditingPart={getEditingPart}
-                  onDelete={deletePart}
                 />
               }
             />
@@ -192,9 +202,9 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
                   parts={allParts}
                   onOpen={openAddPartPopup}
                   onOpenEdit={openEditPartPopup}
+                  onOpenDelete={openDeletePartPopup}
                   getCategory={getAddingPartCategory}
                   getEditingPart={getEditingPart}
-                  onDelete={deletePart}
                 />
               }
             />
@@ -206,9 +216,9 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
                   parts={allParts}
                   onOpen={openAddPartPopup}
                   onOpenEdit={openEditPartPopup}
+                  onOpenDelete={openDeletePartPopup}
                   getCategory={getAddingPartCategory}
                   getEditingPart={getEditingPart}
-                  onDelete={deletePart}
                 />
               }
             />
@@ -220,9 +230,9 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
                   parts={allParts}
                   onOpen={openAddPartPopup}
                   onOpenEdit={openEditPartPopup}
+                  onOpenDelete={openDeletePartPopup}
                   getCategory={getAddingPartCategory}
                   getEditingPart={getEditingPart}
-                  onDelete={deletePart}
                 />
               }
             />
@@ -234,9 +244,9 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
                   parts={allParts}
                   onOpen={openAddPartPopup}
                   onOpenEdit={openEditPartPopup}
+                  onOpenDelete={openDeletePartPopup}
                   getCategory={getAddingPartCategory}
                   getEditingPart={getEditingPart}
-                  onDelete={deletePart}
                 />
               }
             />
@@ -248,9 +258,9 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
                   parts={allParts}
                   onOpen={openAddPartPopup}
                   onOpenEdit={openEditPartPopup}
+                  onOpenDelete={openDeletePartPopup}
                   getCategory={getAddingPartCategory}
                   getEditingPart={getEditingPart}
-                  onDelete={deletePart}
                 />
               }
             />
@@ -262,9 +272,9 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
                   parts={allParts}
                   onOpen={openAddPartPopup}
                   onOpenEdit={openEditPartPopup}
+                  onOpenDelete={openDeletePartPopup}
                   getCategory={getAddingPartCategory}
                   getEditingPart={getEditingPart}
-                  onDelete={deletePart}
                 />
               }
             />
@@ -276,9 +286,9 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
                   parts={allParts}
                   onOpen={openAddPartPopup}
                   onOpenEdit={openEditPartPopup}
+                  onOpenDelete={openDeletePartPopup}
                   getCategory={getAddingPartCategory}
                   getEditingPart={getEditingPart}
-                  onDelete={deletePart}
                 />
               }
             />
@@ -334,6 +344,15 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
           isPopupOpen={isEditPartPopupOpen}
           updateInfo={updatePartInfo}
           bikes={bikes}
+        />
+        <ConfirmationPopup
+          title={'Вы действительно хотите удалить компонент?'}
+          ConfirmBtnText={'Удалить'}
+          CancelBtnText={'Отмена'}
+          onDelete={deletePart}
+          isPopupOpen={isDeletePartPopupOpen}
+          onClose={closeDeletePartPopup}
+          partId={partToEdit.id}
         />
       </div>
     </section>

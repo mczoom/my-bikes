@@ -16,12 +16,14 @@ const partSchema = new mongoose.Schema({
     type: String,    
   },
   bikeOdoAtInstal: {
-    type: Number,  
+    type: Number,
+    default: 0,  
     //get: getDistanceAsNumber,
     //set: v => new Number(v.toFixed(1)),  
   },
   bikeOdoAtLastUpdate: {
-    type: Number,  
+    type: Number,
+    default: 0,  
     //get: getDistanceAsNumber,
     //set: v => new Number(v.toFixed(1)),  
   },

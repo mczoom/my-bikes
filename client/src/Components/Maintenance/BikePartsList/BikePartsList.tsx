@@ -6,9 +6,9 @@ interface BikePartsListProps {
   parts: BikePart[];
   onOpen: () => void;
   onOpenEdit: () => void;
+  onOpenDelete: () => void;
   getEditingPart?: ((part: BikePart) => void) | undefined;
   getCategory?: (cat: string) => void;
-  onDelete: (partId: string) => void;
 }
 
 export default function BikePartsList({
@@ -16,9 +16,9 @@ export default function BikePartsList({
   parts,
   onOpen,
   onOpenEdit,
+  onOpenDelete,
   getEditingPart,
-  getCategory,
-  onDelete
+  getCategory
 }: BikePartsListProps) {
   function filterParts() {
     return parts.filter((part) => part.category === cat);
@@ -39,7 +39,12 @@ export default function BikePartsList({
         {filteredParts &&
           filteredParts.map((item: BikePart) => (
             <li key={item.id}>
-              <BikePartsCard part={item} getEditingPart={getEditingPart} onOpenEdit={onOpenEdit} onDelete={onDelete} />
+              <BikePartsCard
+                part={item}
+                getEditingPart={getEditingPart}
+                onOpenEdit={onOpenEdit}
+                onOpenDelete={onOpenDelete}
+              />
             </li>
           ))}
       </ul>

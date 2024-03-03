@@ -176,7 +176,7 @@ export default function App() {
     let ignore = false;
     appApi
       .getAllBikes()
-      .then((res) => {
+      .then(async (res) => {
         if (!ignore) {
           if (!res.length) {
             appApi.addBike(currentUser.bikes);
@@ -186,8 +186,8 @@ export default function App() {
           const bikesToUpdate = compareBikesOdo(currentUser.bikes, savedBikes);
           if (bikesToUpdate.length > 0) {
             console.log(bikesToUpdate);
-            appApi.updateBikeOdo(bikesToUpdate);
-            appApi.updatePartOdo(bikesToUpdate);
+            await appApi.updateBikeOdo(bikesToUpdate);
+            await appApi.updatePartOdo(bikesToUpdate);
           }
           setSavedBikes(res);
         }

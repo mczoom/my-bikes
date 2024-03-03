@@ -1,0 +1,13 @@
+.delete-btn {
+  height: 18px;
+  width: 18px;
+  background: url('../../../assets/images/delete-btn-24.png') center/cover no-repeat;
+  align-self: end;
+  opacity: 0.3;
+  border: none;
+  cursor: pointer;
+}
+  
+.delete-btn:hover {
+  opacity: 1;
+}
