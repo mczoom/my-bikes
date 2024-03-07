@@ -1,6 +1,4 @@
-const { Decimal128 } = require('mongodb');
 const mongoose = require('mongoose');
-const { getDistanceAsNumber } = require('../utils/services');
 
 
 const partSchema = new mongoose.Schema({
@@ -8,28 +6,31 @@ const partSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user',
     required: true,
-  },
+  },  
   id: {
     type: String,   
   },
   bikeSelect: {
-    type: String,    
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'bike',    
+  },
+  bikeName: {
+    type: String,
   },
   bikeOdoAtInstal: {
     type: Number,
-    default: 0,  
-    //get: getDistanceAsNumber,
-    //set: v => new Number(v.toFixed(1)),  
+    default: 0, 
   },
   bikeOdoAtLastUpdate: {
     type: Number,
     default: 0,  
-    //get: getDistanceAsNumber,
-    //set: v => new Number(v.toFixed(1)),  
+  },
+  updated: {
+    type: Date, 
+    default: new Date().toLocaleString(),
   },
   category: {
     type: String,
-    //required: true,
   },
   brand: {
     type: String,
@@ -39,7 +40,6 @@ const partSchema = new mongoose.Schema({
   },
   year: {
     type: String,
-    default: '',
   },
   weight: {
     type: Number,
@@ -51,9 +51,12 @@ const partSchema = new mongoose.Schema({
   },
   distance: {
     type: Number,
-    //get: getDistanceAsNumber,
     set: v => new Number(v.toFixed(1)),
     default: 0,
+  },
+  created: {
+    type: Date, 
+    default: new Date().toLocaleString(),
   },
   installed: {
     type: Boolean,

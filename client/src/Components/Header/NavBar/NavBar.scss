@@ -6,6 +6,10 @@
   padding: 0;
 }
 
+.navigation__nav-links_column {
+  flex-direction: column;
+}
+
 .nav-links__link {
   font-size: 18px;  
   color: black;

@@ -13,6 +13,7 @@ import { PartInfo } from 'types/PartInfo';
 import EditPartInfoPopup from './EditPartInfoPopup/EditPartInfoPopup';
 import { Bike } from 'types/Bike';
 import ConfirmationPopup from 'components/shared/ConfirmationPopup/ConfirmationPopup';
+import Navigation from 'components/Header/NavBar/NavBar';
 
 interface MaintenanceProps {
   bikes: Bike[];
@@ -29,6 +30,53 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
 
   const snackbar = useSnackbar();
   console.log(allParts);
+
+  const parts = [
+    {
+      title: 'Звёзды',
+      link: 'chainrings'
+    },
+    {
+      title: 'Каретки',
+      link: 'bbs'
+    },
+    {
+      title: 'Кассеты',
+      link: 'cassettes'
+    },
+    {
+      title: 'Колёса',
+      link: 'wheels'
+    },
+    {
+      title: 'Педали',
+      link: 'pedals'
+    },
+    {
+      title: 'Покрышки',
+      link: 'tires'
+    },
+    {
+      title: 'Рамы',
+      link: 'frames'
+    },
+    {
+      title: 'Сёдла',
+      link: 'saddles'
+    },
+    {
+      title: 'Тормозные колодки',
+      link: 'brakepads'
+    },
+    {
+      title: 'Тросики / рубашки',
+      link: 'cables'
+    },
+    {
+      title: 'Цепи',
+      link: 'chains'
+    }
+  ];
 
   const defaultInputValues: BikePart = {
     id: '',
@@ -133,8 +181,8 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
         Раздел для отслеживания пробега различных компонентов велосипеда и проведения своевременного ТО
       </h1>
       <div className="maintenance__content-wrapper">
-        <div className="maintenance__parts-categories">
-          <BikePartsCategories />
+        <div className="maintenance__parts-categories navigation__nav-links_column">
+          <BikePartsCategories navLinks={parts} />
         </div>
         <div className="maintenance__parts-list">
           <Routes>

@@ -1,5 +1,6 @@
 import { BikePart } from 'types/BikePart';
 import BikePartsCard from '../BikePartsCard/BikePartsCard';
+import FormButton from 'components/UI/FormButton/FormButton';
 
 interface BikePartsListProps {
   cat: string;
@@ -35,10 +36,10 @@ export default function BikePartsList({
 
   return (
     <>
-      <ul>
+      <ul className="parts-list">
         {filteredParts &&
           filteredParts.map((item: BikePart) => (
-            <li key={item.id}>
+            <li className="parts-list__part" key={item.id}>
               <BikePartsCard
                 part={item}
                 getEditingPart={getEditingPart}
@@ -48,7 +49,9 @@ export default function BikePartsList({
             </li>
           ))}
       </ul>
-      <button onClick={() => handleAddClick()}>+ Добавить компонент</button>
+      <div className="parts-list__add-btn">
+        <FormButton btnText={'+ Добавить компонент'} btnType={'button'} onAction={handleAddClick} />
+      </div>
     </>
   );
 }

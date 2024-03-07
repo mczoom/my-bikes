@@ -1,6 +1,7 @@
 export interface BikePart {
   id: string;
   bikeSelect?: string;
+  bikeName?: string;
   userID?: string;
   category: string;
   brand: string;

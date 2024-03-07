@@ -10,15 +10,26 @@ interface BikePartsCardProps {
 }
 
 export default function BikePartsCard({ part, onOpenEdit, getEditingPart, onOpenDelete }: BikePartsCardProps) {
-  const isInstalled = part.installed ? 'Компонент установлен' : 'Не используется';
+  const isInstalled = part.installed ? `Установлено на ${part.bikeName || part.bikeSelect}` : 'Не используется';
 
   return (
-    <div>
-      <div>
-        {part.brand} {part.model} ({part.distance} км, {part.price} $) {isInstalled}
+    <div className="part-card">
+      <div className="part-card__title-wrapper">
+        <h4 className="part-card__title">
+          {part.brand} {part.model}
+        </h4>
+        <div className="part-card__buttons">
+          <EditButton item={part} openPopup={onOpenEdit} getEditingItem={getEditingPart} />
+          <DeleteButton item={part} openPopup={onOpenDelete} getEditingItem={getEditingPart} />
+        </div>
       </div>
-      <EditButton item={part} openPopup={onOpenEdit} getEditingItem={getEditingPart} />
-      <DeleteButton item={part} openPopup={onOpenDelete} getEditingItem={getEditingPart} />
+      <div className="part-card__specs">
+        <p>{isInstalled}</p>
+        <p>Пробег: {part.distance} км</p>
+        <p>Вес: {part.weight} г</p>
+        <p>Цена: {part.price} $</p>
+        <p>Добавлен: </p>
+      </div>
     </div>
   );
 }

@@ -185,7 +185,6 @@ export default function App() {
           }
           const bikesToUpdate = compareBikesOdo(currentUser.bikes, savedBikes);
           if (bikesToUpdate.length > 0) {
-            console.log(bikesToUpdate);
             await appApi.updateBikeOdo(bikesToUpdate);
             await appApi.updatePartOdo(bikesToUpdate);
           }

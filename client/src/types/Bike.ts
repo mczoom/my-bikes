@@ -1,4 +1,5 @@
 export interface Bike {
+  _id: string;
   converted_distance: number;
   distance?: number;
   id: string;
@@ -9,5 +10,5 @@ export interface Bike {
   retired: boolean;
   photo?: string;
   trainer: boolean;
-  userID?: string;
+  userID: string;
 }

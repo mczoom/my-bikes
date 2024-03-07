@@ -1,3 +1,5 @@
+@import '../../../../styles/index';
+
 .bike-card__wrap {
   display: flex;
   max-height: 250px;
@@ -13,8 +15,8 @@
   width: 350px;
   object-fit: cover;  
   cursor: pointer;
-  border-bottom-left-radius: 6px;
-  border-top-left-radius: 6px;
+  border-bottom-left-radius: $radius;
+  border-top-left-radius: $radius;
 }
 
 .bike-card__bike-name {

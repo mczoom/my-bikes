@@ -1,26 +1,11 @@
 import { NavLink } from 'react-router-dom';
+import { NavigationLink } from 'types/NavigationLink';
 
-interface navLink {
-  title: string;
-  link: string;
+interface NavigationProps {
+  navLinks: NavigationLink[];
 }
 
-export default function Navigation() {
-  const navLinks: navLink[] = [
-    {
-      title: 'Тренировки',
-      link: '/stats'
-    },
-    {
-      title: 'Велосипеды',
-      link: '/garage'
-    },
-    {
-      title: 'Техобслуживание',
-      link: '/maintenance'
-    }
-  ];
-
+export default function Navigation({ navLinks }: NavigationProps) {
   return (
     <nav className="navigation">
       <ul className="navigation__nav-links">

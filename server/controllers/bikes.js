@@ -1,5 +1,4 @@
 const Bike = require('../models/bike');
-const { updateBikeOdo, getBikesId, getBikesUpdatedOdo } = require('../utils/services');
 
 
 module.exports.addBike = async(req, res, next) => {
@@ -32,22 +31,6 @@ module.exports.getAllBikes = async(req, res, next) => {
 };
 
 
-
-// module.exports.updateOdo = async(req, res, next) => {
-//   const actualBikesInfo = req.body.bikes;
-//   const userID = req.user._id;
-  
-//   try {
-//     const storedBikes = await Bike.findOne({userID});
-//     await updateBikeOdo(storedBikes, actualBikesInfo);
-//     storedBikes.save();
-//     res.send('Километраж обновлен');
-//   } catch (err) {
-//     next(err);
-//   };
-// };
-
-
 module.exports.updateOdo = async(req, res, next) => {
   const bikesToUpdate = req.body.bikes;
   const userId = req.user._id;  
@@ -65,8 +48,6 @@ module.exports.updateOdo = async(req, res, next) => {
 };
 
 
-
-
 module.exports.updateBikeInfo = async(req, res, next) => {
   const {bikeId, updatedInfo} = req.body;
   const userID = req.user._id;
@@ -78,25 +59,3 @@ module.exports.updateBikeInfo = async(req, res, next) => {
     next(err);
   }
 };
-
-
-
-// module.exports.updateBikeInfo = async(req, res, next) => {
-//   const {bikeId, updatedInfo} = req.body;
-//   const userID = req.user._id;
-//   try {
-//     const userGear = await Bike.findOne({userID});
-//     const bikeToUpdate = userGear.bikes.find(bike => bike.id === bikeId);
-
-//     Object.keys(updatedInfo).forEach((spec) => {
-//       if(updatedInfo[spec] !== "") {
-//         bikeToUpdate[spec] = updatedInfo[spec];  
-//       }
-//     });    
-//     await userGear.save();
-//     res.send(userGear.bikes);
-//   } catch (err) {
-//     next(err);
-//   }
-// };
-

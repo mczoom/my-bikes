@@ -71,7 +71,7 @@ export default function EditPartInfoPopup({
       handleSelectValue(selectedBikeData, partInfo);
     } else {
       const selectedBike = bikes.find((bike) => bike.id === e.target.value);
-      const selectedBikeData = { bikeSelect: selectedBike?.id, bikeOdo: selectedBike?.converted_distance };
+      const selectedBikeData = { bikeSelect: selectedBike?._id, bikeOdo: selectedBike?.converted_distance };
       handleSelectValue(selectedBikeData, partInfo);
     }
   }
@@ -90,6 +90,7 @@ export default function EditPartInfoPopup({
   return (
     <>
       <PopupWithForm
+        key={partInfo.brand}
         name="edit-part"
         title="Редактирование компонента"
         btnText="Сохранить"
