@@ -5,6 +5,8 @@ import { BikePart } from 'types/BikePart';
 import { PartInfo } from 'types/PartInfo';
 import { Bike } from 'types/Bike';
 import Select from 'components/UI/Select/Select';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { removeEmptyFields } from 'utils/service';
 
 interface EditPartInfoPopupProps {
   updateInfo: (id: string, specs: PartInfo) => void;
@@ -38,25 +40,25 @@ export default function EditPartInfoPopup({
     uninstalled: false
   };
 
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm<PartInfoFormValues>({ mode: 'onChange' });
+
+  interface PartInfoFormValues {
+    category: string | undefined;
+    brand: string | undefined;
+    model: string | undefined;
+    weight: number | undefined;
+    price: number | undefined;
+    bikeSelect: string | undefined;
+    bikeOdo: number | undefined;
+    uninstalled: boolean | undefined;
+  }
+
   const [partInfo, setPartInfo] = useState<PartInfo>(defaultInputValues);
-
-  function handleTextValue(e: React.ChangeEvent<HTMLInputElement>, value: string | boolean, partData: PartInfo) {
-    if (!value) {
-      return;
-    }
-    setPartInfo({ ...partData, [e.target.name]: value });
-  }
-
-  function handleNumberValue(e: React.ChangeEvent<HTMLInputElement>, value: string, partData: PartInfo) {
-    if (!value) {
-      return;
-    }
-    setPartInfo({ ...partData, [e.target.name]: parseInt(value) });
-  }
-
-  function handleTextInputValue(e: React.ChangeEvent<HTMLInputElement>) {
-    handleTextValue(e, e.target.value, partInfo);
-  }
 
   function handleSelectValue(value: SelectData | undefined, partData: PartInfo) {
     if (!value) {
@@ -65,27 +67,28 @@ export default function EditPartInfoPopup({
     setPartInfo({ ...partData, ...value });
   }
 
-  function handleSelectInputValue(e: React.ChangeEvent<HTMLSelectElement>) {
-    if (e.target.value === 'uninstall') {
-      const selectedBikeData = { uninstalled: true };
-      handleSelectValue(selectedBikeData, partInfo);
-    } else {
-      const selectedBike = bikes.find((bike) => bike.id === e.target.value);
-      const selectedBikeData = { bikeSelect: selectedBike?._id, bikeOdo: selectedBike?.converted_distance };
-      handleSelectValue(selectedBikeData, partInfo);
+  function handleSelectInputValue(selectValue: any) {
+    if (selectValue === 'uninstall') {
+      return;
     }
+    const selectedBike = bikes.find((bike) => bike.id === selectValue);
+    const selectedBikeData = { bikeSelect: selectedBike?._id, bikeOdo: selectedBike?.converted_distance };
+    return selectedBikeData;
   }
 
-  function handleNumberInputValue(e: React.ChangeEvent<HTMLInputElement>) {
-    handleNumberValue(e, e.target.value, partInfo);
-  }
+  const submitHandler: SubmitHandler<PartInfoFormValues> = (data) => {
+    const sanitizedFields = removeEmptyFields(data);
+    console.log(sanitizedFields);
 
-  function submitHandler(e: React.SyntheticEvent) {
-    e.preventDefault();
-    updateInfo(item.id, partInfo);
-    closePopup();
-    setPartInfo(defaultInputValues);
-  }
+    const selectedBikeData = handleSelectInputValue(sanitizedFields.bikeSelect);
+    const p = { ...sanitizedFields, ...selectedBikeData };
+
+    console.log(p);
+
+    //updateInfo(item.id, sanitizedFields);
+    //closePopup();
+    reset();
+  };
 
   return (
     <>
@@ -94,45 +97,21 @@ export default function EditPartInfoPopup({
         name="edit-part"
         title="Редактирование компонента"
         btnText="Сохранить"
-        submitHandler={submitHandler}
+        submitHandler={handleSubmit(submitHandler)}
         isPopupOpen={isPopupOpen}
         onClose={closePopup}
       >
-        <Input
-          name="brand"
-          value={partInfo.brand}
-          label="Производитель"
-          inputType="text"
-          getInputValue={handleTextInputValue}
-        />
-        <Input
-          name="model"
-          value={partInfo.model}
-          label="Модель"
-          inputType="text"
-          getInputValue={handleTextInputValue}
-        />
+        <Input name="brand" value={partInfo.brand} label="Производитель" inputType="text" register={register} />
+        <Input name="model" value={partInfo.model} label="Модель" inputType="text" register={register} />
 
-        <Input
-          name="weight"
-          value={partInfo.weight}
-          label="Вес"
-          inputType="number"
-          getInputValue={handleNumberInputValue}
-        />
-        <Input
-          name="price"
-          value={partInfo.price}
-          label="Цена"
-          inputType="number"
-          getInputValue={handleNumberInputValue}
-        />
+        <Input name="weight" value={partInfo.weight} label="Вес" inputType="number" register={register} />
+        <Input name="price" value={partInfo.price} label="Цена" inputType="number" register={register} />
         <Select
           name={'bikeSelect'}
           items={bikes}
           removeOption={'Снять с велосипеда'}
           defaultValue={'-- Выберите байк --'}
-          getInputValue={handleSelectInputValue}
+          register={register}
         />
       </PopupWithForm>
     </>

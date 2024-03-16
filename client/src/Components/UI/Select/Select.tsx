@@ -1,12 +1,20 @@
-interface SelectProps {
-  name: string;
+import { FieldValues, Path, UseFormRegister } from 'react-hook-form';
+
+interface SelectProps<T extends FieldValues> {
+  name: Path<T>;
   items: any;
   removeOption: string;
   defaultValue: string;
-  getInputValue: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  register: UseFormRegister<T>;
 }
 
-export default function Select({ name, items, removeOption, defaultValue, getInputValue }: SelectProps) {
+export default function Select<T extends FieldValues>({
+  name,
+  items,
+  removeOption,
+  defaultValue,
+  register
+}: SelectProps<T>) {
   function selectOptions(items: any) {
     return items.map((item: any) => (
       <option key={item.id} value={item.id}>
@@ -16,7 +24,7 @@ export default function Select({ name, items, removeOption, defaultValue, getInp
   }
 
   return (
-    <select name={name} id="bike-select" onChange={getInputValue}>
+    <select id="bike-select" {...register(name)}>
       <option selected disabled>
         {defaultValue}
       </option>

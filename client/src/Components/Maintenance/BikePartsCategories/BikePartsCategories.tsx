@@ -7,11 +7,11 @@ interface BikePartsCategoriesProps {
 
 export default function BikePartsCategories({ navLinks }: BikePartsCategoriesProps) {
   return (
-    <nav className="navigation">
-      <ul className="navigation__nav-links navigation__nav-links_column">
+    <nav className="nav-column">
+      <ul className="nav-column__links">
         {navLinks.map((nav, i) => (
-          <li key={i}>
-            <NavLink to={nav.link} className="nav-links__link link">
+          <li className="links__item" key={i}>
+            <NavLink to={nav.link} className="links__link link">
               {nav.title}
             </NavLink>
           </li>

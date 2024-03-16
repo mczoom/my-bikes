@@ -1,22 +1,24 @@
-interface CheckboxProps {
-  name?: string;
+import { FieldValues, Path, UseFormRegister } from 'react-hook-form';
+
+interface CheckboxProps<T extends FieldValues> {
+  name: Path<T>;
   text: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  checkboxStatus: boolean;
+  register: UseFormRegister<T>;
+  checkboxStatus?: boolean;
   switchTrainerCheckbox?: () => void;
 }
 
-export default function Checkbox({ name, text, checkboxStatus = false, onChange }: CheckboxProps) {
+export default function Checkbox<T extends FieldValues>({ name, text, register }: CheckboxProps<T>) {
   return (
     <div className="type-filter">
       <label className="type-filter__label">
         {text}
         <input
           type="checkbox"
-          name={name}
           className="type-filter__checkbox"
-          checked={checkboxStatus}
-          onChange={onChange}
+          //checked={checkboxStatus}
+          {...register(name)}
+          //value="trainer"
         />
       </label>
     </div>

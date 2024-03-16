@@ -11,3 +11,13 @@ export function getLocalStorageValue(key: string) {
   const value = localStorage.getItem(key);
   return value ? value : null;
 }
+
+export function removeEmptyFields<T extends object>(update: T) {
+  let objKeys = Object.keys(update) as Array<keyof T>;
+  objKeys.forEach((key) => {
+    if (update[key] === '' || update[key] == null) {
+      delete update[key];
+    }
+  });
+  return update;
+}

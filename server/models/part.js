@@ -26,8 +26,9 @@ const partSchema = new mongoose.Schema({
     default: 0,  
   },
   updated: {
-    type: Date, 
+    type: String, 
     default: new Date().toLocaleString(),
+    set: v => v.toLocaleString()
   },
   category: {
     type: String,
@@ -55,8 +56,8 @@ const partSchema = new mongoose.Schema({
     default: 0,
   },
   created: {
-    type: Date, 
-    default: new Date().toLocaleString(),
+    type: String, 
+    default: new Date().toLocaleString()
   },
   installed: {
     type: Boolean,

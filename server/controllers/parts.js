@@ -33,13 +33,13 @@ module.exports.updatePartInfo = async(req, res, next) => {
   const {partId, updatedInfo} = req.body;
   const bikeOdo = updatedInfo.bikeOdo;
   const bikeId = updatedInfo.bikeSelect;
-  const uninstalled = updatedInfo.uninstalled;
+  //const uninstalled = updatedInfo.uninstalled;
   const userid = req.user._id;
-  const update = {...updatedInfo, userID: userid, bikeOdoAtInstal: bikeOdo, bikeOdoAtLastUpdate: bikeOdo, updated: new Date().toLocaleString()}
+  const update = {...updatedInfo, userID: userid, bikeOdoAtInstal: bikeOdo, bikeOdoAtLastUpdate: bikeOdo, updated: new Date()}
 
   try {
     const part = await Part.findOne({userID: userid, id: partId});
-    if(uninstalled) {
+    if(bikeId === 'uninstall') {
       await Bike.findOneAndUpdate({_id: bikeId}, {$pull:{"installedParts": partId}}, {new: true})
       part.bikeSelect = '';
       part.bikeName = '';
@@ -47,7 +47,7 @@ module.exports.updatePartInfo = async(req, res, next) => {
       part.bikeOdoAtLastUpdate = 0;
       part.save();
     }
-    if(bikeId) {
+    if(bikeId && bikeId !== 'uninstall') {
       if(part.installed) {
         await Bike.updateOne({_id: part.bikeSelect}, {$pull:{"installedParts": partId}}, {new: true});
       }
@@ -72,7 +72,7 @@ module.exports.updatePartOdo = async(req, res, next) => {
   try {
     bikes.forEach(async(b) => {
       const bike = await Bike.findOne({_id: b._id})
-      bike.installedParts.forEach(async(partId) => {
+      bike?.installedParts.forEach(async(partId) => {
         const part = await Part.findOne({userID: userid, id: partId}); 
         if(part && b.converted_distance !== part.bikeOdoAtLastUpdate) { 
           const distDiff = b.converted_distance - part.bikeOdoAtLastUpdate;

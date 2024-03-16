@@ -1,0 +1,20 @@
+@import '../../../styles/index';
+
+.links__item { 
+  margin-bottom: 7px; 
+}
+
+.links__link {
+  font-size: 18px;
+  color: black;
+  padding: 0 8px;
+}
+
+.links__link:hover {
+  opacity: 0.8;
+}
+
+.links__link.active {
+  border-left: 5px solid $details-bg;
+  margin-left: 10px;
+}

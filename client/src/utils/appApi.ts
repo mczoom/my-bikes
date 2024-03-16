@@ -223,7 +223,7 @@ export const getAllParts = () => {
     .catch((err) => handleErrorResponse(err));
 };
 
-export const updatePartInfo = (partId: string, updatedInfo: PartInfo) => {
+export const updatePartInfo = (partId: string, updatedInfo: any) => {
   return axios
     .patch(
       `${BASE_URL}/partinfo`,

@@ -48,3 +48,19 @@ export function filterRidesByBike(bikeId: string, rides: Activity[]) {
     return activity.gear_id === bikeId;
   });
 }
+
+export const loginInputRules = {
+  required: 'Введите логин',
+  minLength: {
+    value: 3,
+    message: 'Должно быть не менее 3 символов'
+  }
+};
+
+export const passwordInputRules = {
+  required: 'Введите пароль',
+  minLength: {
+    value: 6,
+    message: 'Должно быть не менее 6 символов'
+  }
+};

@@ -1,3 +1,5 @@
+import { BaseSyntheticEvent } from 'react';
+import { FieldValues, SubmitHandler } from 'react-hook-form';
 import FormButton from 'ui/FormButton/FormButton';
 
 interface PopupWithFormProps {
@@ -5,7 +7,7 @@ interface PopupWithFormProps {
   children: React.ReactNode;
   title: string;
   btnText: string;
-  submitHandler?: (e: React.SyntheticEvent) => void;
+  submitHandler?: (e?: BaseSyntheticEvent<object, any, any> | undefined) => Promise<void>;
   isPopupOpen: boolean;
   onClose: () => void;
 }

@@ -4,7 +4,7 @@ const { addAllBikes, getAllBikes, updateBikeInfo, updateOdo, addBike } = require
 const { auth } = require('../middlewares/auth');
 const { exchangeStrToken, refreshStrToken, getStrToken } = require('../controllers/strToken');
 const { checkStravaToken } = require('../middlewares/stravaAuth');
-const { updateBikeInfoValidation } = require('../middlewares/validation');
+const { updateBikeInfoValidation, updatePartInfoValidation } = require('../middlewares/validation');
 const { addAllActivities, getAllActivities, updateActivities } = require('../controllers/activities');
 const { addPart, getAllParts, updatePartInfo, updatePartOdo, deletePart } = require('../controllers/parts');
 
@@ -36,7 +36,7 @@ router.patch('/bikeinfo', auth, checkStravaToken, updateBikeInfoValidation, upda
 router.patch('/trainer', auth, checkStravaToken, updateBikeInfo);
 
 router.post('/addpart', auth, checkStravaToken, addPart);
-router.patch('/partinfo', auth, checkStravaToken, updatePartInfo);
+router.patch('/partinfo', auth, checkStravaToken, updatePartInfoValidation, updatePartInfo);
 router.get('/parts', auth, checkStravaToken, getAllParts);
 router.patch('/partodo', auth, checkStravaToken, updatePartOdo);
 router.delete('/deletepart', auth, checkStravaToken, deletePart);

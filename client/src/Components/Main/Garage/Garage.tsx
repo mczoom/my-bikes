@@ -8,6 +8,7 @@ import { UserBike } from 'types/UserBike';
 import EditBikeInfoPopup from 'components/Main/Garage/EditBikeInfoPopup/EditBikeInfoPopup';
 import useSnackbar from 'hooks/useSnackbar';
 import Checkbox from 'components/shared/Checkbox/Checkbox';
+import { useForm } from 'react-hook-form';
 
 interface GarageProps {
   savedBikes: Bike[];
@@ -17,16 +18,23 @@ interface GarageProps {
 }
 
 interface BikeCardInfo {
-  photo: string | undefined;
-  bikename: string | undefined;
-  brand: string | undefined;
-  model: string | undefined;
-  year: string | number | undefined;
-  weight: string | number | undefined;
+  photo: string | null;
+  bikename: string | null;
+  brand: string | null;
+  model: string | null;
+  year: string | number | null;
+  weight: string | number | null;
   trainer?: boolean;
 }
 
 export default function Garage({ savedBikes, setSavedBikes, yearsAtStrava, activities }: GarageProps) {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors }
+  } = useForm<BikeCardInfo>({ mode: 'onChange' });
+
   const snackbar = useSnackbar();
 
   const [isBikesFilterChecked, setIsBikesFilterChecked] = useState<boolean>(false);
@@ -35,7 +43,10 @@ export default function Garage({ savedBikes, setSavedBikes, yearsAtStrava, activ
   const [bikePopupData, setBikePopupData] = useState<UserBike | undefined>({} as UserBike);
   const [bikeToEdit, setBikeToEdit] = useState<Bike>({} as Bike);
 
-  function filterBikeCardsToRender(bikes: Bike[], filter: boolean) {
+  const watchBikesFilter = watch('trainer', false);
+  console.log(watchBikesFilter);
+
+  function filterBikeCardsToRender(bikes: Bike[], filter: boolean | undefined) {
     const filteredBikes = bikes.filter((bike) => {
       if (filter) {
         return bike.trainer === true;
@@ -46,7 +57,7 @@ export default function Garage({ savedBikes, setSavedBikes, yearsAtStrava, activ
     return filteredBikes;
   }
 
-  const bikesToRender = filterBikeCardsToRender(savedBikes, isBikesFilterChecked);
+  const bikesToRender = filterBikeCardsToRender(savedBikes, watchBikesFilter);
 
   function toggleBikesFilter() {
     setIsBikesFilterChecked((v) => !v);
@@ -82,7 +93,12 @@ export default function Garage({ savedBikes, setSavedBikes, yearsAtStrava, activ
 
   return (
     <section className="garage">
-      <Checkbox text="Показать только велостанки" checkboxStatus={isBikesFilterChecked} onChange={toggleBikesFilter} />
+      <Checkbox
+        text="Показать только велостанки"
+        //checkboxStatus={isBikesFilterChecked}
+        register={register}
+        name="trainer"
+      />
       <GarageBikesList
         bikesToRender={bikesToRender}
         openBikePhotoPopup={openBikePhotoPopup}

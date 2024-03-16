@@ -14,6 +14,7 @@ import EditPartInfoPopup from './EditPartInfoPopup/EditPartInfoPopup';
 import { Bike } from 'types/Bike';
 import ConfirmationPopup from 'components/shared/ConfirmationPopup/ConfirmationPopup';
 import Navigation from 'components/Header/NavBar/NavBar';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 interface MaintenanceProps {
   bikes: Bike[];
@@ -30,6 +31,12 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
 
   const snackbar = useSnackbar();
   console.log(allParts);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<BikePart>({ mode: 'onChange' });
 
   const parts = [
     {
@@ -94,18 +101,6 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
       .catch((err) => snackbar.handleSnackbarError(err));
   }
 
-  function handleInputValue(
-    e: React.ChangeEvent<HTMLInputElement>,
-    value: string | number | boolean,
-    partData: BikePart
-  ) {
-    setPartInfo({ ...partData, [e.target.name]: value });
-  }
-
-  function handleTextInputValue(e: React.ChangeEvent<HTMLInputElement>) {
-    handleInputValue(e, e.target.value, partInfo);
-  }
-
   function openAddPartPopup() {
     setIsAddPartPopupOpen(true);
   }
@@ -138,14 +133,30 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
     setIsDeletePartPopupOpen(false);
   }
 
-  function submitHandler(e: React.SyntheticEvent) {
-    e.preventDefault();
+  interface PartInfoFormValues {
+    id: string;
+    bikeSelect?: string;
+    bikeName?: string;
+    userID?: string;
+    category: string;
+    brand: string;
+    model: string;
+    year: string;
+    weight: number;
+    price: number;
+    distance?: number;
+    installed?: boolean;
+    retired?: boolean;
+    _id?: string;
+  }
+
+  const submitHandler: SubmitHandler<PartInfoFormValues> = (data) => {
     const id = partId();
-    const newPart = { ...partInfo, id, category };
+    const newPart = { ...data, id, category };
     addNewPart(newPart);
     closeAddPartPopup();
     setPartInfo(defaultInputValues);
-  }
+  };
 
   function updatePartInfo(id: string, specs: PartInfo) {
     appApi
@@ -346,45 +357,15 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
           name="add-bike-part"
           title="Добавить компонент"
           btnText="Сохранить"
-          submitHandler={submitHandler}
+          submitHandler={handleSubmit(submitHandler)}
           isPopupOpen={isAddPartPopupOpen}
           onClose={closeAddPartPopup}
         >
-          <Input
-            name="brand"
-            value={partInfo.brand}
-            label="Производитель"
-            inputType="text"
-            getInputValue={handleTextInputValue}
-          />
-          <Input
-            name="model"
-            value={partInfo.model}
-            label="Модель"
-            inputType="text"
-            getInputValue={handleTextInputValue}
-          />
-          <Input
-            name="year"
-            value={partInfo.year}
-            label="Модельный год"
-            inputType="text"
-            getInputValue={handleTextInputValue}
-          />
-          <Input
-            name="weight"
-            value={partInfo.weight}
-            label="Вес"
-            inputType="text"
-            getInputValue={handleTextInputValue}
-          />
-          <Input
-            name="price"
-            value={partInfo.price}
-            label="Цена"
-            inputType="text"
-            getInputValue={handleTextInputValue}
-          />
+          <Input name="brand" value={partInfo.brand} label="Производитель" inputType="text" register={register} />
+          <Input name="model" value={partInfo.model} label="Модель" inputType="text" register={register} />
+          <Input name="year" value={partInfo.year} label="Модельный год" inputType="text" register={register} />
+          <Input name="weight" value={partInfo.weight} label="Вес" inputType="text" register={register} />
+          <Input name="price" value={partInfo.price} label="Цена" inputType="text" register={register} />
         </PopupWithForm>
         <EditPartInfoPopup
           item={partToEdit}

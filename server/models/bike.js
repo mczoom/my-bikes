@@ -31,10 +31,8 @@ const bikeSchema = new mongoose.Schema({
     default: '--',
   },
   converted_distance: {
-    type: Number,  
-    //get: getDistanceAsNumber,
+    type: Number, 
     set: v => new Number(v.toFixed(1)),
-    //required: true,
   },
   retired: {
     type: Boolean,

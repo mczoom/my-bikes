@@ -1,25 +1,33 @@
-interface InputProps {
-  name: string;
+import { FieldValues, Path, RegisterOptions, UseFormRegister } from 'react-hook-form';
+
+interface InputProps<T extends FieldValues> {
   label: string;
   inputType: string;
   placeholder?: string;
-  getInputValue?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  getLoginInputValue?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  getPasswordInputValue?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   value?: string | number | undefined;
+  name: Path<T>;
+  register: UseFormRegister<T>;
+  rules?: RegisterOptions;
 }
 
-export default function Input({ name, label, inputType, placeholder, getInputValue, value }: InputProps) {
+export default function Input<T extends FieldValues>({
+  name,
+  label,
+  inputType,
+  placeholder,
+  value,
+  register,
+  rules
+}: InputProps<T>) {
   return (
     <div className="input">
       <label className="input-label">{label}</label>
       <input
         className="input-field"
-        name={name}
         value={value}
         type={inputType}
         placeholder={placeholder}
-        onChange={getInputValue}
+        {...register(name, rules)}
       ></input>
     </div>
   );
