@@ -33,7 +33,6 @@ module.exports.updatePartInfo = async(req, res, next) => {
   const {partId, updatedInfo} = req.body;
   const bikeOdo = updatedInfo.bikeOdo;
   const bikeId = updatedInfo.bikeSelect;
-  //const uninstalled = updatedInfo.uninstalled;
   const userid = req.user._id;
   const update = {...updatedInfo, userID: userid, bikeOdoAtInstal: bikeOdo, bikeOdoAtLastUpdate: bikeOdo, updated: new Date()}
 
@@ -68,23 +67,23 @@ module.exports.updatePartInfo = async(req, res, next) => {
 module.exports.updatePartOdo = async(req, res, next) => {
   const {bikes} = req.body;  
   const userid = req.user._id;
+  bikeIds = bikes.map((bike) => bike._id);  
 
-  try {
-    bikes.forEach(async(b) => {
-      const bike = await Bike.findOne({_id: b._id})
-      bike?.installedParts.forEach(async(partId) => {
-        const part = await Part.findOne({userID: userid, id: partId}); 
-        if(part && b.converted_distance !== part.bikeOdoAtLastUpdate) { 
-          const distDiff = b.converted_distance - part.bikeOdoAtLastUpdate;
-          part.$inc('distance', distDiff);
-          part.bikeOdoAtLastUpdate = b.converted_distance;
-          part.save();         
-        }
-      })      
-    });
+  try {    
+    const parts = await Part.find({userID: userid, bikeSelect:{$in: bikeIds} }).populate('bikeSelect')
+    
+    parts.forEach((part) => {
+      if(part.bikeSelect.converted_distance !== part.bikeOdoAtLastUpdate) {
+        const distDiff = part.bikeSelect.converted_distance - part.bikeOdoAtLastUpdate;
+        part.$inc('distance', distDiff.toFixed(1));
+        part.bikeOdoAtLastUpdate = part.bikeSelect.converted_distance;
+        part.updated = new Date();
+        part.save();
+      }     
+    })
     const allParts = await Part.find({});    
-    res.send(allParts);  
-  } catch (err) {
+    res.send(allParts);       
+    } catch (err) {
     next(err);
   }
 };

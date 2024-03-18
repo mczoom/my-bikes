@@ -121,7 +121,8 @@ export default function App() {
     stravaBikes.map((bike) => {
       savedBikes.forEach((savedBike) => {
         if (savedBike.id === bike.id && savedBike.converted_distance !== bike.converted_distance) {
-          bikesToUpdate.push(bike);
+          const bikeWithId = { ...bike, _id: savedBike._id };
+          bikesToUpdate.push(bikeWithId);
         }
       });
     });
@@ -188,6 +189,7 @@ export default function App() {
             await appApi.updateBikeOdo(bikesToUpdate);
             await appApi.updatePartOdo(bikesToUpdate);
           }
+          //await appApi.updatePartOdo(bikesToUpdate);
           setSavedBikes(res);
         }
       })
