@@ -2,21 +2,28 @@ import { FieldValues, Path, UseFormRegister } from 'react-hook-form';
 
 interface SelectProps<T extends FieldValues> {
   name: Path<T>;
-  items: any;
+  title: string;
+  items: Items[];
   removeOption: string;
-  defaultValue: string;
+  initialtOption: string;
   register: UseFormRegister<T>;
+}
+
+interface Items {
+  id: string;
+  name: string;
 }
 
 export default function Select<T extends FieldValues>({
   name,
+  title,
   items,
   removeOption,
-  defaultValue,
+  initialtOption,
   register
 }: SelectProps<T>) {
-  function selectOptions(items: any) {
-    return items.map((item: any) => (
+  function selectOptions(items: Items[]) {
+    return items.map((item) => (
       <option key={item.id} value={item.id}>
         {item.name}
       </option>
@@ -24,12 +31,17 @@ export default function Select<T extends FieldValues>({
   }
 
   return (
-    <select id="bike-select" {...register(name)}>
-      <option selected disabled>
-        {defaultValue}
-      </option>
-      {selectOptions(items)}
-      <option value={'uninstall'}>{removeOption}</option>
-    </select>
+    <>
+      <label>{title}</label>
+      <select id="bike-select" {...register(name)}>
+        <option selected value="">
+          {initialtOption}
+        </option>
+        {selectOptions(items)}
+        <option style={{ color: 'red' }} value={'uninstall'}>
+          {removeOption}
+        </option>
+      </select>
+    </>
   );
 }

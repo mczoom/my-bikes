@@ -17,10 +17,20 @@ interface EditPartInfoPopupProps {
 }
 
 interface SelectData {
-  bikeSelect?: string | undefined;
-  bikeOdo?: number | undefined;
-  uninstalled?: boolean;
+  bikeSelect: string;
+  bikeOdo: number;
 }
+
+interface PartInfoFormValues {
+  brand: string;
+  model: string;
+  weight: string | number;
+  price: string | number;
+  bikeSelect: string;
+  bikeOdo: number;
+}
+
+type PartInfoData = PartInfoFormValues & SelectData;
 
 export default function EditPartInfoPopup({
   item,
@@ -29,71 +39,62 @@ export default function EditPartInfoPopup({
   closePopup,
   bikes
 }: EditPartInfoPopupProps) {
-  const defaultInputValues: PartInfo = {
-    category: undefined,
-    brand: undefined,
-    model: undefined,
-    weight: undefined,
-    price: undefined,
-    bikeSelect: undefined,
-    bikeOdo: undefined,
-    uninstalled: false
-  };
-
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors }
-  } = useForm<PartInfoFormValues>({ mode: 'onChange' });
-
-  interface PartInfoFormValues {
-    category: string | undefined;
-    brand: string | undefined;
-    model: string | undefined;
-    weight: number | undefined;
-    price: number | undefined;
-    bikeSelect: string | undefined;
-    bikeOdo: number | undefined;
-    uninstalled: boolean | undefined;
-  }
-
-  const [partInfo, setPartInfo] = useState<PartInfo>(defaultInputValues);
-
-  function handleSelectValue(value: SelectData | undefined, partData: PartInfo) {
-    if (!value) {
-      return;
+    formState,
+    formState: { isSubmitSuccessful }
+  } = useForm<PartInfoFormValues>({
+    mode: 'onChange',
+    defaultValues: {
+      brand: '',
+      model: '',
+      weight: '',
+      price: '',
+      bikeSelect: ''
     }
-    setPartInfo({ ...partData, ...value });
-  }
+  });
 
-  function handleSelectInputValue(selectValue: any) {
+  const numberInputRules = {
+    valueAsNumber: true
+  };
+
+  const [partInfo, setPartInfo] = useState<PartInfoData>({} as PartInfoData);
+
+  const selectTitle = item.installed ? 'Поменять байк или снять' : 'Установить на байк';
+
+  function handleSelectInputValue(selectValue: string) {
     if (selectValue === 'uninstall') {
-      return;
+      const selectedBikeData = { bikeSelect: selectValue, bikeOdo: 0 };
+      return selectedBikeData;
     }
     const selectedBike = bikes.find((bike) => bike.id === selectValue);
-    const selectedBikeData = { bikeSelect: selectedBike?._id, bikeOdo: selectedBike?.converted_distance };
-    return selectedBikeData;
+    if (selectedBike) {
+      const selectedBikeData = { bikeSelect: selectedBike._id, bikeOdo: selectedBike.converted_distance };
+      return selectedBikeData;
+    }
   }
 
   const submitHandler: SubmitHandler<PartInfoFormValues> = (data) => {
-    const sanitizedFields = removeEmptyFields(data);
-    console.log(sanitizedFields);
+    const sanitizedData = removeEmptyFields(data);
+    const selectedBikeData = handleSelectInputValue(sanitizedData.bikeSelect);
+    const submitData = { ...sanitizedData, ...selectedBikeData };
 
-    const selectedBikeData = handleSelectInputValue(sanitizedFields.bikeSelect);
-    const p = { ...sanitizedFields, ...selectedBikeData };
-
-    console.log(p);
-
-    //updateInfo(item.id, sanitizedFields);
-    //closePopup();
-    reset();
+    setPartInfo(submitData);
+    updateInfo(item.id, submitData);
+    closePopup();
   };
+
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset();
+    }
+  }, [formState, partInfo, reset]);
 
   return (
     <>
       <PopupWithForm
-        key={partInfo.brand}
         name="edit-part"
         title="Редактирование компонента"
         btnText="Сохранить"
@@ -101,16 +102,17 @@ export default function EditPartInfoPopup({
         isPopupOpen={isPopupOpen}
         onClose={closePopup}
       >
-        <Input name="brand" value={partInfo.brand} label="Производитель" inputType="text" register={register} />
-        <Input name="model" value={partInfo.model} label="Модель" inputType="text" register={register} />
+        <Input name="brand" label="Производитель" inputType="text" register={register} />
+        <Input name="model" label="Модель" inputType="text" register={register} />
 
-        <Input name="weight" value={partInfo.weight} label="Вес" inputType="number" register={register} />
-        <Input name="price" value={partInfo.price} label="Цена" inputType="number" register={register} />
+        <Input name="weight" label="Вес" inputType="number" register={register} rules={numberInputRules} />
+        <Input name="price" label="Цена" inputType="number" register={register} rules={numberInputRules} />
         <Select
           name={'bikeSelect'}
+          title={selectTitle}
           items={bikes}
           removeOption={'Снять с велосипеда'}
-          defaultValue={'-- Выберите байк --'}
+          initialtOption={''}
           register={register}
         />
       </PopupWithForm>

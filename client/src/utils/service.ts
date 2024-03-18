@@ -15,7 +15,7 @@ export function getLocalStorageValue(key: string) {
 export function removeEmptyFields<T extends object>(update: T) {
   let objKeys = Object.keys(update) as Array<keyof T>;
   objKeys.forEach((key) => {
-    if (update[key] === '' || update[key] == null) {
+    if (update[key] === '' || update[key] == null || Number.isNaN(update[key])) {
       delete update[key];
     }
   });

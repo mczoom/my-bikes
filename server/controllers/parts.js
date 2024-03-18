@@ -40,7 +40,7 @@ module.exports.updatePartInfo = async(req, res, next) => {
   try {
     const part = await Part.findOne({userID: userid, id: partId});
     if(bikeId === 'uninstall') {
-      await Bike.findOneAndUpdate({_id: bikeId}, {$pull:{"installedParts": partId}}, {new: true})
+      await Bike.findOneAndUpdate({_id: part.bikeSelect}, {$pull:{"installedParts": partId}}, {new: true})
       part.bikeSelect = '';
       part.bikeName = '';
       part.bikeOdoAtInstal = 0;
