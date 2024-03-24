@@ -7,8 +7,8 @@ export interface BikePart {
   brand: string;
   model: string;
   year: string;
-  weight: number;
-  price: number;
+  weight: number | string;
+  price: number | string;
   distance?: number;
   installed?: boolean;
   retired?: boolean;

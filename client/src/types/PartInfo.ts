@@ -1,12 +1,14 @@
 import { Bike } from './Bike';
 
 export interface PartInfo {
-  category?: string | undefined;
-  brand: string | undefined;
-  model: string | undefined;
-  weight: number | string;
-  price: number | string;
+  id?: string;
+  category?: string;
+  brand: string;
+  model: string;
+  weight: string | number;
+  price: string | number;
+  year?: string;
   bikeSelect: string;
-  bikeOdo: number | undefined;
-  uninstalled?: boolean | undefined;
+  bikeOdo?: number;
+  uninstalled?: boolean;
 }

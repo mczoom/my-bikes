@@ -15,14 +15,33 @@ import { Bike } from 'types/Bike';
 import ConfirmationPopup from 'components/shared/ConfirmationPopup/ConfirmationPopup';
 import Navigation from 'components/Header/NavBar/NavBar';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import BikePartsListt from './BikeParts/BikeParts';
+import BikeParts from './BikeParts/BikeParts';
+import { AddPartPopup } from './AddPartPopup/AddPartPopup';
 
 interface MaintenanceProps {
   bikes: Bike[];
 }
 
+interface PartInfoFormValues {
+  id: string;
+  bikeSelect?: string;
+  bikeName?: string;
+  userID?: string;
+  category: string;
+  brand: string;
+  model: string;
+  year: string;
+  weight: number;
+  price: number;
+  distance?: number;
+  installed?: boolean;
+  retired?: boolean;
+  _id?: string;
+}
+
 export default function Maintenance({ bikes }: MaintenanceProps) {
   const [allParts, setAllParts] = useState<BikePart[]>([] as BikePart[]);
-  const [partInfo, setPartInfo] = useState<BikePart>({} as BikePart);
   const [category, setCategory] = useState<string>('');
   const [partToEdit, setPartToEdit] = useState<BikePart>({} as BikePart);
   const [isAddPartPopupOpen, setIsAddPartPopupOpen] = useState<boolean>(false);
@@ -35,54 +54,75 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
   } = useForm<BikePart>({ mode: 'onChange' });
 
   const parts = [
     {
       title: 'Звёзды',
-      link: 'chainrings'
+      link: 'chainrings',
+      id: 1,
     },
     {
       title: 'Каретки',
-      link: 'bbs'
+      link: 'bbs',
+      id: 2,
     },
     {
       title: 'Кассеты',
-      link: 'cassettes'
+      link: 'cassettes',
+      id: 3,
     },
     {
       title: 'Колёса',
-      link: 'wheels'
+      link: 'wheels',
+      id: 4,
     },
     {
       title: 'Педали',
-      link: 'pedals'
+      link: 'pedals',
+      id: 5,
+    },
+    {
+      title: 'Переключатель задний',
+      link: 'rd',
+      id: 6,
+    },
+    {
+      title: 'Переключатель передний',
+      link: 'fd',
+      id: 7,
     },
     {
       title: 'Покрышки',
-      link: 'tires'
+      link: 'tires',
+      id: 8,
     },
     {
       title: 'Рамы',
-      link: 'frames'
+      link: 'frames',
+      id: 9,
     },
     {
       title: 'Сёдла',
-      link: 'saddles'
+      link: 'saddles',
+      id: 10,
     },
     {
       title: 'Тормозные колодки',
-      link: 'brakepads'
+      link: 'brakepads',
+      id: 11,
     },
     {
       title: 'Тросики / рубашки',
-      link: 'cables'
+      link: 'cables',
+      id: 12,
     },
     {
       title: 'Цепи',
-      link: 'chains'
-    }
+      link: 'chains',
+      id: 13,
+    },
   ];
 
   const defaultInputValues: BikePart = {
@@ -92,7 +132,7 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
     model: '',
     year: '',
     weight: 0,
-    price: 0
+    price: 0,
   };
 
   function addNewPart(specs: BikePart) {
@@ -133,29 +173,11 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
     setIsDeletePartPopupOpen(false);
   }
 
-  interface PartInfoFormValues {
-    id: string;
-    bikeSelect?: string;
-    bikeName?: string;
-    userID?: string;
-    category: string;
-    brand: string;
-    model: string;
-    year: string;
-    weight: number;
-    price: number;
-    distance?: number;
-    installed?: boolean;
-    retired?: boolean;
-    _id?: string;
-  }
-
-  const submitHandler: SubmitHandler<PartInfoFormValues> = (data) => {
+  const submitHandler: SubmitHandler<BikePart> = (data) => {
     const id = partId();
     const newPart = { ...data, id, category };
     addNewPart(newPart);
     closeAddPartPopup();
-    setPartInfo(defaultInputValues);
   };
 
   function updatePartInfo(id: string, specs: PartInfo) {
@@ -195,178 +217,16 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
         <div className="maintenance__parts-categories navigation__nav-links_column">
           <BikePartsCategories navLinks={parts} />
         </div>
-        <div className="maintenance__parts-list">
-          <Routes>
-            <Route
-              path="chainrings"
-              element={
-                <BikePartsList
-                  cat={'chainrings'}
-                  parts={allParts}
-                  onOpen={openAddPartPopup}
-                  onOpenEdit={openEditPartPopup}
-                  onOpenDelete={openDeletePartPopup}
-                  getCategory={getAddingPartCategory}
-                  getEditingPart={getEditingPart}
-                />
-              }
-            />
-            <Route
-              path="bbs"
-              element={
-                <BikePartsList
-                  cat={'bbs'}
-                  parts={allParts}
-                  onOpen={openAddPartPopup}
-                  onOpenEdit={openEditPartPopup}
-                  onOpenDelete={openDeletePartPopup}
-                  getCategory={getAddingPartCategory}
-                  getEditingPart={getEditingPart}
-                />
-              }
-            />
-            <Route
-              path="cassettes"
-              element={
-                <BikePartsList
-                  cat={'cassettes'}
-                  parts={allParts}
-                  onOpen={openAddPartPopup}
-                  onOpenEdit={openEditPartPopup}
-                  onOpenDelete={openDeletePartPopup}
-                  getCategory={getAddingPartCategory}
-                  getEditingPart={getEditingPart}
-                />
-              }
-            />
-            <Route
-              path="wheels"
-              element={
-                <BikePartsList
-                  cat={'wheels'}
-                  parts={allParts}
-                  onOpen={openAddPartPopup}
-                  onOpenEdit={openEditPartPopup}
-                  onOpenDelete={openDeletePartPopup}
-                  getCategory={getAddingPartCategory}
-                  getEditingPart={getEditingPart}
-                />
-              }
-            />
-            <Route
-              path="pedals"
-              element={
-                <BikePartsList
-                  cat={'pedals'}
-                  parts={allParts}
-                  onOpen={openAddPartPopup}
-                  onOpenEdit={openEditPartPopup}
-                  onOpenDelete={openDeletePartPopup}
-                  getCategory={getAddingPartCategory}
-                  getEditingPart={getEditingPart}
-                />
-              }
-            />
-            <Route
-              path="tires"
-              element={
-                <BikePartsList
-                  cat={'tires'}
-                  parts={allParts}
-                  onOpen={openAddPartPopup}
-                  onOpenEdit={openEditPartPopup}
-                  onOpenDelete={openDeletePartPopup}
-                  getCategory={getAddingPartCategory}
-                  getEditingPart={getEditingPart}
-                />
-              }
-            />
-            <Route
-              path="frames"
-              element={
-                <BikePartsList
-                  cat={'frames'}
-                  parts={allParts}
-                  onOpen={openAddPartPopup}
-                  onOpenEdit={openEditPartPopup}
-                  onOpenDelete={openDeletePartPopup}
-                  getCategory={getAddingPartCategory}
-                  getEditingPart={getEditingPart}
-                />
-              }
-            />
-            <Route
-              path="saddles"
-              element={
-                <BikePartsList
-                  cat={'saddles'}
-                  parts={allParts}
-                  onOpen={openAddPartPopup}
-                  onOpenEdit={openEditPartPopup}
-                  onOpenDelete={openDeletePartPopup}
-                  getCategory={getAddingPartCategory}
-                  getEditingPart={getEditingPart}
-                />
-              }
-            />
-            <Route
-              path="brakepads"
-              element={
-                <BikePartsList
-                  cat={'brakepads'}
-                  parts={allParts}
-                  onOpen={openAddPartPopup}
-                  onOpenEdit={openEditPartPopup}
-                  onOpenDelete={openDeletePartPopup}
-                  getCategory={getAddingPartCategory}
-                  getEditingPart={getEditingPart}
-                />
-              }
-            />
-            <Route
-              path="cables"
-              element={
-                <BikePartsList
-                  cat={'cables'}
-                  parts={allParts}
-                  onOpen={openAddPartPopup}
-                  onOpenEdit={openEditPartPopup}
-                  onOpenDelete={openDeletePartPopup}
-                  getCategory={getAddingPartCategory}
-                  getEditingPart={getEditingPart}
-                />
-              }
-            />
-            <Route
-              path="chains"
-              element={
-                <BikePartsList
-                  cat={'chains'}
-                  parts={allParts}
-                  onOpen={openAddPartPopup}
-                  onOpenEdit={openEditPartPopup}
-                  onOpenDelete={openDeletePartPopup}
-                  getCategory={getAddingPartCategory}
-                  getEditingPart={getEditingPart}
-                />
-              }
-            />
-          </Routes>
-        </div>
-        <PopupWithForm
-          name="add-bike-part"
-          title="Добавить компонент"
-          btnText="Сохранить"
-          submitHandler={handleSubmit(submitHandler)}
-          isPopupOpen={isAddPartPopupOpen}
-          onClose={closeAddPartPopup}
-        >
-          <Input name="brand" value={partInfo.brand} label="Производитель" inputType="text" register={register} />
-          <Input name="model" value={partInfo.model} label="Модель" inputType="text" register={register} />
-          <Input name="year" value={partInfo.year} label="Модельный год" inputType="text" register={register} />
-          <Input name="weight" value={partInfo.weight} label="Вес" inputType="text" register={register} />
-          <Input name="price" value={partInfo.price} label="Цена" inputType="text" register={register} />
-        </PopupWithForm>
+        <BikeParts
+          items={parts}
+          parts={allParts}
+          onOpen={openAddPartPopup}
+          onOpenEdit={openEditPartPopup}
+          onOpenDelete={openDeletePartPopup}
+          getCategory={getAddingPartCategory}
+          getEditingPart={getEditingPart}
+        />
+        <AddPartPopup submitHandler={submitHandler} isPopupOpen={isAddPartPopupOpen} onClose={closeAddPartPopup} />
         <EditPartInfoPopup
           item={partToEdit}
           closePopup={closeEditPartPopup}
@@ -375,7 +235,8 @@ export default function Maintenance({ bikes }: MaintenanceProps) {
           bikes={bikes}
         />
         <ConfirmationPopup
-          title={'Вы действительно хотите удалить компонент?'}
+          title={'Удаление компонента'}
+          text={'Удалить навсегда?'}
           ConfirmBtnText={'Удалить'}
           CancelBtnText={'Отмена'}
           onDelete={deletePart}

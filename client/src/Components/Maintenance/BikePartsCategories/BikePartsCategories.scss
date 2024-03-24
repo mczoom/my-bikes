@@ -1,13 +1,14 @@
 @import '../../../styles/index';
 
 .links__item { 
+  min-width: 260px;
   margin-bottom: 7px; 
+  padding: 0 8px;
 }
 
 .links__link {
   font-size: 18px;
-  color: black;
-  padding: 0 8px;
+  color: black;  
 }
 
 .links__link:hover {

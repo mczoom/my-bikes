@@ -32,7 +32,7 @@ export default function Garage({ savedBikes, setSavedBikes, yearsAtStrava, activ
     register,
     handleSubmit,
     watch,
-    formState: { errors }
+    formState: { errors },
   } = useForm<BikeCardInfo>({ mode: 'onChange' });
 
   const snackbar = useSnackbar();
@@ -93,12 +93,7 @@ export default function Garage({ savedBikes, setSavedBikes, yearsAtStrava, activ
 
   return (
     <section className="garage">
-      <Checkbox
-        text="Показать только велостанки"
-        //checkboxStatus={isBikesFilterChecked}
-        register={register}
-        name="trainer"
-      />
+      <Checkbox text="Показать только велостанки" register={register} name="trainer" />
       <GarageBikesList
         bikesToRender={bikesToRender}
         openBikePhotoPopup={openBikePhotoPopup}

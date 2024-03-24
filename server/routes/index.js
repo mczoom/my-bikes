@@ -1,13 +1,12 @@
 const { Router } = require('express');
 const { login, createUser, getUser, addStravaPermissions, checkStravaPermissions } = require('../controllers/users');
-const { addAllBikes, getAllBikes, updateBikeInfo, updateOdo, addBike } = require('../controllers/bikes');
+const { getAllBikes, updateBikeInfo, updateOdo, addBike } = require('../controllers/bikes');
 const { auth } = require('../middlewares/auth');
 const { exchangeStrToken, refreshStrToken, getStrToken } = require('../controllers/strToken');
 const { checkStravaToken } = require('../middlewares/stravaAuth');
 const { updateBikeInfoValidation, updatePartInfoValidation } = require('../middlewares/validation');
 const { addAllActivities, getAllActivities, updateActivities } = require('../controllers/activities');
 const { addPart, getAllParts, updatePartInfo, updatePartOdo, deletePart } = require('../controllers/parts');
-
 
 
 const router = Router();
@@ -28,7 +27,6 @@ router.post('/activities', auth, checkStravaToken, addAllActivities);
 router.get('/activities', auth, checkStravaToken, getAllActivities);
 router.patch('/updateactivities', auth, checkStravaToken, updateActivities);
 
-//router.post('/bikes', auth, checkStravaToken, addAllBikes);
 router.get('/bikes', auth, checkStravaToken, getAllBikes);
 router.post('/addbike', auth, checkStravaToken, addBike);
 router.patch('/bikeodo', auth, checkStravaToken, updateOdo);

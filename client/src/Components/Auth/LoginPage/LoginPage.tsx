@@ -10,22 +10,11 @@ export default function LoginPage() {
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
   } = useForm<AuthFormValues>({ mode: 'onChange' });
 
   const auth = useAuth();
   const navigate = useNavigate();
-
-  // const [loginValue, setLoginValue] = useState<string>('');
-  // const [passwordValue, setPasswordValue] = useState<string>('');
-
-  // function getLoginInputValue(e: React.ChangeEvent<HTMLInputElement>) {
-  //   setLoginValue(e.target.value);
-  // }
-
-  // function getPasswordInputValue(e: React.ChangeEvent<HTMLInputElement>) {
-  //   setPasswordValue(e.target.value);
-  // }
 
   const err = Object.keys(errors).length > 0 ? true : false;
 

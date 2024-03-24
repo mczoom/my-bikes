@@ -2,10 +2,11 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-  margin-bottom: 80px;
+  margin: 40px 0 0; 
 }
 
 .parts-list__add-btn {
-align-self: center;
+  width: 225px;
+  margin-left: 25px;  
 }
 

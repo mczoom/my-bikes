@@ -19,7 +19,7 @@ export default function BikePartsList({
   onOpenEdit,
   onOpenDelete,
   getEditingPart,
-  getCategory
+  getCategory,
 }: BikePartsListProps) {
   function filterParts() {
     return parts.filter((part) => part.category === cat);
@@ -36,6 +36,9 @@ export default function BikePartsList({
 
   return (
     <>
+      <div className="parts-list__add-btn">
+        <FormButton btnText={'+ Добавить компонент'} btnType={'button'} onAction={handleAddClick} />
+      </div>
       <ul className="parts-list">
         {filteredParts &&
           filteredParts.map((item: BikePart) => (
@@ -49,9 +52,6 @@ export default function BikePartsList({
             </li>
           ))}
       </ul>
-      <div className="parts-list__add-btn">
-        <FormButton btnText={'+ Добавить компонент'} btnType={'button'} onAction={handleAddClick} />
-      </div>
     </>
   );
 }

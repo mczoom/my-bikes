@@ -3,26 +3,38 @@
 .part-card {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  min-width: 240px;
-  margin-right: 50px;  
-  border: 1px solid black;  
+  width: 240px;
+  margin: 0 25px;  
+  margin-bottom: 45px;
+  border: 1px solid #000000;  
   border-radius: $radius;
+  box-sizing: border-box;
+  flex-grow: 1;
 }
 
-.part-card__title-wrapper {
+.part-card__heading {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   box-sizing: border-box;
   width: 100%;
+  height: 60px;
   padding: 10px;  
+}
+
+.part-card__title-wrapper {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .part-card__title {
   margin: 0;
   margin-right: 30px;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .part-card__specs {

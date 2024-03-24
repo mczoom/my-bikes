@@ -14,10 +14,11 @@ export default function BikePartsCard({ part, onOpenEdit, getEditingPart, onOpen
 
   return (
     <div className="part-card">
-      <div className="part-card__title-wrapper">
-        <h4 className="part-card__title">
-          {part.brand} {part.model}
-        </h4>
+      <div className="part-card__heading">
+        <div className="part-card__title-wrapper">
+          <h4 className="part-card__title">{part.brand}</h4>
+          <h4 className="part-card__title">{part.model}</h4>
+        </div>
         <div className="part-card__buttons">
           <EditButton item={part} openPopup={onOpenEdit} getEditingItem={getEditingPart} />
           <DeleteButton item={part} openPopup={onOpenDelete} getEditingItem={getEditingPart} />
