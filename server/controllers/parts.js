@@ -75,7 +75,7 @@ module.exports.updatePartOdo = async(req, res, next) => {
     parts.forEach((part) => {
       if(part.bikeSelect.converted_distance !== part.bikeOdoAtLastUpdate) {
         const distDiff = part.bikeSelect.converted_distance - part.bikeOdoAtLastUpdate;
-        part.$inc('distance', distDiff);
+        part.$inc('distance', distDiff.toFixed(1));
         part.bikeOdoAtLastUpdate = part.bikeSelect.converted_distance;
         part.updated = new Date();
         part.save();

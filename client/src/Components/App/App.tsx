@@ -23,15 +23,17 @@ import useAuth from 'hooks/useAuth';
 import useSnackbar from 'hooks/useSnackbar';
 import useBikes from 'hooks/useBikes';
 import { currentYear, getYearsAtStrava } from 'utils/constants';
+import useActivities from 'hooks/useActivities';
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState<Profile>({} as Profile);
   const [allActivities, setAllActivities] = useState<Activity[]>([]);
-  const [storedActivities, setStoredActivities] = useState<Activity[] | null>(null);
+  //const [storedActivities, setStoredActivities] = useState<Activity[] | null>(null);
   const [hasAllActivitiesLoaded, setHasAllActivitiesLoaded] = useState<boolean>(false);
   const [reset, setReset] = useState<number>(0);
 
   const [savedBikes, setSavedBikes] = useBikes();
+  const [activities, setActivities] = useActivities();
   const snackbar = useSnackbar();
   const auth = useAuth();
   const appToken = auth.appToken;
@@ -56,13 +58,6 @@ export default function App() {
     }
   }
 
-  // function updateBikeDistance(bikes: Bike[]) {
-  //   appApi
-  //     .updateBikeOdo(bikes)
-  //     .then(() => console.log('Пробег байков успешно обновлён'))
-  //     .catch(() => snackbar.handleSnackbarError('Не удалось обновить пробег байков'));
-  // }
-
   async function getAllActivitiesFromStrava(user: Profile) {
     setHasAllActivitiesLoaded(false);
     const dateOfRegAtStrava: string = user.created_at;
@@ -80,7 +75,6 @@ export default function App() {
           })
           .catch((err) => {
             console.log(err);
-            //return;
           });
         page++;
       } while (response !== 0);
@@ -91,29 +85,19 @@ export default function App() {
     return activities;
   }
 
-  function getAllStoredActivities() {
-    let rides: Activity[] = [];
-    appApi
-      .getAllActivities()
-      .then((res: Activity[]) => {
-        setStoredActivities(res);
-        rides = res;
-      })
-      .catch(() => console.log('Тренировки не найдены в базе'));
-    return rides;
-  }
+  // function getAllStoredActivities() {
+  //   let rides: Activity[] = [];
+  //   appApi
+  //     .getAllActivities()
+  //     .then((res: Activity[]) => {
+  //       setStoredActivities(res);
+  //       rides = res;
+  //     })
+  //     .catch(() => console.log('Тренировки не найдены в базе'));
+  //   return rides;
+  // }
 
   console.log(allActivities);
-
-  // function getBikeTotalDistance(bikeId: string): number {
-  //   let dist = 0;
-  //   allActivities.forEach((act: Activity) => {
-  //     if(act.gear_id === bikeId) {
-  //       dist += act.distance;
-  //     }
-  //   });
-  //   return dist;
-  // };
 
   function compareBikesOdo(stravaBikes: Bike[], savedBikes: Bike[]) {
     let bikesToUpdate: Bike[] = [];
@@ -159,7 +143,7 @@ export default function App() {
       Promise.all([getAllActivitiesFromStrava(currentUser), appApi.getAllActivities()])
         .then(([activitiesFromStrava, activitiesFromDB]) => {
           if (!ignore) {
-            if (!activitiesFromDB.length) {
+            if (activitiesFromDB.length < 1) {
               appApi.addAllActivities(activitiesFromStrava);
             } else if (activitiesFromStrava.length !== activitiesFromDB.length) {
               appApi.updateAllActivities(activitiesFromStrava);
@@ -189,7 +173,6 @@ export default function App() {
             await appApi.updateBikeOdo(bikesToUpdate);
             await appApi.updatePartOdo(bikesToUpdate);
           }
-          //await appApi.updatePartOdo(bikesToUpdate);
           setSavedBikes(res);
         }
       })
@@ -201,6 +184,7 @@ export default function App() {
   }, [currentUser]);
 
   console.log(currentUser);
+  console.log(activities);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -215,7 +199,7 @@ export default function App() {
 
             <Route path="/" element={<ProtectedRoute isLoggedIn={appToken} isStravaConnected={stravaToken} />}>
               <Route index element={<Main />} />
-              <Route path="/stats" element={<Stats yearsAtStrava={yearsAtStrava} allActivities={allActivities} />} />
+              <Route path="/stats" element={<Stats yearsAtStrava={yearsAtStrava} allActivities={activities} />} />
               <Route
                 path="/garage"
                 element={

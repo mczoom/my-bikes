@@ -113,7 +113,7 @@ const activitiesSchema = new mongoose.Schema({
     ref: 'user',
     required: true,
   }
-});
+}, {timestamps: true});
 
 
 module.exports = mongoose.model('activity', activitiesSchema);

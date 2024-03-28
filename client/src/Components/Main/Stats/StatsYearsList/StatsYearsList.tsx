@@ -2,11 +2,11 @@ import StatsYearCard from 'components/Main/Stats/StatsYearCard/StatsYearCard';
 
 interface StatsYearsListProps {
   yearsAtStrava: number[];
-  totalDistance: (y: number) => number;
-  totalTime: (y: number) => number;
-  totalTrainings: (y: number) => number;
-  yearLongestDistance: (y: number) => number;
-  totalOverHundredRides: (y: number) => number;
+  totalDistance: (y: number, sport: string) => number;
+  totalTime: (y: number, sport: string) => number;
+  totalTrainings: (y: number, sport: string) => number;
+  yearLongestDistance: (y: number, sport: string) => number;
+  totalOverHundredRides: (y: number, sport: string) => number;
 }
 
 export default function StatsYearsList({
@@ -15,7 +15,7 @@ export default function StatsYearsList({
   totalTime,
   totalTrainings,
   yearLongestDistance,
-  totalOverHundredRides
+  totalOverHundredRides,
 }: StatsYearsListProps) {
   return (
     <ul className="years-list">

@@ -13,13 +13,7 @@ export default function Checkbox<T extends FieldValues>({ name, text, register }
     <div className="type-filter">
       <label className="type-filter__label">
         {text}
-        <input
-          type="checkbox"
-          className="type-filter__checkbox"
-          //checked={checkboxStatus}
-          {...register(name)}
-          //value="trainer"
-        />
+        <input type="checkbox" className="type-filter__checkbox" {...register(name)} />
       </label>
     </div>
   );

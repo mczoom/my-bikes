@@ -11,53 +11,53 @@ interface StatsProps {
 
 export default function Stats({ yearsAtStrava, allActivities }: StatsProps) {
   const isYearMatch = (y: number, activity: Activity): boolean => {
-    return new Date(activity.start_date).getFullYear() === y;
+    return new Date(activity.start_date_local).getFullYear() === y;
   };
 
-  function sumTotalRideDistance(y: number): number {
+  function sumTotalRideDistance(y: number, sport: string): number {
     let odo = 0;
     allActivities.forEach((training) => {
-      if (isYearMatch(y, training) && training.type.includes('Ride')) {
+      if (isYearMatch(y, training) && training.type.includes(sport)) {
         odo += training.distance;
       }
     });
     return convertDistanceToKM(odo);
   }
 
-  function getYearLongestRide(y: number): number {
+  function getYearLongestRide(y: number, sport: string): number {
     let dist = 0;
     allActivities.forEach((training) => {
-      if (isYearMatch(y, training) && training.distance > dist && training.type.includes('Ride')) {
+      if (isYearMatch(y, training) && training.distance > dist && training.type.includes(sport)) {
         dist = training.distance;
       }
     });
     return convertDistanceToKM(dist);
   }
 
-  function totalOverHundredRides(y: number): number {
+  function totalOverHundredRides(y: number, sport: string): number {
     let longRide = 0;
     allActivities.forEach((training) => {
-      if (isYearMatch(y, training) && training.distance >= 100000 && training.type.includes('Ride')) {
+      if (isYearMatch(y, training) && training.distance >= 100000 && training.type.includes(sport)) {
         longRide += 1;
       }
     });
     return longRide;
   }
 
-  function sumTotalRideTime(y: number): number {
+  function sumTotalRideTime(y: number, sport: string): number {
     let time = 0;
     allActivities.forEach((training) => {
-      if (isYearMatch(y, training) && training.type.includes('Ride')) {
+      if (isYearMatch(y, training) && training.type.includes(sport)) {
         time += training.moving_time;
       }
     });
     return convertSecToHrs(time);
   }
 
-  function countRides(y: number): number {
+  function countRides(y: number, sport: string): number {
     let trainings = 0;
     allActivities.forEach((training) => {
-      if (isYearMatch(y, training) && training.type.includes('Ride')) {
+      if (isYearMatch(y, training) && training.type.includes(sport)) {
         trainings++;
       }
     });

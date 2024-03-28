@@ -58,7 +58,7 @@ const bikeSchema = new mongoose.Schema({
     type: Number,
     select: false,
   }
-}, { toJSON: { getters: true } });
+}, { toJSON: { getters: true }, timestamps: true });
 
 
 module.exports = mongoose.model('bike', bikeSchema);

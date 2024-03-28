@@ -71,7 +71,7 @@ const partSchema = new mongoose.Schema({
     type: Number,
     select: false,
   }
-}, { toJSON: { getters: true } });
+}, { toJSON: { getters: true }, timestamps: true });
 
 
 
