@@ -85,18 +85,6 @@ export default function App() {
     return activities;
   }
 
-  // function getAllStoredActivities() {
-  //   let rides: Activity[] = [];
-  //   appApi
-  //     .getAllActivities()
-  //     .then((res: Activity[]) => {
-  //       setStoredActivities(res);
-  //       rides = res;
-  //     })
-  //     .catch(() => console.log('Тренировки не найдены в базе'));
-  //   return rides;
-  // }
-
   console.log(allActivities);
 
   function compareBikesOdo(stravaBikes: Bike[], savedBikes: Bike[]) {
@@ -113,8 +101,6 @@ export default function App() {
 
     return bikesToUpdate;
   }
-
-  console.log(savedBikes);
 
   useEffect(() => {
     checkIfStravaTokenExpired(stravaToken);
@@ -184,6 +170,7 @@ export default function App() {
   }, [currentUser]);
 
   console.log(currentUser);
+  console.log(savedBikes);
   console.log(activities);
 
   return (
@@ -199,7 +186,10 @@ export default function App() {
 
             <Route path="/" element={<ProtectedRoute isLoggedIn={appToken} isStravaConnected={stravaToken} />}>
               <Route index element={<Main />} />
-              <Route path="/stats" element={<Stats yearsAtStrava={yearsAtStrava} allActivities={activities} />} />
+              <Route
+                path="/stats"
+                element={<Stats yearsAtStrava={yearsAtStrava} allActivities={activities} bikes={savedBikes} />}
+              />
               <Route
                 path="/garage"
                 element={

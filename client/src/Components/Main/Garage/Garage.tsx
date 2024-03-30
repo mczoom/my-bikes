@@ -30,7 +30,6 @@ interface BikeCardInfo {
 export default function Garage({ savedBikes, setSavedBikes, yearsAtStrava, activities }: GarageProps) {
   const {
     register,
-    handleSubmit,
     watch,
     formState: { errors },
   } = useForm<BikeCardInfo>({ mode: 'onChange' });
@@ -44,7 +43,6 @@ export default function Garage({ savedBikes, setSavedBikes, yearsAtStrava, activ
   const [bikeToEdit, setBikeToEdit] = useState<Bike>({} as Bike);
 
   const watchBikesFilter = watch('trainer', false);
-  console.log(watchBikesFilter);
 
   function filterBikeCardsToRender(bikes: Bike[], filter: boolean | undefined) {
     const filteredBikes = bikes.filter((bike) => {
@@ -58,10 +56,6 @@ export default function Garage({ savedBikes, setSavedBikes, yearsAtStrava, activ
   }
 
   const bikesToRender = filterBikeCardsToRender(savedBikes, watchBikesFilter);
-
-  function toggleBikesFilter() {
-    setIsBikesFilterChecked((v) => !v);
-  }
 
   function openBikePhotoPopup(bikeData: UserBike | undefined) {
     setBikePhotoPopupOpen(true);

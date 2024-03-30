@@ -55,7 +55,7 @@ export default function StatsYearCard({
             <p className="stats__opener-text">{yearStatsButtonText}</p>
             <div className={openerIconClassName}></div>
           </div>
-          {totalTrainings(year, 'Ride') > 0 && hasActivitiesLoaded ? (
+          {totalTrainings(year, 'Ride') > 0 || (totalTrainings(year, 'trainer') > 0 && hasActivitiesLoaded) ? (
             <>
               <div className={dashboardClassName}>
                 <div className="dashboard__sports-filter-wrapper">
@@ -64,10 +64,10 @@ export default function StatsYearCard({
                     <input
                       className="sports-filter__radio"
                       type="radio"
-                      name="sport"
+                      name={`${year}`}
                       value="Ride"
                       onChange={handleRadio}
-                      //checked={radioValue === 'Ride'}
+                      checked={radioValue === 'Ride'}
                     />
                   </label>
                   <label>
@@ -75,10 +75,10 @@ export default function StatsYearCard({
                     <input
                       className="sports-filter__radio"
                       type="radio"
-                      name="sport"
+                      name={`${year}`}
                       value="trainer"
                       onChange={handleRadio}
-                      //checked={radioValue === 'trainer'}
+                      checked={radioValue === 'trainer'}
                     />
                   </label>
                   <label>
@@ -86,10 +86,10 @@ export default function StatsYearCard({
                     <input
                       className="sports-filter__radio"
                       type="radio"
-                      name="sport"
+                      name={`${year}`}
                       value="NordicSki"
                       onChange={handleRadio}
-                      //checked={radioValue === 'NordicSki'}
+                      checked={radioValue === 'NordicSki'}
                     />
                   </label>
                 </div>

@@ -52,10 +52,7 @@ export interface Activity {
   sport_type: string;
   start_date: string;
   start_date_local: string;
-  start_latlng: {
-    0: number;
-    1: number;
-  };
+  start_latlng: [number];
   timezone: string;
   total_elevation_gain: number;
   total_photo_count: number;

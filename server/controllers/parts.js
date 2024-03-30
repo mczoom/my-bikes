@@ -75,6 +75,8 @@ module.exports.updatePartOdo = async(req, res, next) => {
     parts.forEach((part) => {
       if(part.bikeSelect.converted_distance !== part.bikeOdoAtLastUpdate) {
         const distDiff = part.bikeSelect.converted_distance - part.bikeOdoAtLastUpdate;
+        console.log(part.bikeSelect.converted_distance);
+        console.log(distDiff);
         part.$inc('distance', distDiff.toFixed(1));
         part.bikeOdoAtLastUpdate = part.bikeSelect.converted_distance;
         part.updated = new Date();
@@ -97,7 +99,7 @@ module.exports.deletePart = async(req, res, next) => {
     await Part.deleteOne({userID: userId, id: partId})
       .then(async (report) => {
         if(!report.deletedCount) {
-         return next( new BadRequestError('Не удалось удалить компонент'));
+         return new BadRequestError('Не удалось удалить компонент');
         };        
         await Bike.findOneAndUpdate({'installedParts': {$in: partId}}, {$pull:{"installedParts": partId}}, {new: true})
         const allParts = await Part.find({userID: userId})

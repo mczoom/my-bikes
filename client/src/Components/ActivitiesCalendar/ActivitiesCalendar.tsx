@@ -5,9 +5,11 @@ import { Activity } from 'types/Activity';
 import CalendarLegend from 'components/ActivitiesCalendar/CalendarLegend/CalendarLegend';
 import CalendarTileContent from 'components/ActivitiesCalendar/CalendarTileContent/CalendarTileContent';
 import { convertDistanceToKM } from 'utils/constants';
+import { Bike } from 'types/Bike';
 
 interface ActivitiesCalendarProps {
   allActivities: Activity[];
+  trainers: Bike[];
 }
 
 interface CalendarActivities {
@@ -17,7 +19,7 @@ interface CalendarActivities {
   content: React.ReactNode;
 }
 
-export default function ActivitiesCalendar({ allActivities }: ActivitiesCalendarProps) {
+export default function ActivitiesCalendar({ allActivities, trainers }: ActivitiesCalendarProps) {
   const trainings = getAllActivitiesForCalendar();
 
   function getAllActivitiesForCalendar() {
@@ -25,7 +27,7 @@ export default function ActivitiesCalendar({ allActivities }: ActivitiesCalendar
     allActivities.forEach((act: Activity) => {
       const dotClassName = () => {
         if (act.type.includes('Ride')) {
-          if (act.trainer === true) {
+          if (trainers.some((t) => t.id === act.gear_id)) {
             return 'tile-content__dot tile-content__dot_indoor-ride';
           } else {
             return 'tile-content__dot tile-content__dot_outdoor-ride';
@@ -34,11 +36,12 @@ export default function ActivitiesCalendar({ allActivities }: ActivitiesCalendar
           return 'tile-content__dot tile-content__dot_other-activity';
         }
       };
+
       activities.push({
-        start: act.start_date,
+        start: act.start_date_local,
         title: `${convertDistanceToKM(act.distance)} км`,
         allDay: false,
-        content: <CalendarTileContent dotClassName={dotClassName} activity={act} />
+        content: <CalendarTileContent dotClassName={dotClassName} activity={act} />,
       });
     });
     return activities;
@@ -51,6 +54,7 @@ export default function ActivitiesCalendar({ allActivities }: ActivitiesCalendar
         initialView="dayGridMonth"
         eventContent={(events) => events.event.extendedProps.content}
         height={'auto'}
+        timeZone={'Europe/Moscow'}
         locale={'ru'}
         firstDay={1}
         fixedWeekCount={true}

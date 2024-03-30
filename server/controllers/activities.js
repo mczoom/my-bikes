@@ -30,24 +30,10 @@ module.exports.updateActivities = async(req, res, next) => {
   const actualActivities = req.body.activities;
   const id = req.user._id;
 
-  try{
-  
+  try{  
     await Activity.updateOne({userID: id}, {activities: actualActivities});
-    res.send('Список тренировок обновлен');
-   
-} catch(err) {
-  next(err)
-}  
-
-
-  // Activity.findOne({userID: id})
-  // .orFail(() => new NotFoundError('Тренировки не найдены в базе'))
-  // .then(async(data) => {
-  //   if(data.activities.length === actualActivities.length) {
-  //     return res.send(actualActivities);
-  //   };
-  //   await Activity.updateOne({userID: id}, {activities: actualActivities});
-  //   res.send('Список тренировок обновлен');
-  // })  
-  // .catch(next);  
+    res.send('Список тренировок обновлен');   
+  } catch(err) {
+    next(err)
+  }
 };
