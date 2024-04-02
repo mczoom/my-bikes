@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react';
 import { Preloader } from 'ui/Preloader/Preloader';
 import { ActivitiesLoadingState } from 'contexts/ActivitiesLoadingState';
+import Radio from 'components/UI/Radio/Radio';
 
 interface StatsYearCardProps {
   year: number;
@@ -55,43 +56,38 @@ export default function StatsYearCard({
             <p className="stats__opener-text">{yearStatsButtonText}</p>
             <div className={openerIconClassName}></div>
           </div>
-          {totalTrainings(year, 'Ride') > 0 || (totalTrainings(year, 'trainer') > 0 && hasActivitiesLoaded) ? (
+          {totalTrainings(year, 'Ride') > 0 || (totalTrainings(year, 'Trainer') > 0 && hasActivitiesLoaded) ? (
             <>
               <div className={dashboardClassName}>
                 <div className="dashboard__sports-filter-wrapper">
-                  <label>
-                    Вело
-                    <input
-                      className="sports-filter__radio"
-                      type="radio"
-                      name={`${year}`}
-                      value="Ride"
-                      onChange={handleRadio}
-                      checked={radioValue === 'Ride'}
-                    />
-                  </label>
-                  <label>
-                    Станок
-                    <input
-                      className="sports-filter__radio"
-                      type="radio"
-                      name={`${year}`}
-                      value="trainer"
-                      onChange={handleRadio}
-                      checked={radioValue === 'trainer'}
-                    />
-                  </label>
-                  <label>
-                    Другое
-                    <input
-                      className="sports-filter__radio"
-                      type="radio"
-                      name={`${year}`}
-                      value="NordicSki"
-                      onChange={handleRadio}
-                      checked={radioValue === 'NordicSki'}
-                    />
-                  </label>
+                  <Radio
+                    label="Вело"
+                    name={`${year}`}
+                    value="Ride"
+                    onChange={handleRadio}
+                    checked={radioValue === 'Ride'}
+                  />
+                  <Radio
+                    label="Станок"
+                    name={`${year}`}
+                    value="Trainer"
+                    onChange={handleRadio}
+                    checked={radioValue === 'Trainer'}
+                  />
+                  <Radio
+                    label="Лыжи XC"
+                    name={`${year}`}
+                    value="NordicSki"
+                    onChange={handleRadio}
+                    checked={radioValue === 'NordicSki'}
+                  />
+                  <Radio
+                    label="Другой спорт"
+                    name={`${year}`}
+                    value="Other"
+                    onChange={handleRadio}
+                    checked={radioValue === 'Other'}
+                  />
                 </div>
                 <ul className="dashboard__year-stats">
                   <li className="stats__text">
@@ -113,17 +109,19 @@ export default function StatsYearCard({
                     </div>
                   </li>
                   <li className="stats__text">
-                    Самая длинная поездка
+                    Самая длинная {radioValue === 'Ride' ? 'поездка' : 'тренировка'}
                     <div className="stats__text__wrapper">
                       <span className="stats__text_bold">{yearLongestDistance(year, radioValue)}</span> км
                     </div>
                   </li>
-                  <li className="stats__text">
-                    Поездок 100+ км
-                    <div className="stats__text__wrapper">
-                      <span className="stats__text_bold">{totalOverHundredRides(year, radioValue)}</span>
-                    </div>
-                  </li>
+                  {radioValue === 'Ride' && (
+                    <li className="stats__text">
+                      Поездок 100+ км
+                      <div className="stats__text__wrapper">
+                        <span className="stats__text_bold">{totalOverHundredRides(year, radioValue)}</span>
+                      </div>
+                    </li>
+                  )}
                 </ul>
               </div>
             </>
